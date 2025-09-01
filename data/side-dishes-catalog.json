@@ -1,0 +1,253 @@
+{
+  "sideDishes": {
+    "items": [
+      {
+        "id": "sd001",
+        "name": "Sambar",
+        "description": "Traditional Karnataka lentil soup with vegetables and tamarind",
+        "type": "side-dish-gravy",
+        "cuisine": "Karnataka",
+        "category": "side-dishes",
+        "nutrition": {
+          "calories": 150,
+          "protein": 8,
+          "carbs": 22,
+          "fat": 4
+        },
+        "applicableFor": [
+          "Lunch",
+          "Dinner"
+        ],
+        "region": "Karnataka"
+      },
+      {
+        "id": "sd002",
+        "name": "Rasam",
+        "description": "Tangy soup with tamarind, tomatoes and spices, aids digestion",
+        "type": "side-dish-gravy",
+        "cuisine": "Karnataka",
+        "category": "side-dishes",
+        "nutrition": {
+          "calories": 80,
+          "protein": 3,
+          "carbs": 12,
+          "fat": 2
+        },
+        "applicableFor": [
+          "Lunch",
+          "Dinner"
+        ],
+        "region": "Karnataka"
+      },
+      {
+        "id": "sd003",
+        "name": "Gojju",
+        "description": "Tangy and spicy gravy made with tamarind and jaggery",
+        "type": "side-dish-gravy",
+        "cuisine": "Karnataka",
+        "category": "side-dishes",
+        "nutrition": {
+          "calories": 120,
+          "protein": 2,
+          "carbs": 25,
+          "fat": 3
+        },
+        "applicableFor": [
+          "Lunch",
+          "Dinner"
+        ],
+        "region": "Karnataka"
+      },
+      {
+        "id": "sd004",
+        "name": "Majjige Huli",
+        "description": "Buttermilk curry with vegetables, cooling and digestive",
+        "type": "side-dish-gravy",
+        "cuisine": "Karnataka",
+        "category": "side-dishes",
+        "nutrition": {
+          "calories": 100,
+          "protein": 5,
+          "carbs": 12,
+          "fat": 3
+        },
+        "applicableFor": [
+          "Lunch",
+          "Dinner"
+        ],
+        "region": "Karnataka"
+      },
+      {
+        "id": "sd005",
+        "name": "Tovve",
+        "description": "Simple dal preparation with minimal spices, comfort food",
+        "type": "side-dish-gravy",
+        "cuisine": "Karnataka",
+        "category": "side-dishes",
+        "nutrition": {
+          "calories": 140,
+          "protein": 9,
+          "carbs": 20,
+          "fat": 3
+        },
+        "applicableFor": [
+          "Lunch",
+          "Dinner"
+        ],
+        "region": "Karnataka"
+      },
+      {
+        "id": "sd006",
+        "name": "Badnekayi Yennegai",
+        "description": "Stuffed baby brinjals cooked with spices and peanuts",
+        "type": "side-dish-sabji",
+        "cuisine": "Karnataka",
+        "category": "side-dishes",
+        "nutrition": {
+          "calories": 180,
+          "protein": 5,
+          "carbs": 20,
+          "fat": 9
+        },
+        "applicableFor": [
+          "Lunch",
+          "Dinner"
+        ],
+        "region": "Karnataka"
+      },
+      {
+        "id": "sd007",
+        "name": "Beans Palya",
+        "description": "Stir-fried green beans with coconut and spices - Karnataka style",
+        "type": "side-dish-sabji",
+        "cuisine": "Karnataka",
+        "category": "side-dishes",
+        "nutrition": {
+          "calories": 85,
+          "protein": 4,
+          "carbs": 12,
+          "fat": 3
+        },
+        "applicableFor": [
+          "Lunch",
+          "Dinner"
+        ],
+        "region": "Karnataka"
+      },
+      {
+        "id": "sd008",
+        "name": "Cabbage Palya",
+        "description": "Simple and healthy stir-fried cabbage with minimal spices",
+        "type": "side-dish-sabji",
+        "cuisine": "Karnataka",
+        "category": "side-dishes",
+        "nutrition": {
+          "calories": 65,
+          "protein": 2,
+          "carbs": 10,
+          "fat": 2
+        },
+        "applicableFor": [
+          "Lunch",
+          "Dinner"
+        ],
+        "region": "Karnataka"
+      },
+      {
+        "id": "sd011",
+        "name": "Andhra Dal",
+        "description": "Tangy and spicy lentil curry with tomatoes and tamarind",
+        "type": "side-dish-gravy",
+        "cuisine": "Andhra",
+        "category": "side-dishes",
+        "nutrition": {
+          "calories": 160,
+          "protein": 10,
+          "carbs": 22,
+          "fat": 4
+        },
+        "applicableFor": [
+          "Lunch",
+          "Dinner"
+        ],
+        "region": "Andhra Pradesh"
+      },
+      {
+        "id": "sd012",
+        "name": "Aloo Gobi",
+        "description": "North Indian dry curry with potatoes and cauliflower",
+        "type": "side-dish-sabji",
+        "cuisine": "North Indian",
+        "category": "side-dishes",
+        "nutrition": {
+          "calories": 140,
+          "protein": 4,
+          "carbs": 25,
+          "fat": 4
+        },
+        "applicableFor": [
+          "Lunch",
+          "Dinner"
+        ],
+        "region": "North India"
+      },
+      {
+        "id": "sd013",
+        "name": "Paneer Butter Masala",
+        "description": "Rich and creamy North Indian paneer curry in tomato-based gravy",
+        "type": "side-dish-gravy",
+        "cuisine": "North Indian",
+        "category": "side-dishes",
+        "nutrition": {
+          "calories": 300,
+          "protein": 15,
+          "carbs": 12,
+          "fat": 22
+        },
+        "applicableFor": [
+          "Lunch",
+          "Dinner"
+        ],
+        "region": "North India"
+      },
+      {
+        "id": "sd014",
+        "name": "Dal Makhani",
+        "description": "Creamy black lentil curry slow-cooked with butter and cream",
+        "type": "side-dish-gravy",
+        "cuisine": "North Indian",
+        "category": "side-dishes",
+        "nutrition": {
+          "calories": 250,
+          "protein": 12,
+          "carbs": 18,
+          "fat": 16
+        },
+        "applicableFor": [
+          "Lunch",
+          "Dinner"
+        ],
+        "region": "North India"
+      },
+      {
+        "id": "sd015",
+        "name": "Bhindi Masala",
+        "description": "Spiced okra curry with onions, tomatoes and aromatic spices",
+        "type": "side-dish-sabji",
+        "cuisine": "North Indian",
+        "category": "side-dishes",
+        "nutrition": {
+          "calories": 120,
+          "protein": 3,
+          "carbs": 15,
+          "fat": 6
+        },
+        "applicableFor": [
+          "Lunch",
+          "Dinner"
+        ],
+        "region": "North India"
+      }
+    ]
+  }
+}

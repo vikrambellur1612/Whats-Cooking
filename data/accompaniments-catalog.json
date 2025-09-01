@@ -1,0 +1,186 @@
+{
+  "accompaniments": {
+    "items": [
+      {
+        "id": "ac001",
+        "name": "Kosambari",
+        "description": "Fresh Karnataka salad with cucumber, carrots and lentils",
+        "type": "salad",
+        "category": "accompaniments",
+        "nutrition": {
+          "calories": 80,
+          "protein": 4,
+          "carbs": 12,
+          "fat": 2
+        },
+        "applicableFor": ["Lunch", "Dinner"],
+        "region": "Karnataka"
+      },
+      {
+        "id": "ac002",
+        "name": "Cucumber Raita",
+        "description": "Cool and refreshing yogurt salad with cucumber and mint",
+        "type": "raita",
+        "category": "accompaniments",
+        "nutrition": {
+          "calories": 60,
+          "protein": 3,
+          "carbs": 8,
+          "fat": 2
+        },
+        "applicableFor": ["Lunch", "Dinner"],
+        "region": "Pan-Indian"
+      },
+      {
+        "id": "ac003",
+        "name": "Boondi Raita",
+        "description": "Creamy yogurt with crispy gram flour balls and spices",
+        "type": "raita",
+        "category": "accompaniments",
+        "nutrition": {
+          "calories": 120,
+          "protein": 5,
+          "carbs": 15,
+          "fat": 4
+        },
+        "applicableFor": ["Lunch", "Dinner"],
+        "region": "North India"
+      },
+      {
+        "id": "ac004",
+        "name": "Mixed Vegetable Raita",
+        "description": "Yogurt salad with cucumber, tomato, onion and fresh herbs",
+        "type": "raita",
+        "category": "accompaniments",
+        "nutrition": {
+          "calories": 70,
+          "protein": 4,
+          "carbs": 10,
+          "fat": 2
+        },
+        "applicableFor": ["Lunch", "Dinner"],
+        "region": "Pan-Indian"
+      },
+      {
+        "id": "ac005",
+        "name": "Carrot Kosambari",
+        "description": "Traditional Karnataka salad with grated carrots, coconut and green chilies",
+        "type": "salad",
+        "category": "accompaniments",
+        "nutrition": {
+          "calories": 90,
+          "protein": 3,
+          "carbs": 14,
+          "fat": 3
+        },
+        "applicableFor": ["Lunch", "Dinner"],
+        "region": "Karnataka"
+      },
+      {
+        "id": "ac006",
+        "name": "Beetroot Palya",
+        "description": "Healthy beetroot salad with coconut, curry leaves and mustard seeds",
+        "type": "salad",
+        "category": "accompaniments",
+        "nutrition": {
+          "calories": 75,
+          "protein": 2,
+          "carbs": 12,
+          "fat": 2
+        },
+        "applicableFor": ["Lunch", "Dinner"],
+        "region": "Karnataka"
+      },
+      {
+        "id": "ac007",
+        "name": "Mint Chutney",
+        "description": "Fresh and zesty mint chutney with coriander and green chilies",
+        "type": "chutney",
+        "category": "accompaniments",
+        "nutrition": {
+          "calories": 25,
+          "protein": 1,
+          "carbs": 4,
+          "fat": 1
+        },
+        "applicableFor": ["Lunch", "Dinner"],
+        "region": "Pan-Indian"
+      },
+      {
+        "id": "ac008",
+        "name": "Coconut Chutney",
+        "description": "Traditional South Indian coconut chutney with curry leaves and mustard seeds",
+        "type": "chutney",
+        "category": "accompaniments",
+        "nutrition": {
+          "calories": 45,
+          "protein": 1,
+          "carbs": 3,
+          "fat": 4
+        },
+        "applicableFor": ["Lunch", "Dinner"],
+        "region": "South India"
+      },
+      {
+        "id": "ac009",
+        "name": "Tomato Onion Salad",
+        "description": "Simple fresh salad with tomatoes, onions and lemon dressing",
+        "type": "salad",
+        "category": "accompaniments",
+        "nutrition": {
+          "calories": 35,
+          "protein": 1,
+          "carbs": 8,
+          "fat": 0
+        },
+        "applicableFor": ["Lunch", "Dinner"],
+        "region": "Pan-Indian"
+      },
+      {
+        "id": "ac010",
+        "name": "Pickled Onions",
+        "description": "Tangy pickled onions with vinegar and spices",
+        "type": "pickle",
+        "category": "accompaniments",
+        "nutrition": {
+          "calories": 20,
+          "protein": 0,
+          "carbs": 5,
+          "fat": 0
+        },
+        "applicableFor": ["Lunch", "Dinner"],
+        "region": "Pan-Indian"
+      },
+      {
+        "id": "ac011",
+        "name": "Papad",
+        "description": "Crispy lentil wafers, roasted or fried, traditional Indian accompaniment",
+        "type": "crispy",
+        "category": "accompaniments",
+        "nutrition": {
+          "calories": 40,
+          "protein": 2,
+          "carbs": 6,
+          "fat": 1
+        },
+        "applicableFor": ["Lunch", "Dinner"],
+        "region": "Pan-Indian"
+      },
+      {
+        "id": "ac012",
+        "name": "Yogurt Rice",
+        "description": "Comfort food - rice mixed with yogurt, curry leaves and mustard seeds",
+        "type": "rice-based",
+        "category": "accompaniments",
+        "nutrition": {
+          "calories": 180,
+          "protein": 6,
+          "carbs": 32,
+          "fat": 3
+        },
+        "applicableFor": ["Lunch", "Dinner"],
+        "region": "South India"
+      }
+    ]
+  }
+}

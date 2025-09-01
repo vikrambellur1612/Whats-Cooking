@@ -1,0 +1,19 @@
+{
+  "name": "karnataka-cuisine-pwa",
+  "version": "1.0.0",
+  "description": "Progressive Web App for Karnataka Cuisine Catalog",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "serve": "python3 -m http.server 8000"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {},
+  "keywords": ["pwa", "karnataka", "cuisine", "food", "catalog"],
+  "author": "Food Catalog App",
+  "license": "MIT"
+}

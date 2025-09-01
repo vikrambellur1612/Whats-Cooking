@@ -1,0 +1,222 @@
+{
+  "meal": {
+    "items": [
+      {
+        "id": "ml001",
+        "name": "Bisi Bele Bath",
+        "description": "Karnataka's signature rice dish with lentils, vegetables and aromatic spices",
+        "type": "mains",
+        "category": "meal",
+        "nutrition": {
+          "calories": 380,
+          "protein": 12,
+          "carbs": 68,
+          "fat": 8
+        },
+        "applicableFor": [
+          "Lunch",
+          "Dinner"
+        ],
+        "region": "Karnataka"
+      },
+      {
+        "id": "ml003",
+        "name": "Ragi Mudde",
+        "description": "Finger millet balls, staple food of Karnataka, highly nutritious",
+        "type": "vegetarian",
+        "category": "meal",
+        "nutrition": {
+          "calories": 320,
+          "protein": 8,
+          "carbs": 65,
+          "fat": 2
+        },
+        "applicableFor": [
+          "Lunch",
+          "Dinner"
+        ],
+        "region": "Karnataka"
+      },
+      {
+        "id": "ml007",
+        "name": "Gojju",
+        "description": "Tangy and spicy gravy made with tamarind and jaggery",
+        "type": "vegetarian",
+        "category": "meal",
+        "nutrition": {
+          "calories": 120,
+          "protein": 2,
+          "carbs": 25,
+          "fat": 3
+        },
+        "applicableFor": [
+          "Lunch",
+          "Dinner"
+        ],
+        "region": "Karnataka"
+      },
+      {
+        "id": "ml009",
+        "name": "Vangi Bath",
+        "description": "Spiced rice with brinjal, aromatic and flavorful",
+        "type": "mains",
+        "category": "meal",
+        "nutrition": {
+          "calories": 340,
+          "protein": 7,
+          "carbs": 62,
+          "fat": 8
+        },
+        "applicableFor": [
+          "Lunch",
+          "Dinner"
+        ],
+        "region": "Karnataka"
+      },
+      {
+        "id": "ml010",
+        "name": "Coconut Rice",
+        "description": "Fragrant rice with fresh coconut, curry leaves and mustard seeds",
+        "type": "vegetarian",
+        "category": "meal",
+        "nutrition": {
+          "calories": 280,
+          "protein": 5,
+          "carbs": 45,
+          "fat": 9
+        },
+        "applicableFor": [
+          "Lunch",
+          "Dinner"
+        ],
+        "region": "Karnataka"
+      },
+      {
+        "id": "ml011",
+        "name": "Lemon Rice",
+        "description": "Tangy rice dish with lemon juice, turmeric and peanuts",
+        "type": "vegetarian",
+        "category": "meal",
+        "nutrition": {
+          "calories": 260,
+          "protein": 6,
+          "carbs": 48,
+          "fat": 6
+        },
+        "applicableFor": [
+          "Lunch",
+          "Dinner"
+        ],
+        "region": "Karnataka"
+      },
+      {
+        "id": "ml013",
+        "name": "Tomato Rice",
+        "description": "Spicy rice cooked with fresh tomatoes and aromatic spices",
+        "type": "vegetarian",
+        "category": "meal",
+        "nutrition": {
+          "calories": 290,
+          "protein": 6,
+          "carbs": 52,
+          "fat": 7
+        },
+        "applicableFor": [
+          "Lunch",
+          "Dinner"
+        ],
+        "region": "Karnataka"
+      },
+      {
+        "id": "ml014",
+        "name": "Sambar",
+        "description": "Lentil soup with vegetables and tamarind, staple South Indian curry",
+        "type": "side-dish-gravy",
+        "category": "meal",
+        "nutrition": {
+          "calories": 150,
+          "protein": 8,
+          "carbs": 22,
+          "fat": 4
+        },
+        "applicableFor": [
+          "Lunch",
+          "Dinner"
+        ],
+        "region": "Karnataka"
+      },
+      {
+        "id": "ml015",
+        "name": "Rasam",
+        "description": "Tangy soup with tamarind, tomatoes and spices, aids digestion",
+        "type": "side-dish-gravy",
+        "category": "meal",
+        "nutrition": {
+          "calories": 80,
+          "protein": 3,
+          "carbs": 12,
+          "fat": 2
+        },
+        "applicableFor": [
+          "Lunch",
+          "Dinner"
+        ],
+        "region": "Karnataka"
+      },
+      {
+        "id": "ml017",
+        "name": "Majjige Huli",
+        "description": "Buttermilk curry with vegetables, cooling and digestive",
+        "type": "vegetarian",
+        "category": "meal",
+        "nutrition": {
+          "calories": 100,
+          "protein": 5,
+          "carbs": 12,
+          "fat": 3
+        },
+        "applicableFor": [
+          "Lunch",
+          "Dinner"
+        ],
+        "region": "Karnataka"
+      },
+      {
+        "id": "ml018",
+        "name": "Tovve",
+        "description": "Simple dal preparation with minimal spices, comfort food",
+        "type": "vegetarian",
+        "category": "meal",
+        "nutrition": {
+          "calories": 140,
+          "protein": 9,
+          "carbs": 20,
+          "fat": 3
+        },
+        "applicableFor": [
+          "Lunch",
+          "Dinner"
+        ],
+        "region": "Karnataka"
+      },
+      {
+        "id": "ml019",
+        "name": "Badnekayi Yennegai",
+        "description": "Stuffed baby brinjals cooked with spices and peanuts",
+        "type": "side-dish-sabji",
+        "category": "meal",
+        "nutrition": {
+          "calories": 180,
+          "protein": 5,
+          "carbs": 20,
+          "fat": 9
+        },
+        "applicableFor": [
+          "Lunch",
+          "Dinner"
+        ],
+        "region": "Karnataka"
+      }
+    ]
+  }
+}

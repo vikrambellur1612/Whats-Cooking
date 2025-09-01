@@ -1,0 +1,118 @@
+{
+  "breakfast": {
+    "items": [
+      {
+        "id": "bf001",
+        "name": "Dosa",
+        "description": "Crispy dosa with spicy red chutney and potato filling, originated from Mysore",
+        "type": "vegetarian",
+        "category": "breakfast",
+        "nutrition": {
+          "calories": 320,
+          "protein": 8,
+          "carbs": 58,
+          "fat": 7
+        },
+        "region": "Karnataka"
+      },
+      {
+        "id": "bf002",
+        "name": "Set Dosa",
+        "description": "Soft and fluffy dosas served in sets of 3-4, popular Karnataka breakfast",
+        "type": "vegetarian",
+        "category": "breakfast",
+        "nutrition": {
+          "calories": 280,
+          "protein": 7,
+          "carbs": 52,
+          "fat": 5
+        },
+        "region": "Karnataka"
+      },
+      {
+        "id": "bf003",
+        "name": "Rava Idli",
+        "description": "Steamed semolina cakes with mustard seeds, curry leaves and cashews",
+        "type": "vegetarian",
+        "category": "breakfast",
+        "nutrition": {
+          "calories": 150,
+          "protein": 4,
+          "carbs": 28,
+          "fat": 3
+        },
+        "region": "Karnataka"
+      },
+      {
+        "id": "bf005",
+        "name": "Upma and Kesari Bath",
+        "description": "Savory semolina porridge with vegetables, mustard seeds and curry leaves",
+        "type": "vegetarian",
+        "category": "breakfast",
+        "nutrition": {
+          "calories": 200,
+          "protein": 5,
+          "carbs": 35,
+          "fat": 5
+        },
+        "region": "Karnataka"
+      },
+      {
+        "id": "bf006",
+        "name": "Poha",
+        "description": "Flattened rice cooked with onions, peanuts and spices, garnished with coriander",
+        "type": "vegetarian",
+        "category": "breakfast",
+        "nutrition": {
+          "calories": 180,
+          "protein": 4,
+          "carbs": 32,
+          "fat": 4
+        },
+        "region": "Karnataka"
+      },
+      {
+        "id": "bf009",
+        "name": "Idli",
+        "description": "Thick pancake made from fermented rice and lentil batter with vegetable toppings",
+        "type": "vegetarian",
+        "category": "breakfast",
+        "nutrition": {
+          "calories": 35,
+          "protein": 2,
+          "carbs": 6,
+          "fat": 0.5
+        },
+        "region": "Karnataka"
+      },
+      {
+        "id": "bf015",
+        "name": "Akki Roti",
+        "description": "Rice flour flatbread with vegetables and spices, cooked on griddle",
+        "type": "vegetarian",
+        "category": "breakfast",
+        "nutrition": {
+          "calories": 200,
+          "protein": 5,
+          "carbs": 38,
+          "fat": 4
+        },
+        "region": "Karnataka"
+      },
+      {
+        "id": "bf_user_1756746332987",
+        "name": "Ragi Rotti",
+        "description": "Ragi Rotti",
+        "type": "mains",
+        "category": "breakfast",
+        "nutrition": {
+          "calories": 150,
+          "protein": 4,
+          "carbs": 25,
+          "fat": 4
+        },
+        "region": "Karnataka"
+      }
+    ]
+  }
+}

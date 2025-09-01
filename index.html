@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ನಾಳೆ ಅಡುಗೆ ಏನು? - Karnataka Cuisine</title>
+    <meta name="description" content="Discover authentic Karnataka breakfast and meal recipes">
+    <meta name="theme-color" content="#667eea">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/components.css">
+    
+    <!-- PWA Icons -->
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192x192.png">
+    <link rel="apple-touch-icon" href="assets/icons/icon-192x192.png">
+</head>
+<body>
+    <div id="app">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="container">
+                <h1 class="app-title">ನಾಳೆ ಅಡುಗೆ ಏನು?</h1>
+                <p class="app-subtitle">Karnataka Cuisine Catalog</p>
+                
+                <!-- Navigation Menu -->
+                <nav class="main-nav">
+                    <button class="nav-btn active" data-module="dashboard">
+                        🏠 Dashboard
+                    </button>
+                    <button class="nav-btn" data-module="breakfast-catalog">
+                        🌅 Breakfast
+                    </button>
+                    <button class="nav-btn" data-module="mains-catalog">
+                        🍽️ Mains
+                    </button>
+                    <button class="nav-btn" data-module="side-dishes-catalog">
+                        🥘 Side Dishes
+                    </button>
+                    <button class="nav-btn" data-module="accompaniments-catalog">
+                        🥗 Accompaniments
+                    </button>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main id="main-content" class="main-content">
+            <!-- Modules will be loaded here dynamically -->
+        </main>
+
+        <!-- Loading Indicator -->
+        <div id="loading" class="loading-overlay hidden">
+            <div class="loading-spinner">
+                <div class="spinner"></div>
+                <p>Loading...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script src="js/navigation.js"></script>
+    
+    <!-- PWA Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then((registration) => {
+                        console.log('SW registered: ', registration);
+                    })
+                    .catch((registrationError) => {
+                        console.log('SW registration failed: ', registrationError);
+                    });
+            });
+        }
+    </script>
+</body>
+</html>

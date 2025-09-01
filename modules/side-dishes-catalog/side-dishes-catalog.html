@@ -1,0 +1,195 @@
+<div class="side-dishes-catalog-module">
+    <!-- Header Section -->
+    <div class="container">
+        <div class="catalog-header">
+            <h2 class="module-title">🥗 Side Dishes Catalog</h2>
+            <p class="module-description">Karnataka side dishes to complement your meals</p>
+        </div>
+
+        <!-- Action Bar -->
+        <div class="action-bar">
+            <div class="search-controls">
+                <input 
+                    type="text" 
+                    id="searchInput" 
+                    class="form-input search-input"
+                    placeholder="🔍 Search side dishes..."
+                >
+                <div class="filter-controls">
+                    <select id="typeFilter" class="form-select">
+                        <option value="all">All Types</option>
+                        <option value="vegetable">Vegetable</option>
+                        <option value="dal">Dal</option>
+                        <option value="curry">Curry</option>
+                        <option value="stir-fry">Stir-fry</option>
+                    </select>
+                </div>
+            </div>
+            
+            <button id="addSideDishBtn" class="btn btn-primary">
+                ➕ Add Side Dish
+            </button>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="statistics-grid grid grid-3">
+            <div class="stat-card card">
+                <div class="stat-icon">🥗</div>
+                <div class="stat-content">
+                    <h3 id="totalCount" class="stat-number">0</h3>
+                    <p class="stat-label">Total Side Dishes</p>
+                </div>
+            </div>
+            <div class="stat-card card">
+                <div class="stat-icon">🌱</div>
+                <div class="stat-content">
+                    <h3 id="vegCount" class="stat-number">0</h3>
+                    <p class="stat-label">Vegetarian Options</p>
+                </div>
+            </div>
+            <div class="stat-card card">
+                <div class="stat-icon">🔥</div>
+                <div class="stat-content">
+                    <h3 id="avgCalories" class="stat-number">0</h3>
+                    <p class="stat-label">Avg Calories</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Food Grid -->
+        <div id="foodGrid" class="food-grid grid grid-3">
+            <!-- Food cards will be dynamically loaded here -->
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="empty-state hidden">
+            <div class="empty-icon">🥗</div>
+            <h3 class="empty-title">No side dishes found</h3>
+            <p class="empty-description">Try adjusting your search or filters, or add a new side dish.</p>
+            <button class="btn btn-primary" onclick="document.getElementById('addSideDishBtn').click()">
+                ➕ Add First Side Dish
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Add/Edit Side Dish Modal -->
+<div id="sideDishModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="modalTitle" class="modal-title">Add New Side Dish</h3>
+            <button class="modal-close" onclick="window.sideDishesCatalog && window.sideDishesCatalog.closeModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <form id="sideDishForm" class="form">
+                <div class="form-grid grid-2">
+                    <div class="form-group">
+                        <label for="dishName" class="form-label">Dish Name *</label>
+                        <input type="text" id="dishName" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="dishType" class="form-label">Type *</label>
+                        <select id="dishType" class="form-select" required>
+                            <option value="">Select Type</option>
+                            <option value="vegetable">Vegetable</option>
+                            <option value="dal">Dal</option>
+                            <option value="curry">Curry</option>
+                            <option value="stir-fry">Stir-fry</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="dishDescription" class="form-label">Description *</label>
+                    <textarea 
+                        id="dishDescription" 
+                        class="form-textarea" 
+                        rows="3" 
+                        placeholder="Describe the side dish, its preparation, and unique characteristics..."
+                        required
+                    ></textarea>
+                </div>
+
+                <div class="form-section">
+                    <h4 class="form-section-title">🍽️ Meal Times</h4>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="applicableLunch">
+                            <span class="checkbox-text">Lunch</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="applicableDinner">
+                            <span class="checkbox-text">Dinner</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Nutrition Section -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <h4 class="form-section-title">🔥 Nutrition Information</h4>
+                        <button type="button" id="fetchNutritionBtn" class="btn btn-outline btn-small">
+                            📊 Auto-Fill Nutrition
+                        </button>
+                    </div>
+                    <div id="nutritionStatus" class="nutrition-status"></div>
+                    
+                    <div class="nutrition-grid grid-4">
+                        <div class="form-group">
+                            <label for="calories" class="form-label">Calories</label>
+                            <input type="number" id="calories" class="form-input" min="0" step="1">
+                        </div>
+                        <div class="form-group">
+                            <label for="protein" class="form-label">Protein (g)</label>
+                            <input type="number" id="protein" class="form-input" min="0" step="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label for="carbs" class="form-label">Carbs (g)</label>
+                            <input type="number" id="carbs" class="form-input" min="0" step="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label for="fat" class="form-label">Fat (g)</label>
+                            <input type="number" id="fat" class="form-input" min="0" step="0.1">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="window.sideDishesCatalog && window.sideDishesCatalog.closeModal()">
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <span id="submitBtnText">Add Side Dish</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div id="deleteModal" class="modal">
+    <div class="modal-content modal-small">
+        <div class="modal-header">
+            <h3 class="modal-title">🗑️ Delete Side Dish</h3>
+            <button class="modal-close" onclick="window.sideDishesCatalog && window.sideDishesCatalog.closeDeleteModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="delete-confirmation">
+                <div class="delete-icon">⚠️</div>
+                <p class="delete-message">
+                    Are you sure you want to delete "<span id="deleteDishName"></span>"?
+                </p>
+                <p class="delete-warning">This action cannot be undone.</p>
+            </div>
+            <div class="form-actions">
+                <button type="button" class="btn btn-secondary" onclick="window.sideDishesCatalog && window.sideDishesCatalog.closeDeleteModal()">
+                    Cancel
+                </button>
+                <button type="button" class="btn btn-danger" onclick="window.sideDishesCatalog && window.sideDishesCatalog.confirmDelete()">
+                    🗑️ Delete
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
