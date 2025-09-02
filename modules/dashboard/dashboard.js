@@ -37,11 +37,11 @@ class Dashboard {
             const accompanimentsResponse = await fetch('/data/accompaniments-catalog.json');
             const accompanimentsJson = await accompanimentsResponse.json();
             
-            // Extract items from nested structure
-            this.breakfastItems = this.extractItems(breakfastJson);
-            this.mainsItems = this.extractItems(mainsJson, 'mains');
-            this.sideDishesItems = this.extractItems(sideDishesJson, 'sideDishes');
-            this.accompanimentsItems = this.extractItems(accompanimentsJson, 'accompaniments');
+            // Extract items from nested structure and merge with localStorage
+            this.breakfastItems = await this.mergeWithLocalStorage(this.extractItems(breakfastJson), 'breakfast-catalog');
+            this.mainsItems = await this.mergeWithLocalStorage(this.extractItems(mainsJson, 'mains'), 'mains-catalog');
+            this.sideDishesItems = await this.mergeWithLocalStorage(this.extractItems(sideDishesJson, 'sideDishes'), 'side-dishes-catalog');
+            this.accompanimentsItems = await this.mergeWithLocalStorage(this.extractItems(accompanimentsJson, 'accompaniments'), 'accompaniments-catalog');
             
             // Combine all items for total calculations
             this.allFoodItems = [...this.breakfastItems, ...this.mainsItems, ...this.sideDishesItems, ...this.accompanimentsItems];
@@ -51,6 +51,28 @@ class Dashboard {
         } catch (error) {
             console.error('Error loading data:', error);
             this.showAlert('Failed to load food data. Please refresh the page.', 'error');
+        }
+    }
+
+    // Merge source data with any new items added to localStorage
+    async mergeWithLocalStorage(sourceItems, storageKey) {
+        try {
+            const localData = localStorage.getItem(storageKey);
+            if (localData) {
+                const parsedData = JSON.parse(localData);
+                const localItems = parsedData.items || [];
+                
+                // Find items that are in localStorage but not in source data
+                const sourceIds = new Set(sourceItems.map(item => item.id));
+                const newLocalItems = localItems.filter(item => !sourceIds.has(item.id));
+                
+                // Merge arrays
+                return [...sourceItems, ...newLocalItems];
+            }
+            return sourceItems;
+        } catch (error) {
+            console.warn(`Error merging localStorage for ${storageKey}:`, error);
+            return sourceItems;
         }
     }
 
@@ -121,6 +143,34 @@ class Dashboard {
                 this.fetchNutritionInfo();
             });
         }
+
+        // Developer tools buttons
+        const downloadAllBtn = document.getElementById('downloadAllCatalogsBtn');
+        if (downloadAllBtn) {
+            downloadAllBtn.addEventListener('click', () => {
+                this.downloadAllCatalogs();
+            });
+        }
+
+        const clearLocalStorageBtn = document.getElementById('clearLocalStorageBtn');
+        if (clearLocalStorageBtn) {
+            clearLocalStorageBtn.addEventListener('click', () => {
+                this.clearLocalStorage();
+            });
+        }
+
+        // Make toggleDevTools globally available
+        window.toggleDevTools = () => {
+            const devTools = document.getElementById('devTools');
+            const toggleBtn = document.getElementById('toggleDevToolsBtn');
+            if (devTools.style.display === 'none') {
+                devTools.style.display = 'block';
+                toggleBtn.textContent = '🔧 Hide Developer Tools';
+            } else {
+                devTools.style.display = 'none';
+                toggleBtn.textContent = '🔧 Developer Tools';
+            }
+        };
 
         // Breakfast card click
         const breakfastCard = document.getElementById('breakfastCard');
@@ -708,30 +758,62 @@ class Dashboard {
 
     async saveDishToStorage(dishData) {
         // Determine which storage category to use
-        let storageKey;
+        let storageKey, sourceDataStructure;
         if (dishData.type === 'breakfast') {
             storageKey = 'breakfast-catalog';
+            sourceDataStructure = 'breakfast';
         } else if (dishData.type === 'main-dish') {
             storageKey = 'mains-catalog';
+            sourceDataStructure = 'mains';
         } else if (dishData.type === 'side-dish-gravy' || dishData.type === 'side-dish-sabji') {
             storageKey = 'side-dishes-catalog';
+            sourceDataStructure = 'sideDishes';
         } else if (dishData.type === 'accompaniment') {
             storageKey = 'accompaniments-catalog';
+            sourceDataStructure = 'accompaniments';
         } else {
-            storageKey = 'mains-catalog'; // default fallback
+            storageKey = 'mains-catalog';
+            sourceDataStructure = 'mains';
         }
 
-        // Get existing data from localStorage
-        const existingData = JSON.parse(localStorage.getItem(storageKey)) || { items: [] };
+        // Get existing data from localStorage (if any)
+        const existingLocalData = JSON.parse(localStorage.getItem(storageKey)) || { items: [] };
         
-        // Add new dish
-        existingData.items.push(dishData);
-        
-        // Save back to localStorage
-        localStorage.setItem(storageKey, JSON.stringify(existingData));
+        // Add new dish to localStorage
+        existingLocalData.items.push(dishData);
+        localStorage.setItem(storageKey, JSON.stringify(existingLocalData));
 
-        // Also save to downloadable JSON file for local development
-        this.downloadUpdatedCatalog(storageKey, existingData);
+        // Create the complete merged data structure for download
+        await this.createCompleteUpdatedCatalog(storageKey, sourceDataStructure, dishData);
+    }
+
+    async createCompleteUpdatedCatalog(storageKey, sourceDataStructure, newDishData) {
+        try {
+            // Load the original source file to get the complete structure
+            const sourceFileName = `${storageKey}.json`;
+            const response = await fetch(`/data/${sourceFileName}`);
+            const originalData = await response.json();
+
+            // Add the new dish to the original structure
+            if (originalData[sourceDataStructure] && originalData[sourceDataStructure].items) {
+                originalData[sourceDataStructure].items.push(newDishData);
+            } else {
+                // Fallback structure if original doesn't exist
+                originalData[sourceDataStructure] = {
+                    items: [newDishData]
+                };
+            }
+
+            // Download the complete updated file
+            this.downloadUpdatedCatalog(storageKey, originalData);
+            
+            console.log(`Created complete updated ${sourceFileName} with ${originalData[sourceDataStructure].items.length} items`);
+        } catch (error) {
+            console.error('Error creating complete catalog:', error);
+            // Fallback to simple download
+            const fallbackData = { items: [newDishData] };
+            this.downloadUpdatedCatalog(storageKey, fallbackData);
+        }
     }
 
     downloadUpdatedCatalog(catalogName, data) {
@@ -756,8 +838,55 @@ class Dashboard {
             URL.revokeObjectURL(url);
             
             console.log(`Downloaded updated ${catalogName}.json file`);
+            
+            // Show helpful message to user
+            this.showAlert(
+                `📥 ${catalogName}.json downloaded! Please replace the file in your /data/ directory and commit to Git.`, 
+                'info'
+            );
         } catch (error) {
             console.error('Error downloading catalog:', error);
+        }
+    }
+
+    // Utility method to download all current catalogs (helpful for backup/sync)
+    downloadAllCatalogs() {
+        const catalogs = [
+            { key: 'breakfast-catalog', structure: 'breakfast', items: this.breakfastItems },
+            { key: 'mains-catalog', structure: 'mains', items: this.mainsItems },
+            { key: 'side-dishes-catalog', structure: 'sideDishes', items: this.sideDishesItems },
+            { key: 'accompaniments-catalog', structure: 'accompaniments', items: this.accompanimentsItems }
+        ];
+
+        catalogs.forEach(catalog => {
+            const data = {
+                [catalog.structure]: {
+                    items: catalog.items
+                }
+            };
+            setTimeout(() => {
+                this.downloadUpdatedCatalog(catalog.key, data);
+            }, 500); // Small delay between downloads
+        });
+
+        this.showAlert('📥 All catalog files will be downloaded. Please replace them in your /data/ directory.', 'info');
+    }
+
+    // Clear localStorage to reset to original data
+    clearLocalStorage() {
+        const catalogs = ['breakfast-catalog', 'mains-catalog', 'side-dishes-catalog', 'accompaniments-catalog'];
+        
+        if (confirm('Are you sure you want to clear all local data? This will reset the app to use only the original catalog files.')) {
+            catalogs.forEach(key => {
+                localStorage.removeItem(key);
+            });
+            
+            this.showAlert('🗑️ Local data cleared! Please refresh the page to reload original data.', 'warning');
+            
+            // Automatically refresh after 2 seconds
+            setTimeout(() => {
+                window.location.reload();
+            }, 2000);
         }
     }
 

@@ -1052,3 +1052,62 @@
         min-width: 140px;
     }
 }
+
+/* Developer Tools Styling */
+.developer-tools {
+    margin-top: 20px;
+}
+
+.dev-tools-card {
+    background: rgba(255, 193, 7, 0.05);
+    border: 1px dashed #ffc107;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.dev-tools-header h4 {
+    color: #e67e22;
+    margin: 0 0 5px 0;
+    font-size: 1.1rem;
+}
+
+.dev-tools-header p {
+    color: #666;
+    margin: 0 0 15px 0;
+    font-size: 0.9rem;
+}
+
+.dev-tools-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.dev-tools-toggle {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.btn-link {
+    background: none;
+    border: none;
+    color: #666;
+    cursor: pointer;
+    font-size: 0.85rem;
+    text-decoration: underline;
+    padding: 5px;
+}
+
+.btn-link:hover {
+    color: var(--primary-color);
+}
+
+@media (max-width: 768px) {
+    .dev-tools-actions {
+        flex-direction: column;
+    }
+    
+    .dev-tools-actions .btn {
+        width: 100%;
+    }
+}
