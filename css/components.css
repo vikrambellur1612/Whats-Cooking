@@ -214,6 +214,17 @@
     z-index: 1000;
     min-height: 100vh;
     max-height: 100vh;
+    /* Ensure modal is always at viewport top on mobile */
+    overflow-y: auto;
+}
+
+/* Mobile-specific modal positioning */
+@media (max-width: 768px) {
+    .modal {
+        align-items: flex-start;
+        padding-top: 80px; /* Account for sticky header */
+        padding-bottom: 20px;
+    }
 }
 
 .modal-content {
@@ -582,13 +593,15 @@
     .modal-content {
         width: calc(100vw - 30px);
         max-width: none;
-        max-height: 90vh;
+        max-height: calc(100vh - 120px); /* Account for header and padding */
         border-radius: 12px;
-        /* Center content within modal */
-        margin: auto;
+        /* Remove auto margin since we're using flex-start alignment */
+        margin: 0 auto;
         /* Prevent content from being cut off */
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
+        /* Add some shadow for better visibility */
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
     }
     
     .modal-header {

@@ -354,6 +354,13 @@ class Dashboard {
         const modal = document.getElementById('mealPlanModal');
         if (modal) {
             modal.classList.add('active');
+            
+            // Scroll to top for better mobile experience - ensures modal is visible
+            // Small delay to let modal opening animation start first
+            setTimeout(() => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, 100);
+            
             console.log('Modal shown');
         } else {
             console.error('Modal not found!');
@@ -608,6 +615,12 @@ class Dashboard {
         
         if (modal) {
             modal.classList.add('active');
+            
+            // Scroll to top for better mobile experience - ensures modal is visible
+            // Small delay to let modal opening animation start first
+            setTimeout(() => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, 100);
             
             // Update modal title and submit button based on whether we're adding or editing
             if (modalTitle) {
