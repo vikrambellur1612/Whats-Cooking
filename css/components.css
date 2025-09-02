@@ -212,7 +212,8 @@
     visibility: hidden;
     transition: all 0.3s ease;
     z-index: 1000;
-    /* Remove overflow-y auto that might be causing issues */
+    min-height: 100vh;
+    max-height: 100vh;
 }
 
 .modal-content {
@@ -221,11 +222,12 @@
     border-radius: var(--border-radius);
     width: 100%;
     max-width: 500px;
-    max-height: 70vh;
+    max-height: 60vh;
     overflow-y: auto;
     position: relative;
     animation: modalSlideIn 0.3s ease-out;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    flex-shrink: 0;
 }
 
 .modal.active {
@@ -360,6 +362,12 @@
     .modal {
         left: 0;
         width: 100vw;
+        min-height: 100vh;
+        max-height: 100vh;
+    }
+    
+    .modal-content {
+        max-height: 55vh;
     }
 }
 
@@ -369,6 +377,12 @@
         /* Account for sidebar width on desktop */
         left: 280px;
         width: calc(100vw - 280px);
+        min-height: 100vh;
+        max-height: 100vh;
+    }
+    
+    .modal-content {
+        max-height: 50vh;
     }
 }
 
@@ -383,12 +397,14 @@
         padding: 10px;
         left: 0;
         width: 100vw;
+        min-height: 100vh;
+        max-height: 100vh;
     }
     
     .modal-content {
         width: calc(100% - 20px);
         max-width: none;
-        max-height: 80vh;
+        max-height: 60vh;
         border-radius: 12px;
     }
     
