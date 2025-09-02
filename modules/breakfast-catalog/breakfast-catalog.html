@@ -3,32 +3,16 @@
     <div class="container">
         <div class="catalog-header">
             <h2 class="module-title">🌅 Breakfast Catalog</h2>
-            <p class="module-description">Traditional Karnataka breakfast dishes to start your day</p>
+            <p class="module-description">Traditional Indian breakfast dishes to start your day</p>
         </div>
 
         <!-- Action Bar -->
         <div class="action-bar">
-            <div class="search-controls">
-                <input 
-                    type="text" 
-                    id="searchInput" 
-                    class="form-input search-input"
-                    placeholder="🔍 Search breakfast dishes..."
-                >
-                <div class="filter-controls">
-                    <select id="typeFilter" class="form-select">
-                        <option value="all">All Types</option>
-                        <option value="mains">Mains</option>
-                        <option value="side-dish-gravy">Side Dish - Gravy</option>
-                        <option value="side-dish-sabji">Side Dish - Sabji</option>
-                        <option value="vegetarian">Vegetarian</option>
-                        <option value="non-vegetarian">Non-Vegetarian</option>
-                    </select>
-                </div>
+            <div class="action-bar-content">
+                <button id="addBreakfastBtn" class="btn btn-primary">
+                    ➕ Add New Breakfast
+                </button>
             </div>
-            <button id="addBreakfastBtn" class="btn btn-primary">
-                ➕ Add New Breakfast
-            </button>
         </div>
 
         <!-- Statistics Cards -->
@@ -96,13 +80,27 @@
                 <div class="form-group">
                     <label class="form-label">Type *</label>
                     <select id="dishType" class="form-select" required>
-                        <option value="">Select Type</option>
-                        <option value="mains">Mains</option>
-                        <option value="side-dish-gravy">Side Dish - Gravy</option>
-                        <option value="side-dish-sabji">Side Dish - Sabji</option>
-                        <option value="vegetarian">Vegetarian</option>
-                        <option value="non-vegetarian">Non-Vegetarian</option>
+                        <option value="">Select dish type...</option>
+                        <option value="breakfast">🌅 Breakfast</option>
+                        <option value="main-dish">🍽️ Main Dish</option>
+                        <option value="side-dish-gravy">🥘 Side Dish - Gravy</option>
+                        <option value="side-dish-sabji">🥗 Side Dish - Sabji</option>
+                        <option value="accompaniment">🍯 Accompaniment</option>
                     </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Meal Classification</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="isVegetarian" value="vegetarian">
+                            <span class="checkbox-text">🥬 Vegetarian</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="isNonVegetarian" value="non-vegetarian">
+                            <span class="checkbox-text">🍖 Non-Vegetarian</span>
+                        </label>
+                    </div>
                 </div>
                 
                 <div class="form-group">

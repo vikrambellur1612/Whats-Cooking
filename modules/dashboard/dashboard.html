@@ -2,8 +2,24 @@
     <!-- Header Section -->
     <div class="container">
         <div class="dashboard-header">
-            <h2 class="module-title">🏠 Dashboard</h2>
-            <p class="module-description">Your Karnataka cuisine catalog at a glance</p>
+            <h2 class="module-title">🏠 Home - ನಾಳೆ ಅಡುಗೆ ಏನು?</h2>
+            <p class="module-description">Your Indian cuisine catalog at a glance</p>
+        </div>
+
+        <!-- Search and Add Section -->
+        <div class="search-add-section">
+            <div class="search-add-grid grid grid-2">
+                <div class="search-section">
+                    <div class="search-container">
+                        <input type="text" id="globalSearch" class="form-input" placeholder="🔍 Search all dishes...">
+                    </div>
+                </div>
+                <div class="add-section">
+                    <button id="addNewDishBtn" class="btn btn-primary btn-large">
+                        ➕ Add New Dish
+                    </button>
+                </div>
+            </div>
         </div>
 
         <!-- Quick Stats Cards -->
@@ -13,7 +29,7 @@
                 <div class="stat-content">
                     <h3 id="breakfastCount" class="stat-number">0</h3>
                     <p class="stat-label">Breakfast Items</p>
-                    <p class="stat-description">Traditional Karnataka breakfast dishes</p>
+                    <p class="stat-description">Traditional Indian breakfast dishes</p>
                     <div class="card-action">Click to explore →</div>
                 </div>
             </div>
@@ -23,7 +39,7 @@
                 <div class="stat-content">
                     <h3 id="mainsCount" class="stat-number">0</h3>
                     <p class="stat-label">Main Dishes</p>
-                    <p class="stat-description">Karnataka main course specialties</p>
+                    <p class="stat-description">Indian main course specialties</p>
                     <div class="card-action">Click to explore →</div>
                 </div>
             </div>
@@ -33,7 +49,7 @@
                 <div class="stat-content">
                     <h3 id="sideDishesCount" class="stat-number">0</h3>
                     <p class="stat-label">Side Dishes</p>
-                    <p class="stat-description">Karnataka, Andhra & North Indian sides</p>
+                    <p class="stat-description">Various Indian side dishes</p>
                     <div class="card-action">Click to explore →</div>
                 </div>
             </div>
@@ -96,6 +112,199 @@
         </div>
     </div>
 </div>
+
+    <!-- Add New Dish Modal -->
+    <div id="addDishModal" class="modal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content add-dish-modal">
+            <div class="modal-header">
+                <h3 id="modalTitle">✨ Add New Dish</h3>
+                <button class="modal-close" onclick="window.dashboard?.closeAddDishModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="addDishForm" class="add-dish-form">
+                    <!-- Step 1: Basic Info -->
+                    <div class="form-step active" id="step1">
+                        <div class="step-header">
+                            <h4>📝 Basic Information</h4>
+                            <p>Tell us about your dish</p>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="dishName" class="form-label">What's the name of your dish? *</label>
+                            <input type="text" id="dishName" name="dishName" class="form-input" placeholder="e.g., Masala Dosa" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="dishDescription" class="form-label">Describe your dish</label>
+                            <textarea id="dishDescription" name="dishDescription" class="form-textarea" rows="3" placeholder="Tell us what makes this dish special..." required></textarea>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-primary" onclick="showStep(2)">
+                                Next: Category <span class="btn-arrow">→</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Category -->
+                    <div class="form-step" id="step2">
+                        <div class="step-header">
+                            <h4>🍽️ Category & Type</h4>
+                            <p>Help us categorize your dish</p>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">What type of dish is this? *</label>
+                            <div class="dish-type-grid">
+                                <label class="dish-type-card">
+                                    <input type="radio" name="dishType" value="breakfast" required>
+                                    <div class="dish-type-content">
+                                        <span class="dish-type-emoji">🌅</span>
+                                        <span class="dish-type-label">Breakfast</span>
+                                    </div>
+                                </label>
+                                <label class="dish-type-card">
+                                    <input type="radio" name="dishType" value="main-dish" required>
+                                    <div class="dish-type-content">
+                                        <span class="dish-type-emoji">🍽️</span>
+                                        <span class="dish-type-label">Main Dish</span>
+                                    </div>
+                                </label>
+                                <label class="dish-type-card">
+                                    <input type="radio" name="dishType" value="side-dish-gravy" required>
+                                    <div class="dish-type-content">
+                                        <span class="dish-type-emoji">🥘</span>
+                                        <span class="dish-type-label">Side - Gravy</span>
+                                    </div>
+                                </label>
+                                <label class="dish-type-card">
+                                    <input type="radio" name="dishType" value="side-dish-sabji" required>
+                                    <div class="dish-type-content">
+                                        <span class="dish-type-emoji">🥗</span>
+                                        <span class="dish-type-label">Side - Sabji</span>
+                                    </div>
+                                </label>
+                                <label class="dish-type-card">
+                                    <input type="radio" name="dishType" value="accompaniment" required>
+                                    <div class="dish-type-content">
+                                        <span class="dish-type-emoji">🍯</span>
+                                        <span class="dish-type-label">Accompaniment</span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="cuisineType" class="form-label">Cuisine Style *</label>
+                                <select id="cuisineType" name="cuisineType" class="form-select" required>
+                                    <option value="">Choose cuisine</option>
+                                    <option value="South Indian">�️ South Indian</option>
+                                    <option value="North Indian">🫓 North Indian</option>
+                                    <option value="Regional">🏔️ Regional</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Diet Type</label>
+                                <div class="diet-toggle">
+                                    <label class="toggle-option">
+                                        <input type="checkbox" name="mealType" value="vegetarian">
+                                        <span class="toggle-content">🥬 Vegetarian</span>
+                                    </label>
+                                    <label class="toggle-option">
+                                        <input type="checkbox" name="mealType" value="non-vegetarian">
+                                        <span class="toggle-content">🍖 Non-Vegetarian</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary" onclick="showStep(1)">
+                                <span class="btn-arrow">←</span> Back
+                            </button>
+                            <button type="button" class="btn btn-primary" onclick="showStep(3)">
+                                Next: Nutrition <span class="btn-arrow">→</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Nutrition (Optional) -->
+                    <div class="form-step" id="step3">
+                        <div class="step-header">
+                            <h4>🔥 Nutrition Info</h4>
+                            <p>Add nutritional details (optional but helpful!)</p>
+                        </div>
+                        
+                        <div class="nutrition-auto-section">
+                            <button type="button" id="fetchNutritionBtn" class="btn btn-outline">
+                                🔍 Auto-fetch nutrition data
+                            </button>
+                            <div id="nutritionStatus" class="nutrition-status"></div>
+                        </div>
+                        
+                        <div class="nutrition-grid">
+                            <div class="nutrition-item">
+                                <label for="calories" class="nutrition-label">
+                                    <span class="nutrition-icon">🔥</span>
+                                    Calories
+                                </label>
+                                <input type="number" id="calories" name="calories" class="nutrition-input" min="0" placeholder="0">
+                            </div>
+                            <div class="nutrition-item">
+                                <label for="protein" class="nutrition-label">
+                                    <span class="nutrition-icon">💪</span>
+                                    Protein (g)
+                                </label>
+                                <input type="number" id="protein" name="protein" class="nutrition-input" min="0" step="0.1" placeholder="0.0">
+                            </div>
+                            <div class="nutrition-item">
+                                <label for="carbs" class="nutrition-label">
+                                    <span class="nutrition-icon">🌾</span>
+                                    Carbs (g)
+                                </label>
+                                <input type="number" id="carbs" name="carbs" class="nutrition-input" min="0" step="0.1" placeholder="0.0">
+                            </div>
+                            <div class="nutrition-item">
+                                <label for="fat" class="nutrition-label">
+                                    <span class="nutrition-icon">🥑</span>
+                                    Fat (g)
+                                </label>
+                                <input type="number" id="fat" name="fat" class="nutrition-input" min="0" step="0.1" placeholder="0.0">
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary" onclick="showStep(2)">
+                                <span class="btn-arrow">←</span> Back
+                            </button>
+                            <button type="submit" class="btn btn-success">
+                                ✨ Add Dish to Collection
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Progress Indicator -->
+                    <div class="step-progress">
+                        <div class="progress-step active" data-step="1">
+                            <span class="progress-number">1</span>
+                            <span class="progress-label">Basic Info</span>
+                        </div>
+                        <div class="progress-step" data-step="2">
+                            <span class="progress-number">2</span>
+                            <span class="progress-label">Category</span>
+                        </div>
+                        <div class="progress-step" data-step="3">
+                            <span class="progress-number">3</span>
+                            <span class="progress-label">Nutrition</span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
 <!-- Lucky Meal Plan Modal -->
 <div id="mealPlanModal" class="modal">

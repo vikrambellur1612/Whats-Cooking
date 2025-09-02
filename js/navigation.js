@@ -3,20 +3,20 @@ class Navigation {
     constructor() {
         this.routes = {
             'dashboard': {
-                title: 'Dashboard',
-                description: 'Overview of your Karnataka cuisine catalog with quick access'
+                title: 'Home - ನಾಳೆ ಅಡುಗೆ ಏನು?',
+                description: 'Your Indian cuisine catalog at a glance'
             },
             'breakfast-catalog': {
                 title: 'Breakfast Catalog',
-                description: 'Browse and manage traditional Karnataka breakfast dishes'
+                description: 'Browse and manage traditional Indian breakfast dishes'
             },
             'mains-catalog': {
                 title: 'Mains Catalog', 
-                description: 'Browse and manage Karnataka main course dishes'
+                description: 'Browse and manage Indian main course dishes'
             },
             'side-dishes-catalog': {
                 title: 'Side Dishes Catalog',
-                description: 'Browse side dishes from Karnataka, Andhra, and North Indian cuisines'
+                description: 'Browse Indian side dishes from various cuisines'
             },
             'accompaniments-catalog': {
                 title: 'Accompaniments Catalog',

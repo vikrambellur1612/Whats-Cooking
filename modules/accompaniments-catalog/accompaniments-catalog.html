@@ -8,28 +8,11 @@
 
         <!-- Action Bar -->
         <div class="action-bar">
-            <div class="search-controls">
-                <input 
-                    type="text" 
-                    id="searchInput" 
-                    class="form-input search-input"
-                    placeholder="🔍 Search accompaniments..."
-                >
-                <div class="filter-controls">
-                    <select id="typeFilter" class="form-select">
-                        <option value="all">All Types</option>
-                        <option value="salad">Salad</option>
-                        <option value="raita">Raita</option>
-                        <option value="chutney">Chutney</option>
-                        <option value="pickle">Pickle</option>
-                        <option value="crispy">Crispy</option>
-                        <option value="rice-based">Rice Based</option>
-                    </select>
-                </div>
+            <div class="action-bar-content">
+                <button id="addAccompanimentBtn" class="btn btn-primary">
+                    ➕ Add New Accompaniment
+                </button>
             </div>
-            <button id="addAccompanimentBtn" class="btn btn-primary">
-                ➕ Add New Accompaniment
-            </button>
         </div>
 
         <!-- Statistics Cards -->
@@ -98,13 +81,36 @@
                             <label for="dishType" class="form-label">Type *</label>
                             <select id="dishType" name="dishType" class="form-select" required>
                                 <option value="">Select type</option>
-                                <option value="salad">Salad</option>
-                                <option value="raita">Raita</option>
-                                <option value="chutney">Chutney</option>
-                                <option value="pickle">Pickle</option>
-                                <option value="crispy">Crispy</option>
-                                <option value="rice-based">Rice Based</option>
+                                <option value="breakfast">🌅 Breakfast</option>
+                                <option value="main-dish">🍽️ Main Dish</option>
+                                <option value="side-dish-gravy">🥘 Side Dish - Gravy</option>
+                                <option value="side-dish-sabji">🥗 Side Dish - Sabji</option>
+                                <option value="accompaniment">🍯 Accompaniment</option>
                             </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="cuisineType" class="form-label">Cuisine *</label>
+                            <select id="cuisineType" name="cuisineType" class="form-select" required>
+                                <option value="">Select cuisine</option>
+                                <option value="South Indian">South Indian</option>
+                                <option value="North Indian">North Indian</option>
+                                <option value="Regional">Regional</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Meal Classification</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="vegetarian" name="mealType" value="vegetarian">
+                                <span class="checkbox-text">🥬 Vegetarian</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="nonVegetarian" name="mealType" value="non-vegetarian">
+                                <span class="checkbox-text">🍖 Non-Vegetarian</span>
+                            </label>
                         </div>
                     </div>
 

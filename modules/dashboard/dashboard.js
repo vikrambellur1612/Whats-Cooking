@@ -74,6 +74,31 @@ class Dashboard {
     }
 
     setupEventListeners() {
+        // Global search functionality
+        const searchInput = document.getElementById('globalSearchInput');
+        if (searchInput) {
+            searchInput.addEventListener('input', (e) => {
+                this.performGlobalSearch(e.target.value);
+            });
+        }
+
+        // Add New Dish modal
+        const addNewDishBtn = document.getElementById('addNewDishBtn');
+        if (addNewDishBtn) {
+            addNewDishBtn.addEventListener('click', () => {
+                this.showAddDishModal();
+            });
+        }
+
+        // Add Dish Form
+        const addDishForm = document.getElementById('addDishForm');
+        if (addDishForm) {
+            addDishForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.handleAddDishSubmit();
+            });
+        }
+
         // Breakfast card click
         const breakfastCard = document.getElementById('breakfastCard');
         if (breakfastCard) {
@@ -408,6 +433,212 @@ class Dashboard {
                 alert.parentNode.removeChild(alert);
             }
         });
+    }
+
+    // Global search functionality
+    performGlobalSearch(query) {
+        if (!query || query.length < 2) {
+            this.hideSearchResults();
+            return;
+        }
+
+        const searchQuery = query.toLowerCase();
+        const results = this.allFoodItems.filter(item => 
+            item.name.toLowerCase().includes(searchQuery) ||
+            item.description.toLowerCase().includes(searchQuery)
+        );
+
+        this.displaySearchResults(results, query);
+    }
+
+    displaySearchResults(results, query) {
+        const resultsContainer = document.getElementById('searchResults');
+        if (!resultsContainer) return;
+
+        if (results.length === 0) {
+            resultsContainer.innerHTML = `
+                <div class="search-no-results">
+                    <p>No dishes found for "${query}"</p>
+                    <small>Try searching with different keywords</small>
+                </div>
+            `;
+        } else {
+            const resultsHTML = results.map(item => `
+                <div class="search-result-item">
+                    <div class="search-result-emoji">${this.getDishEmoji(item)}</div>
+                    <div class="search-result-content">
+                        <h5 class="search-result-name">${item.name}</h5>
+                        <p class="search-result-description">${item.description}</p>
+                        <div class="search-result-badges">
+                            <span class="badge badge-${item.type}">${this.formatType(item.type)}</span>
+                            ${item.nutrition?.calories ? `<span class="badge badge-nutrition">${item.nutrition.calories} cal</span>` : ''}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            resultsContainer.innerHTML = resultsHTML;
+        }
+        
+        resultsContainer.style.display = 'block';
+    }
+
+    hideSearchResults() {
+        const resultsContainer = document.getElementById('searchResults');
+        if (resultsContainer) {
+            resultsContainer.style.display = 'none';
+        }
+    }
+
+    // Add New Dish Modal functionality
+    showAddDishModal() {
+        const modal = document.getElementById('addDishModal');
+        if (modal) {
+            modal.classList.add('active');
+            this.resetAddDishForm();
+            this.showStep(1); // Start with first step
+        }
+    }
+
+    closeAddDishModal() {
+        const modal = document.getElementById('addDishModal');
+        if (modal) {
+            modal.classList.remove('active');
+        }
+    }
+
+    resetAddDishForm() {
+        const form = document.getElementById('addDishForm');
+        if (form) {
+            form.reset();
+        }
+        // Reset all steps to inactive
+        document.querySelectorAll('.form-step').forEach(step => step.classList.remove('active'));
+        document.querySelectorAll('.progress-step').forEach(step => step.classList.remove('active'));
+    }
+
+    showStep(stepNumber) {
+        // Hide all steps
+        document.querySelectorAll('.form-step').forEach(step => {
+            step.classList.remove('active');
+        });
+        
+        // Show target step
+        const targetStep = document.getElementById(`step${stepNumber}`);
+        if (targetStep) {
+            targetStep.classList.add('active');
+        }
+        
+        // Update progress indicator
+        document.querySelectorAll('.progress-step').forEach((step, index) => {
+            if (index < stepNumber) {
+                step.classList.add('active');
+            } else {
+                step.classList.remove('active');
+            }
+        });
+
+        // Make showStep globally available
+        window.showStep = (step) => this.showStep(step);
+    }
+
+    async handleAddDishSubmit() {
+        const form = document.getElementById('addDishForm');
+        const formData = new FormData(form);
+        
+        // Get form values
+        const dishData = {
+            name: formData.get('dishName'),
+            description: formData.get('dishDescription'),
+            type: formData.get('dishType'),
+            cuisine: formData.get('cuisineType'),
+            mealTypes: formData.getAll('mealType'),
+            nutrition: {
+                calories: parseInt(formData.get('calories')) || 0,
+                protein: parseFloat(formData.get('protein')) || 0,
+                carbs: parseFloat(formData.get('carbs')) || 0,
+                fat: parseFloat(formData.get('fat')) || 0
+            },
+            id: Date.now().toString(),
+            dateAdded: new Date().toISOString()
+        };
+
+        // Validate required fields
+        if (!dishData.name || !dishData.description || !dishData.type || !dishData.cuisine) {
+            this.showAlert('Please fill in all required fields.', 'warning');
+            return;
+        }
+
+        try {
+            // Show loading state
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Adding...';
+            submitBtn.disabled = true;
+
+            // Save dish to appropriate category in localStorage
+            await this.saveDishToStorage(dishData);
+            
+            // Add to current data arrays
+            this.addDishToArrays(dishData);
+            
+            // Update statistics
+            this.updateStatistics();
+            
+            // Close modal and show success message
+            this.closeAddDishModal();
+            this.showAlert(`🎉 ${dishData.name} has been added successfully!`, 'success');
+            
+        } catch (error) {
+            console.error('Error adding dish:', error);
+            this.showAlert('Failed to add dish. Please try again.', 'error');
+        } finally {
+            // Reset button state
+            const submitBtn = form.querySelector('button[type="submit"]');
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
+        }
+    }
+
+    async saveDishToStorage(dishData) {
+        // Determine which storage category to use
+        let storageKey;
+        if (dishData.type === 'breakfast') {
+            storageKey = 'breakfast-catalog';
+        } else if (dishData.type === 'main-dish') {
+            storageKey = 'mains-catalog';
+        } else if (dishData.type === 'side-dish-gravy' || dishData.type === 'side-dish-sabji') {
+            storageKey = 'side-dishes-catalog';
+        } else if (dishData.type === 'accompaniment') {
+            storageKey = 'accompaniments-catalog';
+        } else {
+            storageKey = 'mains-catalog'; // default fallback
+        }
+
+        // Get existing data from localStorage
+        const existingData = JSON.parse(localStorage.getItem(storageKey)) || { items: [] };
+        
+        // Add new dish
+        existingData.items.push(dishData);
+        
+        // Save back to localStorage
+        localStorage.setItem(storageKey, JSON.stringify(existingData));
+    }
+
+    addDishToArrays(dishData) {
+        // Add to appropriate array based on type
+        if (dishData.type === 'breakfast') {
+            this.breakfastItems.push(dishData);
+        } else if (dishData.type === 'main-dish') {
+            this.mainsItems.push(dishData);
+        } else if (dishData.type === 'side-dish-gravy' || dishData.type === 'side-dish-sabji') {
+            this.sideDishesItems.push(dishData);
+        } else if (dishData.type === 'accompaniment') {
+            this.accompanimentsItems.push(dishData);
+        }
+        
+        // Add to all items array
+        this.allFoodItems.push(dishData);
     }
 }
 
