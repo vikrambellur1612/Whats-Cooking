@@ -249,9 +249,40 @@ class Dashboard {
             const randomBreakfast = this.getRandomItem(this.breakfastItems);
             console.log('Random breakfast:', randomBreakfast);
             
-            // Get random main item
-            const randomMain = this.getRandomItem(this.mainsItems);
-            console.log('Random main:', randomMain);
+            // Intelligent main dish selection - prefer rice-based dishes 70% of the time for variety
+            const riceBasedMains = this.mainsItems.filter(item => 
+                item.type === 'mains-rice' || 
+                item.name.toLowerCase().includes('rice') || 
+                item.name.toLowerCase().includes('biryani') || 
+                item.name.toLowerCase().includes('pulao')
+            );
+            
+            const wheatBasedMains = this.mainsItems.filter(item => 
+                item.type === 'mains-wheat' || 
+                item.name.toLowerCase().includes('roti') || 
+                item.name.toLowerCase().includes('chapati') || 
+                item.name.toLowerCase().includes('naan')
+            );
+            
+            const otherMains = this.mainsItems.filter(item => 
+                !riceBasedMains.includes(item) && !wheatBasedMains.includes(item)
+            );
+            
+            let randomMain;
+            const preferRice = Math.random() < 0.7; // 70% chance for rice-based
+            
+            if (preferRice && riceBasedMains.length > 0) {
+                randomMain = this.getRandomItem(riceBasedMains);
+            } else if (!preferRice && wheatBasedMains.length > 0) {
+                randomMain = this.getRandomItem(wheatBasedMains);
+            } else if (otherMains.length > 0) {
+                randomMain = this.getRandomItem(otherMains);
+            } else {
+                // Fallback to any available main dish
+                randomMain = this.getRandomItem(this.mainsItems);
+            }
+            
+            console.log('Random main (intelligent selection):', randomMain);
 
             // Get random side dish
             const randomSideDish = this.getRandomItem(this.sideDishesItems);
@@ -358,10 +389,10 @@ class Dashboard {
         if (name.includes('poha')) return '🍛';
         if (name.includes('paratha')) return '🫓';
         
-        // Main dishes
-        if (name.includes('rice') || name.includes('bath')) return '🍚';
-        if (name.includes('biryani')) return '🍛';
-        if (name.includes('pulao')) return '🍚';
+        // Main dishes with subcategorization
+        if (type === 'mains-rice' || name.includes('rice') || name.includes('bath') || name.includes('biryani') || name.includes('pulao')) return '🍚';
+        if (type === 'mains-wheat' || name.includes('roti') || name.includes('chapati') || name.includes('naan') || name.includes('bread')) return '🫓';
+        if (name.includes('biryani')) return '�';
         
         // Side dishes
         if (name.includes('sambar')) return '🍲';
@@ -369,20 +400,20 @@ class Dashboard {
         if (name.includes('dal')) return '🥣';
         if (name.includes('curry')) return '🍛';
         if (name.includes('sabji') || name.includes('palya')) return '🥗';
-        if (name.includes('gojju')) return '�';
+        if (name.includes('gojju')) return '🥫';
         
         // Accompaniments
         if (name.includes('chutney')) return '🥄';
         if (name.includes('pickle') || name.includes('achar')) return '🥒';
         if (name.includes('raita')) return '🥛';
-        if (name.includes('papad')) return '�';
+        if (name.includes('papad')) return '🥐';
         if (name.includes('kosambari')) return '🥗';
         if (name.includes('salad')) return '🥗';
         if (name.includes('sweet') || name.includes('payasa') || name.includes('halwa')) return '🍮';
         
         // Category-based fallbacks
         if (category === 'breakfast') return '🌅';
-        if (category === 'mains' || type === 'mains') return '🍽️';
+        if (category === 'mains' || type === 'mains' || type === 'mains-rice' || type === 'mains-wheat') return '🍽️';
         if (category === 'side-dishes') {
             if (type === 'side-dish-gravy') return '🍲';
             if (type === 'side-dish-sabji') return '🥗';
@@ -401,6 +432,9 @@ class Dashboard {
     formatType(type) {
         const typeMap = {
             'mains': 'Main Dish',
+            'main-dish': 'Main Dish', 
+            'mains-rice': 'Mains - Rice Based',
+            'mains-wheat': 'Mains - Wheat/Cereal Based',
             'side-dish-gravy': 'Side Dish - Gravy',
             'side-dish-sabji': 'Side Dish - Sabji',
             'vegetarian': 'Vegetarian',
@@ -566,12 +600,30 @@ class Dashboard {
         }
     }
 
-    // Add New Dish Modal functionality
-    showAddDishModal(preselectedType = null) {
+    // Add New Dish Modal functionality - now supports editing existing dishes
+    showAddDishModal(preselectedType = null, existingDish = null) {
         const modal = document.getElementById('addDishModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const submitBtn = modal?.querySelector('button[type="submit"]');
+        
         if (modal) {
             modal.classList.add('active');
-            this.resetAddDishForm();
+            
+            // Update modal title and submit button based on whether we're adding or editing
+            if (modalTitle) {
+                modalTitle.textContent = existingDish ? '✏️ Edit Dish' : '✨ Add New Dish';
+            }
+            
+            if (submitBtn) {
+                submitBtn.textContent = existingDish ? '✨ Update Dish' : '✨ Add Dish to Collection';
+            }
+            
+            this.resetAddDishForm(!!existingDish);
+            
+            // Pre-populate form if editing existing dish (do this after reset to preserve editing state)
+            if (existingDish) {
+                this.populateFormWithExistingDish(existingDish);
+            }
             
             // Pre-select dish type if provided
             if (preselectedType) {
@@ -594,7 +646,58 @@ class Dashboard {
         }
     }
 
-    resetAddDishForm() {
+    populateFormWithExistingDish(dish) {
+        // Populate basic information
+        const dishNameInput = document.getElementById('dishName');
+        if (dishNameInput) dishNameInput.value = dish.name || '';
+        
+        const dishDescriptionInput = document.getElementById('dishDescription');
+        if (dishDescriptionInput) dishDescriptionInput.value = dish.description || '';
+        
+        // Select dish type
+        if (dish.type) {
+            const dishTypeRadio = document.querySelector(`input[name="dishType"][value="${dish.type}"]`);
+            if (dishTypeRadio) {
+                dishTypeRadio.checked = true;
+                // Trigger visual feedback
+                dishTypeRadio.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+        }
+        
+        // Select cuisine type
+        const cuisineSelect = document.getElementById('cuisineType');
+        if (cuisineSelect && dish.cuisine) {
+            cuisineSelect.value = dish.cuisine;
+        }
+        
+        // Set diet type checkboxes
+        if (dish.mealTypes && Array.isArray(dish.mealTypes)) {
+            dish.mealTypes.forEach(mealType => {
+                const checkbox = document.querySelector(`input[name="mealType"][value="${mealType}"]`);
+                if (checkbox) checkbox.checked = true;
+            });
+        }
+        
+        // Populate nutrition information if available
+        if (dish.nutrition) {
+            const caloriesInput = document.getElementById('calories');
+            if (caloriesInput) caloriesInput.value = dish.nutrition.calories || '';
+            
+            const proteinInput = document.getElementById('protein');
+            if (proteinInput) proteinInput.value = dish.nutrition.protein || '';
+            
+            const carbsInput = document.getElementById('carbs');
+            if (carbsInput) carbsInput.value = dish.nutrition.carbs || '';
+            
+            const fatInput = document.getElementById('fat');
+            if (fatInput) fatInput.value = dish.nutrition.fat || '';
+        }
+        
+        // Store the existing dish ID for update operations
+        this.currentEditingDish = dish;
+    }
+
+    resetAddDishForm(preserveEditingState = false) {
         const form = document.getElementById('addDishForm');
         if (form) {
             form.reset();
@@ -612,6 +715,11 @@ class Dashboard {
         const nutritionStatus = document.getElementById('nutritionStatus');
         if (nutritionStatus) {
             nutritionStatus.innerHTML = '';
+        }
+        
+        // Clear editing state only if not preserving it
+        if (!preserveEditingState) {
+            this.currentEditingDish = null;
         }
     }
 
@@ -650,6 +758,13 @@ class Dashboard {
         }
         
         const formData = new FormData(form);
+        const isEditing = this.currentEditingDish !== null && this.currentEditingDish !== undefined;
+        
+        // Debug logging to help troubleshoot
+        console.log('Form submission:', { 
+            isEditing, 
+            currentEditingDish: this.currentEditingDish 
+        });
         
         // Get form values
         const dishData = {
@@ -664,48 +779,79 @@ class Dashboard {
                 carbs: parseFloat(formData.get('carbs')) || 0,
                 fat: parseFloat(formData.get('fat')) || 0
             },
-            id: Date.now().toString(),
-            dateAdded: new Date().toISOString()
+            // Use existing ID for editing, generate new for adding
+            id: isEditing ? (this.currentEditingDish?.id || this.currentEditingDish?.name || Date.now().toString()) : Date.now().toString(),
+            dateAdded: isEditing ? (this.currentEditingDish?.dateAdded || new Date().toISOString()) : new Date().toISOString(),
+            dateModified: isEditing ? new Date().toISOString() : undefined
         };
 
-        // Validate required fields
-        if (!dishData.name || !dishData.type || !dishData.cuisine) {
-            this.showAlert('Please fill in all required fields (Name, Type, and Cuisine).', 'warning');
+        // Validate required fields with better error handling
+        if (!dishData.name) {
+            this.showAlert('Please enter a dish name.', 'warning');
+            this.showStep(1); // Go back to step 1
+            const dishNameInput = document.getElementById('dishName');
+            if (dishNameInput) {
+                dishNameInput.focus();
+            }
+            return;
+        }
+        
+        if (!dishData.type) {
+            this.showAlert('Please select a dish type.', 'warning');
+            this.showStep(2); // Go back to step 2
+            return;
+        }
+        
+        if (!dishData.cuisine) {
+            this.showAlert('Please select a cuisine style.', 'warning');
+            this.showStep(2); // Go back to step 2
+            const cuisineSelect = document.getElementById('cuisineType');
+            if (cuisineSelect) {
+                cuisineSelect.focus();
+            }
             return;
         }
 
         try {
             // Show loading state
             const originalText = submitBtn.textContent;
-            submitBtn.textContent = '🔄 Adding...';
+            const actionText = isEditing ? 'Updating...' : 'Adding...';
+            submitBtn.textContent = `🔄 ${actionText}`;
             submitBtn.disabled = true;
 
-            // Save dish to appropriate category in localStorage (this will trigger file download silently)
-            await this.saveDishToStorage(dishData);
-            
-            // Add to current data arrays
-            this.addDishToArrays(dishData);
+            if (isEditing) {
+                // Update existing dish
+                await this.updateDishInStorage(dishData);
+                this.updateDishInArrays(dishData);
+            } else {
+                // Add new dish
+                await this.saveDishToStorage(dishData);
+                this.addDishToArrays(dishData);
+            }
             
             // Update statistics
             this.updateStatistics();
             
             // Close modal and show success message
             this.closeAddDishModal();
-            this.showAlert(`🎉 ${dishData.name} has been added successfully! The dish has been saved to the ${this.getTypeDisplayName(dishData.type)} catalog and will persist permanently.`, 'success');
+            const actionWord = isEditing ? 'updated' : 'added';
+            this.showAlert(`🎉 ${dishData.name} has been ${actionWord} successfully! The dish has been saved to the ${this.getTypeDisplayName(dishData.type)} catalog and will persist permanently.`, 'success');
             
         } catch (error) {
-            console.error('Error adding dish:', error);
+            console.error(`Error ${isEditing ? 'updating' : 'adding'} dish:`, error);
             
             // Show appropriate error message based on the error
+            const actionWord = isEditing ? 'updated' : 'added';
             const errorMessage = error.message.includes('Failed to save dish to server') 
-                ? `⚠️ ${dishData.name} was saved locally but couldn't be saved to the server. ${error.message}`
-                : 'Failed to add dish. Please try again.';
+                ? `⚠️ ${dishData.name} was ${actionWord} locally but couldn't be saved to the server. ${error.message}`
+                : `Failed to ${isEditing ? 'update' : 'add'} dish. Please try again.`;
             
             this.showAlert(errorMessage, error.message.includes('saved locally') ? 'warning' : 'error');
         } finally {
             // Reset button state
             if (submitBtn) {
-                submitBtn.textContent = '✨ Add Dish to Collection';
+                const defaultText = isEditing ? '✨ Update Dish' : '✨ Add Dish to Collection';
+                submitBtn.textContent = defaultText;
                 submitBtn.disabled = false;
             }
         }
@@ -788,7 +934,7 @@ class Dashboard {
             storageKey = 'breakfast-catalog';
             fileName = 'breakfast-catalog.json';
             sourceDataStructure = 'breakfast';
-        } else if (dishData.type === 'main-dish') {
+        } else if (dishData.type === 'main-dish' || dishData.type === 'mains-rice' || dishData.type === 'mains-wheat') {
             storageKey = 'mains-catalog';
             fileName = 'mains-catalog.json';
             sourceDataStructure = 'mains';
@@ -801,6 +947,7 @@ class Dashboard {
             fileName = 'accompaniments-catalog.json';
             sourceDataStructure = 'accompaniments';
         } else {
+            // Default to mains for any unrecognized type
             storageKey = 'mains-catalog';
             fileName = 'mains-catalog.json';
             sourceDataStructure = 'mains';
@@ -858,11 +1005,42 @@ class Dashboard {
         }
     }
 
+    async updateDishInStorage(dishData) {
+        // Use the same logic as saveDishToStorage but with update semantics
+        await this.saveDishToStorage(dishData);
+    }
+
+    updateDishInArrays(dishData) {
+        // Find and update the dish in the appropriate array
+        const updateInArray = (array) => {
+            const index = array.findIndex(item => (item.id || item.name) === (dishData.id || dishData.name));
+            if (index !== -1) {
+                array[index] = dishData;
+                return true;
+            }
+            return false;
+        };
+
+        // Update in appropriate array based on type
+        if (dishData.type === 'breakfast') {
+            updateInArray(this.breakfastItems);
+        } else if (dishData.type === 'main-dish' || dishData.type === 'mains-rice' || dishData.type === 'mains-wheat') {
+            updateInArray(this.mainsItems);
+        } else if (dishData.type === 'side-dish-gravy' || dishData.type === 'side-dish-sabji') {
+            updateInArray(this.sideDishesItems);
+        } else if (dishData.type === 'accompaniment') {
+            updateInArray(this.accompanimentsItems);
+        }
+        
+        // Update in all items array
+        updateInArray(this.allFoodItems);
+    }
+
     addDishToArrays(dishData) {
         // Add to appropriate array based on type
         if (dishData.type === 'breakfast') {
             this.breakfastItems.push(dishData);
-        } else if (dishData.type === 'main-dish') {
+        } else if (dishData.type === 'main-dish' || dishData.type === 'mains-rice' || dishData.type === 'mains-wheat') {
             this.mainsItems.push(dishData);
         } else if (dishData.type === 'side-dish-gravy' || dishData.type === 'side-dish-sabji') {
             this.sideDishesItems.push(dishData);
@@ -906,26 +1084,12 @@ class Dashboard {
         }
     }
 
-    addDishToArrays(dishData) {
-        // Add to appropriate array based on type
-        if (dishData.type === 'breakfast') {
-            this.breakfastItems.push(dishData);
-        } else if (dishData.type === 'main-dish') {
-            this.mainsItems.push(dishData);
-        } else if (dishData.type === 'side-dish-gravy' || dishData.type === 'side-dish-sabji') {
-            this.sideDishesItems.push(dishData);
-        } else if (dishData.type === 'accompaniment') {
-            this.accompanimentsItems.push(dishData);
-        }
-        
-        // Add to all items array
-        this.allFoodItems.push(dishData);
-    }
-
     getTypeDisplayName(type) {
         const typeMap = {
             'breakfast': 'Breakfast',
             'main-dish': 'Main Dishes',
+            'mains-rice': 'Main Dishes',
+            'mains-wheat': 'Main Dishes',
             'side-dish-gravy': 'Side Dishes',
             'side-dish-sabji': 'Side Dishes',
             'accompaniment': 'Accompaniments'

@@ -126,6 +126,9 @@ class MainsCatalog {
                 if (e.target.classList.contains('delete-btn')) {
                     const itemId = e.target.getAttribute('data-id');
                     this.deleteItem(itemId);
+                } else if (e.target.classList.contains('edit-btn')) {
+                    const itemId = e.target.getAttribute('data-id');
+                    this.editItem(itemId);
                 }
             });
         }
@@ -219,6 +222,9 @@ class MainsCatalog {
                 ` : ''}
                 
                 <div class="food-card-actions">
+                    <button class="action-btn edit-btn" data-id="${item.id || item.name}">
+                        ✏️ Edit
+                    </button>
                     <button class="action-btn delete-btn" data-id="${item.id || item.name}">
                         🗑️ Delete
                     </button>
@@ -250,12 +256,12 @@ class MainsCatalog {
             // Wait a bit for Dashboard to load and then show modal with pre-selected type
             setTimeout(() => {
                 if (window.dashboard && typeof window.dashboard.showAddDishModal === 'function') {
-                    window.dashboard.showAddDishModal('main-dish');
+                    window.dashboard.showAddDishModal('mains-rice'); // Default to rice-based
                 } else {
                     console.warn('Dashboard not ready, trying again...');
                     setTimeout(() => {
                         if (window.dashboard && typeof window.dashboard.showAddDishModal === 'function') {
-                            window.dashboard.showAddDishModal('main-dish');
+                            window.dashboard.showAddDishModal('mains-rice');
                         }
                     }, 500);
                 }
@@ -267,16 +273,24 @@ class MainsCatalog {
 
     getDishEmoji(item) {
         const name = item.name.toLowerCase();
+        const type = item.type;
         
-        if (name.includes('rice') || name.includes('bath')) return '🍚';
+        // Rice-based dishes
+        if (type === 'mains-rice' || name.includes('rice') || name.includes('bath') || name.includes('biryani') || name.includes('pulao')) return '�';
+        
+        // Wheat/Cereal-based dishes  
+        if (type === 'mains-wheat' || name.includes('roti') || name.includes('chapati') || name.includes('naan') || name.includes('bread')) return '🫓';
+        
+        // Other specific dishes
         if (name.includes('curry')) return '🍛';
         if (name.includes('sambar')) return '🍲';
-        if (name.includes('rasam')) return '🍵';
+        if (name.includes('rasam')) return '�';
         if (name.includes('dal')) return '🥘';
-        if (name.includes('roti')) return '🫓';
-        if (name.includes('biryani')) return '🍛';
-        if (name.includes('pulao')) return '🍚';
         if (name.includes('fry') || name.includes('sabji')) return '🥗';
+        
+        // Default based on type
+        if (type === 'mains-rice') return '🍚';
+        if (type === 'mains-wheat') return '🫓';
         
         return '🍽️'; // default meal emoji
     }
@@ -285,6 +299,8 @@ class MainsCatalog {
         const typeMap = {
             'mains': 'Mains',
             'main-dish': 'Main Dish',
+            'mains-rice': 'Mains - Rice Based',
+            'mains-wheat': 'Mains - Wheat/Cereal Based',
             'side-dish-gravy': 'Side Dish - Gravy',
             'side-dish-sabji': 'Side Dish - Sabji', 
             'vegetarian': 'Vegetarian',
@@ -303,7 +319,11 @@ class MainsCatalog {
         
         if (vegCount) {
             const vegetarianCount = this.filteredItems.filter(item => 
-                item.type === 'vegetarian' || item.type === 'mains' || item.type === 'main-dish'
+                item.type === 'vegetarian' || 
+                item.type === 'mains' || 
+                item.type === 'main-dish' ||
+                item.type === 'mains-rice' ||
+                item.type === 'mains-wheat'
             ).length;
             vegCount.textContent = vegetarianCount;
         }
@@ -315,6 +335,44 @@ class MainsCatalog {
             
             const avgCal = this.filteredItems.length > 0 ? Math.round(totalCalories / this.filteredItems.length) : 0;
             avgCalories.textContent = avgCal;
+        }
+    }
+
+    editItem(itemId) {
+        const item = this.allFoodItems.find(item => (item.id || item.name) === itemId);
+        if (!item) {
+            this.showAlert('Item not found for editing.', 'error');
+            return;
+        }
+
+        // Navigate to Dashboard and open edit modal with existing data
+        if (window.navigation && window.navigation.navigateToModule) {
+            window.navigation.navigateToModule('dashboard');
+            
+            setTimeout(() => {
+                if (window.dashboard && typeof window.dashboard.showAddDishModal === 'function') {
+                    // Determine the appropriate type for editing
+                    let dishType = item.type;
+                    if (dishType === 'mains' || dishType === 'main-dish') {
+                        dishType = 'mains-rice'; // Default to rice-based for legacy items
+                    }
+                    // Pass the existing item data for pre-population
+                    window.dashboard.showAddDishModal(dishType, item);
+                } else {
+                    console.warn('Dashboard not ready, trying again...');
+                    setTimeout(() => {
+                        if (window.dashboard && typeof window.dashboard.showAddDishModal === 'function') {
+                            let dishType = item.type;
+                            if (dishType === 'mains' || dishType === 'main-dish') {
+                                dishType = 'mains-rice';
+                            }
+                            window.dashboard.showAddDishModal(dishType, item);
+                        }
+                    }, 500);
+                }
+            }, 300);
+        } else {
+            alert('Unable to open Edit modal. Please navigate to Dashboard manually.');
         }
     }
 

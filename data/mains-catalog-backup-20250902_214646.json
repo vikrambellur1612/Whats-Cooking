@@ -214,6 +214,23 @@
         },
         "id": "1756829319692",
         "dateAdded": "2025-09-02T16:08:39.692Z"
+      },
+      {
+        "name": "Coconut Rice",
+        "description": "Fragrant rice with fresh coconut, curry leaves and mustard seeds",
+        "type": "mains-rice",
+        "cuisine": "South Indian",
+        "mealTypes": [
+          "vegetarian"
+        ],
+        "nutrition": {
+          "calories": 280,
+          "protein": 5,
+          "carbs": 45,
+          "fat": 9
+        },
+        "id": "1756829340063",
+        "dateAdded": "2025-09-02T16:09:00.063Z"
       }
     ]
   }

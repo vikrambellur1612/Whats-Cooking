@@ -569,15 +569,26 @@
         padding: 15px;
         left: 0;
         width: 100vw;
-        min-height: 100vh;
-        max-height: 100vh;
+        height: 100vh;
+        /* Use viewport units for true viewport centering */
+        position: fixed;
+        top: 0;
+        align-items: center;
+        justify-content: center;
+        /* Ensure it's always visible in current viewport */
+        transform: translateZ(0); /* Force hardware acceleration */
     }
     
     .modal-content {
-        width: calc(100% - 30px);
+        width: calc(100vw - 30px);
         max-width: none;
-        max-height: 85vh;
+        max-height: 90vh;
         border-radius: 12px;
+        /* Center content within modal */
+        margin: auto;
+        /* Prevent content from being cut off */
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
     }
     
     .modal-header {

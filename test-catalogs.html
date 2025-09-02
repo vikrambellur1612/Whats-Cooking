@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clean Catalogs Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .section {
+            background: white;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .item-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 4px solid #007bff;
+        }
+        .item-name {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        .item-type {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+        .item-cuisine {
+            color: #007bff;
+            font-size: 0.85em;
+        }
+        .nutrition {
+            font-size: 0.85em;
+            color: #666;
+            margin-top: 8px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .clear-btn {
+            background: #dc3545;
+        }
+        .clear-btn:hover {
+            background: #c82333;
+        }
+        .stats {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🍽️ Clean Catalogs Test Page</h1>
+    
+    <div class="section">
+        <h2>🧹 Data Management</h2>
+        <p>Current Mode: <span id="currentMode">Loading...</span></p>
+        <button onclick="clearAllStorage()">🗑️ Clear All localStorage</button>
+        <button onclick="loadAllCatalogs()">🔄 Reload All Catalogs</button>
+        <div id="clearResult"></div>
+    </div>
+
+    <div class="section">
+        <h2>🍛 Mains Catalog</h2>
+        <div class="stats" id="mainsStats">Loading...</div>
+        <div class="items-grid" id="mainsItems"></div>
+    </div>
+
+    <div class="section">
+        <h2>🌅 Breakfast Catalog</h2>
+        <div class="stats" id="breakfastStats">Loading...</div>
+        <div class="items-grid" id="breakfastItems"></div>
+    </div>
+
+    <div class="section">
+        <h2>🥘 Side Dishes Catalog</h2>
+        <div class="stats" id="sideDishesStats">Loading...</div>
+        <div class="items-grid" id="sideDishesItems"></div>
+    </div>
+
+    <div class="section">
+        <h2>🥗 Accompaniments Catalog</h2>
+        <div class="stats" id="accompanimentsStats">Loading...</div>
+        <div class="items-grid" id="accompanimentsItems"></div>
+    </div>
+
+    <script src="js/data-manager.js"></script>
+    <script>
+        let allData = {};
+
+        function updateCurrentMode() {
+            document.getElementById('currentMode').textContent = 
+                DataManager.isDevelopment() ? 'Development (JSON files)' : 'Production (localStorage)';
+        }
+
+        async function loadAllCatalogs() {
+            const catalogs = [
+                'mains-catalog',
+                'breakfast-catalog', 
+                'side-dishes-catalog',
+                'accompaniments-catalog'
+            ];
+
+            for (const catalog of catalogs) {
+                try {
+                    const items = await DataManager.loadCatalogData(catalog);
+                    allData[catalog] = items;
+                    console.log(`Loaded ${catalog}: ${items.length} items`);
+                    renderCatalog(catalog, items);
+                } catch (error) {
+                    console.error(`Error loading ${catalog}:`, error);
+                }
+            }
+        }
+
+        function renderCatalog(catalogName, items) {
+            const catalogKey = catalogName.replace('-catalog', '');
+            const statsElement = document.getElementById(catalogKey + 'Stats');
+            const itemsElement = document.getElementById(catalogKey + 'Items');
+            
+            // Update stats
+            const riceBasedCount = items.filter(item => item.type === 'mains-rice').length;
+            const wheatBasedCount = items.filter(item => item.type === 'mains-wheat').length;
+            
+            let statsHTML = `Total Items: ${items.length}`;
+            if (catalogName === 'mains-catalog') {
+                statsHTML += ` | Rice-based: ${riceBasedCount} | Wheat-based: ${wheatBasedCount}`;
+            }
+            
+            statsElement.innerHTML = statsHTML;
+
+            // Render items
+            itemsElement.innerHTML = items.map(item => `
+                <div class="item-card">
+                    <div class="item-name">${item.name}</div>
+                    <div class="item-type">Type: ${item.type}</div>
+                    <div class="item-cuisine">Cuisine: ${item.cuisine}</div>
+                    <div class="nutrition">
+                        Nutrition: ${item.nutrition.calories}cal | 
+                        ${item.nutrition.protein}g protein | 
+                        ${item.nutrition.carbs}g carbs | 
+                        ${item.nutrition.fat}g fat
+                    </div>
+                    <div style="font-size: 0.8em; color: #999; margin-top: 5px;">
+                        ID: ${item.id} | Added: ${new Date(item.dateAdded).toLocaleDateString()}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function clearAllStorage() {
+            const catalogKeys = [
+                'mains-catalog',
+                'breakfast-catalog', 
+                'side-dishes-catalog',
+                'accompaniments-catalog',
+                'meals-catalog'
+            ];
+
+            let cleared = [];
+            catalogKeys.forEach(key => {
+                if (localStorage.getItem(key)) {
+                    localStorage.removeItem(key);
+                    cleared.push(key);
+                }
+            });
+
+            document.getElementById('clearResult').innerHTML = 
+                cleared.length > 0 
+                    ? `✅ Cleared: ${cleared.join(', ')}`
+                    : 'ℹ️ localStorage was already empty';
+        }
+
+        // Initialize
+        updateCurrentMode();
+        loadAllCatalogs();
+    </script>
+</body>
+</html>
