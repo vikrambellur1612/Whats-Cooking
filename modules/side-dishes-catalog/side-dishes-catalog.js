@@ -67,11 +67,27 @@ class SideDishesCatalog {
 
     async loadData() {
         try {
+            // First check if we have data in localStorage
+            const storedItems = window.dataStorage?.getCatalogData('side-dishes-catalog');
+            
+            if (storedItems && storedItems.length > 0) {
+                this.allFoodItems = storedItems;
+                console.log(`Loaded ${this.allFoodItems.length} side dish items from localStorage`);
+                return;
+            }
+
+            // If no localStorage data, load from JSON file
             const sideDishesResponse = await fetch('/data/side-dishes-catalog.json');
             const sideDishesJson = await sideDishesResponse.json();
             
             this.allFoodItems = this.extractItems(sideDishesJson);
-            console.log(`Loaded ${this.allFoodItems.length} side dish items`);
+            
+            // Save to localStorage for future use
+            if (window.dataStorage) {
+                window.dataStorage.saveCatalogData('side-dishes-catalog', this.allFoodItems);
+            }
+            
+            console.log(`Loaded ${this.allFoodItems.length} side dish items from JSON file`);
             
         } catch (error) {
             console.error('Error loading side dishes data:', error);
@@ -520,52 +536,31 @@ class SideDishesCatalog {
 
     async persistChanges() {
         try {
-            await this.saveToJsonFile();
-            console.log('Side dishes changes persisted');
+            await this.saveToLocalStorage();
+            console.log('Side dishes changes persisted to localStorage');
         } catch (error) {
             console.error('Failed to persist changes:', error);
-            this.showAlert('Changes saved locally but couldn\'t sync to server.', 'warning');
+            this.showAlert('Changes saved locally in browser memory.', 'warning');
         }
     }
 
-    async saveToJsonFile() {
+    async saveToLocalStorage() {
         try {
-            const jsonData = {
-                sideDishes: {
-                    items: this.allFoodItems.map(item => ({
-                        id: item.id,
-                        name: item.name,
-                        description: item.description,
-                        type: item.type,
-                        cuisine: item.cuisine,
-                        category: item.category,
-                        nutrition: item.nutrition,
-                        applicableFor: item.applicableFor,
-                        region: item.region
-                    }))
+            if (window.dataStorage) {
+                const success = window.dataStorage.saveCatalogData('side-dishes-catalog', this.allFoodItems);
+                if (success) {
+                    console.log('Successfully saved side dishes data to localStorage');
+                    return true;
+                } else {
+                    console.error('Failed to save side dishes data to localStorage');
+                    return false;
                 }
-            };
-
-            const response = await fetch(`http://localhost:3001/api/save-catalog`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    filename: 'side-dishes-catalog.json',
-                    data: jsonData
-                })
-            });
-
-            if (!response.ok) {
-                console.error('Failed to save to JSON file:', response.statusText);
+            } else {
+                console.error('DataStorage not available');
                 return false;
             }
-
-            console.log('Successfully saved side dishes data');
-            return true;
         } catch (error) {
-            console.error('Error saving to JSON file:', error);
+            console.error('Error saving to localStorage:', error);
             return false;
         }
     }

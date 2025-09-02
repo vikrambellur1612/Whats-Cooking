@@ -1,4 +1,4 @@
-// Navigation System
+// Navigation System with Sidebar Support
 class Navigation {
     constructor() {
         this.routes = {
@@ -23,6 +23,92 @@ class Navigation {
                 description: 'Browse salads, raitas, chutneys and other accompaniments'
             }
         };
+        
+        this.sidebar = null;
+        this.sidebarOverlay = null;
+        this.menuToggle = null;
+        this.sidebarClose = null;
+        this.isSidebarOpen = false;
+    }
+
+    initSidebar() {
+        // Get DOM elements
+        this.sidebar = document.getElementById('sidebar');
+        this.sidebarOverlay = document.getElementById('sidebar-overlay');
+        this.menuToggle = document.getElementById('menu-toggle');
+        this.sidebarClose = document.getElementById('sidebar-close');
+
+        if (!this.sidebar || !this.sidebarOverlay || !this.menuToggle || !this.sidebarClose) {
+            console.error('Sidebar elements not found');
+            return;
+        }
+
+        // Add event listeners
+        this.menuToggle.addEventListener('click', () => this.toggleSidebar());
+        this.sidebarClose.addEventListener('click', () => this.closeSidebar());
+        this.sidebarOverlay.addEventListener('click', () => this.closeSidebar());
+
+        // Close sidebar on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.isSidebarOpen) {
+                this.closeSidebar();
+            }
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            if (window.innerWidth >= 1024) {
+                this.closeSidebar(false); // Don't animate on desktop
+            }
+        });
+
+        // Auto-open sidebar on desktop
+        if (window.innerWidth >= 1024) {
+            this.sidebar.classList.add('open');
+        }
+    }
+
+    toggleSidebar() {
+        if (this.isSidebarOpen) {
+            this.closeSidebar();
+        } else {
+            this.openSidebar();
+        }
+    }
+
+    openSidebar() {
+        this.sidebar.classList.add('open');
+        this.sidebarOverlay.classList.add('active');
+        this.menuToggle.classList.add('active');
+        this.isSidebarOpen = true;
+        
+        // Prevent body scroll on mobile
+        if (window.innerWidth < 1024) {
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    closeSidebar(animate = true) {
+        if (!animate) {
+            this.sidebar.style.transition = 'none';
+            this.sidebarOverlay.style.transition = 'none';
+        }
+
+        this.sidebar.classList.remove('open');
+        this.sidebarOverlay.classList.remove('active');
+        this.menuToggle.classList.remove('active');
+        this.isSidebarOpen = false;
+        
+        // Re-enable body scroll
+        document.body.style.overflow = '';
+
+        if (!animate) {
+            // Reset transitions after animation frame
+            requestAnimationFrame(() => {
+                this.sidebar.style.transition = '';
+                this.sidebarOverlay.style.transition = '';
+            });
+        }
     }
 
     updatePageTitle(moduleId) {
@@ -52,6 +138,11 @@ class Navigation {
 
     // Navigate to a module
     navigateToModule(moduleId, updateHistory = true) {
+        // Close sidebar on mobile after navigation
+        if (window.innerWidth < 1024 && this.isSidebarOpen) {
+            this.closeSidebar();
+        }
+
         // Update URL without page refresh
         if (updateHistory) {
             const url = moduleId === 'dashboard' ? '/' : `/${moduleId}`;
@@ -69,6 +160,9 @@ class Navigation {
     }
 
     init() {
+        // Initialize sidebar
+        this.initSidebar();
+
         // Handle browser navigation
         window.addEventListener('popstate', (event) => {
             this.handlePopState(event);

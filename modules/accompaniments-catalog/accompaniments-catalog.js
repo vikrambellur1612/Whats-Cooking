@@ -47,11 +47,27 @@ class AccompanimentsCatalog {
 
     async loadData() {
         try {
+            // First check if we have data in localStorage
+            const storedItems = window.dataStorage?.getCatalogData('accompaniments-catalog');
+            
+            if (storedItems && storedItems.length > 0) {
+                this.allFoodItems = storedItems;
+                console.log(`Loaded ${this.allFoodItems.length} accompaniment items from localStorage`);
+                return;
+            }
+
+            // If no localStorage data, load from JSON file
             const accompanimentsResponse = await fetch('/data/accompaniments-catalog.json');
             const accompanimentsJson = await accompanimentsResponse.json();
             
             this.allFoodItems = this.extractItems(accompanimentsJson);
-            console.log(`Loaded ${this.allFoodItems.length} accompaniment items`);
+            
+            // Save to localStorage for future use
+            if (window.dataStorage) {
+                window.dataStorage.saveCatalogData('accompaniments-catalog', this.allFoodItems);
+            }
+            
+            console.log(`Loaded ${this.allFoodItems.length} accompaniment items from JSON file`);
             
         } catch (error) {
             console.error('Error loading accompaniments data:', error);
@@ -480,51 +496,31 @@ class AccompanimentsCatalog {
 
     async persistChanges() {
         try {
-            await this.saveToJsonFile();
-            console.log('Accompaniments changes persisted');
+            await this.saveToLocalStorage();
+            console.log('Accompaniments changes persisted to localStorage');
         } catch (error) {
             console.error('Failed to persist changes:', error);
-            this.showAlert('Changes saved locally but couldn\'t sync to server.', 'warning');
+            this.showAlert('Changes saved locally in browser memory.', 'warning');
         }
     }
 
-    async saveToJsonFile() {
+    async saveToLocalStorage() {
         try {
-            const jsonData = {
-                accompaniments: {
-                    items: this.allFoodItems.map(item => ({
-                        id: item.id,
-                        name: item.name,
-                        description: item.description,
-                        type: item.type,
-                        category: item.category,
-                        nutrition: item.nutrition,
-                        applicableFor: item.applicableFor,
-                        region: item.region
-                    }))
+            if (window.dataStorage) {
+                const success = window.dataStorage.saveCatalogData('accompaniments-catalog', this.allFoodItems);
+                if (success) {
+                    console.log('Successfully saved accompaniments data to localStorage');
+                    return true;
+                } else {
+                    console.error('Failed to save accompaniments data to localStorage');
+                    return false;
                 }
-            };
-
-            const response = await fetch(`http://localhost:3001/api/save-catalog`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    filename: 'accompaniments-catalog.json',
-                    data: jsonData
-                })
-            });
-
-            if (!response.ok) {
-                console.error('Failed to save to JSON file:', response.statusText);
+            } else {
+                console.error('DataStorage not available');
                 return false;
             }
-
-            console.log('Successfully saved accompaniments data');
-            return true;
         } catch (error) {
-            console.error('Error saving to JSON file:', error);
+            console.error('Error saving to localStorage:', error);
             return false;
         }
     }

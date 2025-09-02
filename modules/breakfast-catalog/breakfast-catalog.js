@@ -22,11 +22,27 @@ class BreakfastCatalog {
 
     async loadData() {
         try {
+            // First check if we have data in localStorage
+            const storedItems = window.dataStorage?.getCatalogData('breakfast-catalog');
+            
+            if (storedItems && storedItems.length > 0) {
+                this.allFoodItems = storedItems;
+                console.log(`Loaded ${this.allFoodItems.length} breakfast items from localStorage`);
+                return;
+            }
+
+            // If no localStorage data, load from JSON file
             const breakfastResponse = await fetch('/data/breakfast-catalog.json');
             const breakfastJson = await breakfastResponse.json();
             
             this.allFoodItems = this.extractItems(breakfastJson);
-            console.log(`Loaded ${this.allFoodItems.length} breakfast items`);
+            
+            // Save to localStorage for future use
+            if (window.dataStorage) {
+                window.dataStorage.saveCatalogData('breakfast-catalog', this.allFoodItems);
+            }
+            
+            console.log(`Loaded ${this.allFoodItems.length} breakfast items from JSON file`);
             
         } catch (error) {
             console.error('Error loading breakfast data:', error);
@@ -316,7 +332,18 @@ class BreakfastCatalog {
         document.getElementById('modalTitle').textContent = 'Add New Breakfast Item';
         document.getElementById('submitBtnText').textContent = 'Add Breakfast Item';
         this.clearForm();
-        document.getElementById('breakfastModal').classList.add('active');
+        
+        // Prevent body scroll when modal is open
+        document.body.style.overflow = 'hidden';
+        
+        const modal = document.getElementById('breakfastModal');
+        modal.classList.add('active');
+        
+        // Focus on first input field
+        setTimeout(() => {
+            const firstInput = modal.querySelector('input');
+            if (firstInput) firstInput.focus();
+        }, 100);
     }
 
     editItem(itemId) {
@@ -328,7 +355,18 @@ class BreakfastCatalog {
         document.getElementById('submitBtnText').textContent = 'Update Breakfast Item';
         
         this.populateForm(item);
-        document.getElementById('breakfastModal').classList.add('active');
+        
+        // Prevent body scroll when modal is open
+        document.body.style.overflow = 'hidden';
+        
+        const modal = document.getElementById('breakfastModal');
+        modal.classList.add('active');
+        
+        // Focus on first input field
+        setTimeout(() => {
+            const firstInput = modal.querySelector('input');
+            if (firstInput) firstInput.focus();
+        }, 100);
     }
 
     populateForm(item) {
@@ -351,6 +389,9 @@ class BreakfastCatalog {
         document.getElementById('breakfastModal').classList.remove('active');
         this.clearForm();
         this.currentEditId = null;
+        
+        // Restore body scroll
+        document.body.style.overflow = '';
     }
 
     async handleFormSubmit(e) {
@@ -407,53 +448,34 @@ class BreakfastCatalog {
         return true;
     }
 
-    async saveToJsonFile() {
+    async saveToLocalStorage() {
         try {
-            const jsonData = {
-                breakfast: {
-                    items: this.allFoodItems.map(item => ({
-                        id: item.id,
-                        name: item.name,
-                        description: item.description,
-                        type: item.type,
-                        category: item.category,
-                        nutrition: item.nutrition,
-                        region: item.region
-                    }))
+            if (window.dataStorage) {
+                const success = window.dataStorage.saveCatalogData('breakfast-catalog', this.allFoodItems);
+                if (success) {
+                    console.log('Successfully saved breakfast data to localStorage');
+                    return true;
+                } else {
+                    console.error('Failed to save breakfast data to localStorage');
+                    return false;
                 }
-            };
-
-            const response = await fetch(`http://localhost:3001/api/save-catalog`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    filename: 'breakfast-catalog.json',
-                    data: jsonData
-                })
-            });
-
-            if (!response.ok) {
-                console.error('Failed to save to JSON file:', response.statusText);
+            } else {
+                console.error('DataStorage not available');
                 return false;
             }
-
-            console.log('Successfully saved breakfast data');
-            return true;
         } catch (error) {
-            console.error('Error saving to JSON file:', error);
+            console.error('Error saving to localStorage:', error);
             return false;
         }
     }
 
     async persistChanges() {
         try {
-            await this.saveToJsonFile();
-            console.log('Breakfast changes persisted');
+            await this.saveToLocalStorage();
+            console.log('Breakfast changes persisted to localStorage');
         } catch (error) {
             console.error('Failed to persist changes:', error);
-            this.showAlert('Changes saved locally but couldn\'t sync to server.', 'warning');
+            this.showAlert('Changes saved locally in browser memory.', 'warning');
         }
     }
 

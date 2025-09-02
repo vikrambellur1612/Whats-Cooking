@@ -23,13 +23,18 @@ class App {
             btn.addEventListener('click', async (e) => {
                 const moduleId = btn.getAttribute('data-module');
                 if (moduleId && moduleId !== this.currentModule) {
-                    // Update active nav button
-                    navButtons.forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    
-                    // Load module
-                    await this.loadModule(moduleId);
-                    this.currentModule = moduleId;
+                    // Use navigation system for proper routing
+                    if (window.navigation) {
+                        window.navigation.navigateToModule(moduleId);
+                    } else {
+                        // Fallback if navigation system not loaded yet
+                        await this.loadModule(moduleId);
+                        this.currentModule = moduleId;
+                        
+                        // Update active nav button
+                        navButtons.forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                    }
                 }
             });
         });
@@ -43,6 +48,14 @@ class App {
             
             if (!moduleConfig) {
                 throw new Error(`Module ${moduleId} not found`);
+            }
+
+            // Update active nav button
+            const navButtons = document.querySelectorAll('.nav-btn');
+            navButtons.forEach(b => b.classList.remove('active'));
+            const activeButton = document.querySelector(`[data-module="${moduleId}"]`);
+            if (activeButton) {
+                activeButton.classList.add('active');
             }
 
             // Load module HTML
@@ -80,6 +93,9 @@ class App {
             
             // Initialize module
             await this.initializeModule(moduleId);
+            
+            // Update current module
+            this.currentModule = moduleId;
             
         } catch (error) {
             console.error(`Error loading module ${moduleId}:`, error);

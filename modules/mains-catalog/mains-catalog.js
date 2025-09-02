@@ -11,6 +11,51 @@ class MainsCatalog {
 
     async init() {
         console.log('Initializing Mains Catalog...');
+        
+        // Wait for DOM elements to be available
+        await this.waitForDOMElements();
+        
+        await this.loadData();
+        this.setupEventListeners();
+        this.applyFilters();
+        this.updateStatistics();
+        
+        window.mainsCatalog = this;
+        console.log('Mains Catalog initialized. Global instance:', window.mainsCatalog);
+    }
+
+    async loadData() {
+        try {
+            // First check if we have data in localStorage
+            const storedItems = window.dataStorage?.getCatalogData('mains-catalog');
+            
+            if (storedItems && storedItems.length > 0) {
+                this.allFoodItems = storedItems;
+                console.log(`Loaded ${this.allFoodItems.length} mains items from localStorage`);
+                return;
+            }
+
+            // If no localStorage data, load from JSON file
+            const mainsResponse = await fetch('/data/mains-catalog.json');
+            const mainsJson = await mainsResponse.json();
+            
+            this.allFoodItems = this.extractItems(mainsJson);
+            
+            // Save to localStorage for future use
+            if (window.dataStorage) {
+                window.dataStorage.saveCatalogData('mains-catalog', this.allFoodItems);
+            }
+            
+            console.log(`Loaded ${this.allFoodItems.length} mains items from JSON file`);
+            
+        } catch (error) {
+            console.error('Error loading mains data:', error);
+            this.showAlert('Failed to load mains data. Please refresh the page.', 'error');
+        }
+    }
+
+    async init() {
+        console.log('Initializing Mains Catalog...');
         await this.loadData();
         
         // Wait for DOM elements to be available
@@ -458,54 +503,34 @@ class MainsCatalog {
         return true;
     }
 
-    async saveToJsonFile() {
+    async saveToLocalStorage() {
         try {
-            const jsonData = {
-                mains: {
-                    items: this.allFoodItems.map(item => ({
-                        id: item.id,
-                        name: item.name,
-                        description: item.description,
-                        type: item.type,
-                        category: item.category,
-                        nutrition: item.nutrition,
-                        applicableFor: item.applicableFor,
-                        region: item.region
-                    }))
+            if (window.dataStorage) {
+                const success = window.dataStorage.saveCatalogData('mains-catalog', this.allFoodItems);
+                if (success) {
+                    console.log('Successfully saved mains data to localStorage');
+                    return true;
+                } else {
+                    console.error('Failed to save mains data to localStorage');
+                    return false;
                 }
-            };
-
-            const response = await fetch(`http://localhost:3001/api/save-catalog`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    filename: 'mains-catalog.json',
-                    data: jsonData
-                })
-            });
-
-            if (!response.ok) {
-                console.error('Failed to save to JSON file:', response.statusText);
+            } else {
+                console.error('DataStorage not available');
                 return false;
             }
-
-            console.log('Successfully saved mains data');
-            return true;
         } catch (error) {
-            console.error('Error saving to JSON file:', error);
+            console.error('Error saving to localStorage:', error);
             return false;
         }
     }
 
     async persistChanges() {
         try {
-            await this.saveToJsonFile();
-            console.log('Mains changes persisted');
+            await this.saveToLocalStorage();
+            console.log('Mains changes persisted to localStorage');
         } catch (error) {
             console.error('Failed to persist changes:', error);
-            this.showAlert('Changes saved locally but couldn\'t sync to server.', 'warning');
+            this.showAlert('Changes saved locally in browser memory.', 'warning');
         }
     }
 

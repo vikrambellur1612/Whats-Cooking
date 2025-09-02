@@ -13,10 +13,16 @@
     --card-bg: #ffffff;
     --header-bg: rgba(255, 255, 255, 0.95);
     --content-bg: rgba(255, 255, 255, 0.9);
+    --sidebar-bg: #ffffff;
+    --sidebar-width: 280px;
+    --header-height: 70px;
     --border-radius: 15px;
     --shadow: 0 4px 15px rgba(102, 126, 234, 0.15);
     --text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     --transition: all 0.3s ease;
+    --z-sidebar: 1001;
+    --z-overlay: 1000;
+    --z-header: 999;
 }
 
 * {
@@ -31,70 +37,174 @@ body {
     color: var(--text-color);
     background: var(--primary-gradient);
     min-height: 100vh;
+    overflow-x: hidden;
 }
 
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
+#app {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 /* Header Styles */
 .app-header {
-    background: rgba(255, 255, 255, 0.95);
+    background: var(--header-bg);
     backdrop-filter: blur(10px);
-    padding: 20px 0;
     box-shadow: var(--shadow);
-    position: sticky;
+    position: fixed;
     top: 0;
-    z-index: 1000;
+    left: 0;
+    right: 0;
+    height: var(--header-height);
+    z-index: var(--z-header);
+    border-bottom: 1px solid rgba(102, 126, 234, 0.1);
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    padding: 0 20px;
+    gap: 15px;
+}
+
+.header-title {
+    flex: 1;
+    text-align: center;
 }
 
 .app-title {
-    font-size: 2.5rem;
+    font-size: 1.4rem;
     font-weight: 700;
     background: var(--primary-gradient);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    text-align: center;
-    margin-bottom: 5px;
+    margin: 0;
+    line-height: 1.2;
 }
 
 .app-subtitle {
-    text-align: center;
     color: var(--text-muted);
-    font-size: 1.1rem;
-    margin-bottom: 20px;
+    font-size: 0.8rem;
+    margin: 0;
+    line-height: 1;
 }
 
-/* Navigation Styles */
-.main-nav {
+/* Hamburger Menu Toggle */
+.menu-toggle {
     display: flex;
+    flex-direction: column;
     justify-content: center;
-    gap: 15px;
-    flex-wrap: wrap;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: var(--z-sidebar);
 }
 
-.nav-btn {
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
-    border: 2px solid transparent;
-    padding: 12px 24px;
-    border-radius: 25px;
-    font-size: 1rem;
+.hamburger-line {
+    width: 20px;
+    height: 2px;
+    background: var(--text-color);
+    margin: 2px 0;
+    transition: var(--transition);
+    border-radius: 1px;
+}
+
+.menu-toggle.active .hamburger-line:nth-child(1) {
+    transform: rotate(45deg) translate(4px, 4px);
+}
+
+.menu-toggle.active .hamburger-line:nth-child(2) {
+    opacity: 0;
+}
+
+.menu-toggle.active .hamburger-line:nth-child(3) {
+    transform: rotate(-45deg) translate(4px, -4px);
+}
+
+/* Sidebar Styles */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -280px;
+    width: var(--sidebar-width);
+    height: 100vh;
+    background: var(--sidebar-bg);
+    box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+    z-index: var(--z-sidebar);
+    transition: left var(--transition);
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar.open {
+    left: 0;
+}
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    border-bottom: 1px solid rgba(102, 126, 234, 0.1);
+    min-height: var(--header-height);
+}
+
+.sidebar-title {
+    font-size: 1.2rem;
     font-weight: 600;
+    color: var(--text-color);
+}
+
+.sidebar-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 5px;
+    line-height: 1;
+    transition: var(--transition);
+}
+
+.sidebar-close:hover {
+    color: var(--text-color);
+    transform: scale(1.1);
+}
+
+.sidebar-content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+/* Navigation Button Styles */
+.nav-btn {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    background: transparent;
+    border: none;
+    padding: 15px 20px;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 500;
     color: var(--text-color);
     cursor: pointer;
     transition: var(--transition);
-    position: relative;
-    overflow: hidden;
+    margin-bottom: 8px;
+    text-align: left;
+    gap: 15px;
 }
 
 .nav-btn:hover {
-    background: var(--primary-gradient);
-    color: white;
-    transform: translateY(-2px);
-    box-shadow: var(--shadow);
+    background: rgba(102, 126, 234, 0.1);
+    transform: translateX(5px);
 }
 
 .nav-btn.active {
@@ -103,15 +213,51 @@ body {
     box-shadow: var(--shadow);
 }
 
+.nav-btn.active:hover {
+    transform: translateX(0);
+}
+
+.nav-icon {
+    font-size: 1.2rem;
+    min-width: 24px;
+}
+
+.nav-text {
+    flex: 1;
+}
+
+/* Sidebar Overlay */
+.sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: var(--z-overlay);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--transition), visibility var(--transition);
+}
+
+.sidebar-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
 /* Main Content */
 .main-content {
-    min-height: calc(100vh - 180px);
-    padding: 30px 0;
+    flex: 1;
+    margin-top: var(--header-height);
+    padding: 20px;
     background: var(--content-bg);
     backdrop-filter: blur(10px);
-    margin: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-bottom: 20px;
     border-radius: var(--border-radius);
     box-shadow: var(--shadow);
+    min-height: calc(100vh - var(--header-height) - 40px);
 }
 
 /* Loading Styles */
@@ -167,34 +313,130 @@ body {
 .mt-20 { margin-top: 20px; }
 .mt-30 { margin-top: 30px; }
 
-/* Responsive Design */
-@media (max-width: 768px) {
+/* Desktop Layout - Sidebar always visible */
+@media (min-width: 1024px) {
+    .menu-toggle {
+        display: none;
+    }
+    
+    .sidebar {
+        left: 0;
+        position: fixed;
+    }
+    
+    .sidebar-close {
+        display: none;
+    }
+    
+    .sidebar-overlay {
+        display: none;
+    }
+    
+    .main-content {
+        margin-left: calc(var(--sidebar-width) + 20px);
+    }
+    
     .app-title {
-        font-size: 2rem;
+        font-size: 1.6rem;
     }
     
-    .nav-btn {
-        padding: 10px 20px;
+    .app-subtitle {
         font-size: 0.9rem;
-    }
-    
-    .container {
-        padding: 0 15px;
     }
 }
 
-@media (max-width: 480px) {
+/* Tablet Layout */
+@media (min-width: 768px) and (max-width: 1023px) {
     .app-title {
-        font-size: 1.8rem;
+        font-size: 1.5rem;
     }
     
-    .main-nav {
-        flex-direction: column;
-        align-items: center;
+    .app-subtitle {
+        font-size: 0.85rem;
+    }
+    
+    .sidebar {
+        width: 260px;
     }
     
     .nav-btn {
-        width: 100%;
-        max-width: 250px;
+        padding: 12px 18px;
     }
 }
+
+/* Mobile Layout */
+@media (max-width: 767px) {
+    .app-title {
+        font-size: 1.3rem;
+    }
+    
+    .app-subtitle {
+        font-size: 0.75rem;
+    }
+    
+    .sidebar {
+        width: 260px;
+    }
+    
+    .nav-btn {
+        padding: 12px 15px;
+        font-size: 0.95rem;
+    }
+    
+    .main-content {
+        margin: 10px;
+        margin-top: calc(var(--header-height) + 10px);
+        min-height: calc(100vh - var(--header-height) - 20px);
+    }
+}
+
+/* Small Mobile Layout */
+@media (max-width: 480px) {
+    .header-content {
+        padding: 0 15px;
+    }
+    
+    .app-title {
+        font-size: 1.2rem;
+    }
+    
+    .app-subtitle {
+        font-size: 0.7rem;
+    }
+    
+    .sidebar {
+        width: calc(100vw - 60px);
+        max-width: 280px;
+    }
+    
+    .nav-btn {
+        padding: 14px 15px;
+        font-size: 0.9rem;
+    }
+    
+    .nav-icon {
+        font-size: 1.1rem;
+    }
+}
+
+/* Animations for better UX */
+@keyframes slideInLeft {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.sidebar.open .nav-btn {
+    animation: slideInLeft 0.3s ease forwards;
+}
+
+.sidebar.open .nav-btn:nth-child(1) { animation-delay: 0.1s; }
+.sidebar.open .nav-btn:nth-child(2) { animation-delay: 0.15s; }
+.sidebar.open .nav-btn:nth-child(3) { animation-delay: 0.2s; }
+.sidebar.open .nav-btn:nth-child(4) { animation-delay: 0.25s; }
+.sidebar.open .nav-btn:nth-child(5) { animation-delay: 0.3s; }
