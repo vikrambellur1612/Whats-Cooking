@@ -185,7 +185,93 @@ class Navigation {
         // Set initial state without updating history
         history.replaceState({ module: initialModule }, '', currentPath);
     }
+
+    // Modal utility functions
+    showModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (!modal) return;
+
+        // Reset any transforms or positioning
+        modal.style.transform = '';
+        modal.style.top = '';
+        modal.style.left = '';
+        
+        // Show the modal
+        modal.classList.add('active');
+        
+        // Ensure modal is properly positioned
+        setTimeout(() => {
+            this.ensureModalVisibility(modal);
+        }, 50);
+
+        // Prevent body scroll
+        document.body.style.overflow = 'hidden';
+    }
+
+    hideModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (!modal) return;
+
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    ensureModalVisibility(modal) {
+        const modalContent = modal.querySelector('.modal-content');
+        if (!modalContent) return;
+
+        // Get viewport dimensions
+        const viewportHeight = window.innerHeight;
+        const viewportWidth = window.innerWidth;
+        
+        // Get modal dimensions
+        const modalRect = modalContent.getBoundingClientRect();
+        
+        // Check if modal is outside viewport
+        if (modalRect.top < 0 || modalRect.bottom > viewportHeight) {
+            // Center the modal vertically in viewport
+            modal.style.alignItems = 'center';
+            modal.style.paddingTop = '0';
+        }
+
+        // Ensure modal is centered horizontally
+        if (modalRect.left < 0 || modalRect.right > viewportWidth) {
+            modal.style.justifyContent = 'center';
+        }
+
+        // Scroll to top if needed on mobile
+        if (window.innerWidth <= 768) {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    }
 }
+
+// Global modal functions for backward compatibility
+window.showModal = function(modalId) {
+    if (window.navigation) {
+        window.navigation.showModal(modalId);
+    } else {
+        // Fallback
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+    }
+};
+
+window.hideModal = function(modalId) {
+    if (window.navigation) {
+        window.navigation.hideModal(modalId);
+    } else {
+        // Fallback
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    }
+};
 
 // Initialize navigation
 document.addEventListener('DOMContentLoaded', () => {
