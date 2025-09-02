@@ -1,42 +1,78 @@
-// Breakfast Catalog Module - Dedicated to Karnataka Breakfast Dishes
-class BreakfastCatalog {
+// Mains Catalog Module - Dedicated to Karnataka Main Dishes (Lunch & Dinner)
+class MainsCatalog {
     constructor() {
         this.allFoodItems = [];
         this.filteredItems = [];
         this.currentEditId = null;
         this.deleteItemId = null;
-        
-        this.init();
     }
 
     async init() {
-        console.log('Initializing Breakfast Catalog...');
+        console.log('Initializing Mains Catalog...');
+        
+        // Wait for DOM elements to be available
+        await this.waitForDOMElements();
+        
         await this.loadData();
         this.setupEventListeners();
         this.applyFilters();
         this.updateStatistics();
         
-        window.breakfastCatalog = this;
-        console.log('Breakfast Catalog initialized. Global instance:', window.breakfastCatalog);
+        // Ensure global access
+        window.mainsCatalog = this;
+        console.log('Mains Catalog initialized. Global instance:', window.mainsCatalog);
+    }
+
+    async waitForDOMElements() {
+        console.log('MainsCatalog: Waiting for DOM elements...');
+        
+        return new Promise((resolve, reject) => {
+            let attempts = 0;
+            const maxAttempts = 20;
+            
+            const checkElements = () => {
+                const foodGrid = document.getElementById('foodGrid');
+                const emptyState = document.getElementById('emptyState');
+                
+                console.log(`MainsCatalog: Attempt ${attempts + 1} - foodGrid: ${foodGrid ? 'found' : 'null'}, emptyState: ${emptyState ? 'found' : 'null'}`);
+                
+                if (foodGrid && emptyState) {
+                    console.log('MainsCatalog: DOM elements found!');
+                    resolve();
+                    return;
+                }
+                
+                attempts++;
+                if (attempts >= maxAttempts) {
+                    console.error('MainsCatalog: DOM elements not found after', maxAttempts, 'attempts');
+                    reject(new Error('Missing DOM elements - foodGrid: ' + foodGrid + ' emptyState: ' + emptyState));
+                    return;
+                }
+                
+                requestAnimationFrame(checkElements);
+            };
+            
+            checkElements();
+        });
     }
 
     async loadData() {
         try {
             // Load from JSON file first
-            const breakfastResponse = await fetch('/data/breakfast-catalog.json');
-            const breakfastJson = await breakfastResponse.json();
+            const mainsResponse = await fetch('/data/mains-catalog.json');
+            const mainsJson = await mainsResponse.json();
             
             // Extract items from the JSON structure
-            const sourceItems = this.extractItems(breakfastJson);
+            const sourceItems = this.extractItems(mainsJson);
             
             // Merge with localStorage data (same logic as dashboard)
-            this.allFoodItems = await this.mergeWithLocalStorage(sourceItems, 'breakfast-catalog');
+            this.allFoodItems = await this.mergeWithLocalStorage(sourceItems, 'mains-catalog');
             
-            console.log(`Loaded ${this.allFoodItems.length} breakfast items (${sourceItems.length} from source + ${this.allFoodItems.length - sourceItems.length} from localStorage)`);
+            console.log(`Loaded ${this.allFoodItems.length} mains items (${sourceItems.length} from source + ${this.allFoodItems.length - sourceItems.length} from localStorage)`);
             
         } catch (error) {
-            console.error('Error loading breakfast data:', error);
-            this.showAlert('Failed to load breakfast data. Please refresh the page.', 'error');
+            console.error('Error loading mains data:', error);
+            this.showAlert('Failed to load mains data. Please refresh the page.', 'error');
         }
     }
 
@@ -63,8 +99,8 @@ class BreakfastCatalog {
     }
 
     extractItems(jsonData) {
-        if (jsonData.breakfast && jsonData.breakfast.items) {
-            return jsonData.breakfast.items;
+        if (jsonData.mains && jsonData.mains.items) {
+            return jsonData.mains.items;
         } else if (Array.isArray(jsonData)) {
             return jsonData;
         } else {
@@ -84,13 +120,9 @@ class BreakfastCatalog {
             typeFilter.addEventListener('change', () => this.applyFilters());
         }
 
-        // Removed Add Breakfast button and modal-related event listeners
-        // Users can add new dishes from the Dashboard's "Add New Dish" feature
-
         const foodGrid = document.getElementById('foodGrid');
         if (foodGrid) {
             foodGrid.addEventListener('click', (e) => {
-                // Only keep delete functionality - add/edit is handled via dashboard
                 if (e.target.classList.contains('delete-btn')) {
                     const itemId = e.target.getAttribute('data-id');
                     this.deleteItem(itemId);
@@ -121,7 +153,12 @@ class BreakfastCatalog {
         const foodGrid = document.getElementById('foodGrid');
         const emptyState = document.getElementById('emptyState');
         
-        if (!foodGrid || !emptyState) return;
+        console.log('MainsCatalog renderFoodGrid:', foodGrid, emptyState, this.filteredItems.length);
+        
+        if (!foodGrid || !emptyState) {
+            console.error('MainsCatalog: Missing DOM elements - foodGrid:', foodGrid, 'emptyState:', emptyState);
+            return;
+        }
 
         if (this.filteredItems.length === 0) {
             foodGrid.classList.add('hidden');
@@ -132,13 +169,12 @@ class BreakfastCatalog {
         foodGrid.classList.remove('hidden');
         emptyState.classList.add('hidden');
 
-        // Render food items
-        const foodCards = this.filteredItems.map(item => this.createFoodCard(item)).join('');
+        const cardsHTML = this.filteredItems.map(item => this.createFoodCard(item)).join('');
         
         // Add "Add New Dish" card at the end
         const addNewCard = this.createAddNewCard();
         
-        foodGrid.innerHTML = foodCards + addNewCard;
+        foodGrid.innerHTML = cardsHTML + addNewCard;
     }
 
     createFoodCard(item) {
@@ -193,70 +229,67 @@ class BreakfastCatalog {
 
     createAddNewCard() {
         return `
-            <div class="food-card add-new-card" onclick="window.breakfastCatalog?.openAddDishModal()">
+            <div class="food-card add-new-card" onclick="window.mainsCatalog?.openAddDishModal()">
                 <div class="add-new-content">
                     <div class="add-new-icon">➕</div>
                     <h4 class="add-new-title">Add New Dish</h4>
-                    <p class="add-new-description">Add a new breakfast item to your collection</p>
+                    <p class="add-new-description">Add a new main dish to your collection</p>
                 </div>
             </div>
         `;
     }
 
     async openAddDishModal() {
-        console.log('Opening Add Dish modal from Breakfast catalog...');
-        
-        // Navigate to Dashboard and then show the modal with pre-selected type
-        if (window.navigation && window.navigation.navigateToModule) {
-            // Navigate to dashboard
-            window.navigation.navigateToModule('dashboard');
-            
-            // Wait a bit for Dashboard to load and then show modal with pre-selected type
-            setTimeout(() => {
-                if (window.dashboard && typeof window.dashboard.showAddDishModal === 'function') {
-                    window.dashboard.showAddDishModal('breakfast');
-                } else {
-                    console.warn('Dashboard not ready, trying again...');
-                    setTimeout(() => {
-                        if (window.dashboard && typeof window.dashboard.showAddDishModal === 'function') {
-                            window.dashboard.showAddDishModal('breakfast');
-                        }
-                    }, 500);
+        // Ensure Dashboard is loaded and available globally
+        if (!window.dashboard) {
+            console.log('Dashboard not available, loading it first...');
+            try {
+                // Load Dashboard if not available
+                if (window.app && typeof window.app.loadModule === 'function') {
+                    await window.app.loadModule('dashboard');
+                    // Give it a moment to initialize
+                    await new Promise(resolve => setTimeout(resolve, 300));
                 }
-            }, 300);
+            } catch (error) {
+                console.error('Failed to load Dashboard:', error);
+                alert('Unable to open Add Dish modal. Please refresh the page and try again.');
+                return;
+            }
+        }
+
+        // Check if dashboard instance is available globally
+        if (window.dashboard && typeof window.dashboard.showAddDishModal === 'function') {
+            window.dashboard.showAddDishModal('main-dish');
         } else {
-            alert('Unable to open Add Dish modal. Please navigate to Dashboard manually.');
+            console.warn('Dashboard instance not available. Cannot open Add Dish modal.');
+            alert('Unable to open Add Dish modal. Please use the Dashboard.');
         }
     }
 
     getDishEmoji(item) {
         const name = item.name.toLowerCase();
         
-        // Breakfast-specific emojis
-        if (name.includes('dosa')) return '🫓';
-        if (name.includes('idli')) return '⚪';
-        if (name.includes('vada')) return '🍩';
-        if (name.includes('upma')) return '🍚';
-        if (name.includes('poha')) return '🥣';
-        if (name.includes('paratha')) return '🫓';
-        if (name.includes('uttapam')) return '🥞';
-        if (name.includes('sheera') || name.includes('kesari')) return '🍮';
-        if (name.includes('chutney')) return '🥄';
+        if (name.includes('rice') || name.includes('bath')) return '🍚';
+        if (name.includes('curry')) return '🍛';
         if (name.includes('sambar')) return '🍲';
-        if (name.includes('coffee') || name.includes('tea')) return '☕';
+        if (name.includes('rasam')) return '🍵';
+        if (name.includes('dal')) return '🥘';
+        if (name.includes('roti')) return '🫓';
+        if (name.includes('biryani')) return '🍛';
+        if (name.includes('pulao')) return '🍚';
+        if (name.includes('fry') || name.includes('sabji')) return '🥗';
         
-        return '🌅'; // default breakfast emoji
+        return '🍽️'; // default meal emoji
     }
 
     formatType(type) {
         const typeMap = {
-            'main': 'Main Dish',
-            'side': 'Side Dish',
-            'beverage': 'Beverage',
-            'sweet': 'Sweet',
-            'snack': 'Snack',
-            'traditional': 'Traditional',
-            'light': 'Light'
+            'mains': 'Mains',
+            'main-dish': 'Main Dish',
+            'side-dish-gravy': 'Side Dish - Gravy',
+            'side-dish-sabji': 'Side Dish - Sabji', 
+            'vegetarian': 'Vegetarian',
+            'non-vegetarian': 'Non-Vegetarian'
         };
         
         return typeMap[type] || type.charAt(0).toUpperCase() + type.slice(1);
@@ -271,9 +304,7 @@ class BreakfastCatalog {
         
         if (vegCount) {
             const vegetarianCount = this.filteredItems.filter(item => 
-                !item.name.toLowerCase().includes('egg') && 
-                !item.name.toLowerCase().includes('meat') &&
-                !item.name.toLowerCase().includes('chicken')
+                item.type === 'vegetarian' || item.type === 'mains' || item.type === 'main-dish'
             ).length;
             vegCount.textContent = vegetarianCount;
         }
@@ -288,113 +319,44 @@ class BreakfastCatalog {
         }
     }
 
-    async fetchNutritionInfo() {
-        const dishNameInput = document.getElementById('dishName');
-        const statusElement = document.getElementById('nutritionStatus');
-        
-        if (!dishNameInput.value.trim()) {
-            statusElement.textContent = '⚠️ Please enter a dish name first';
-            statusElement.className = 'nutrition-status error';
-            setTimeout(() => {
-                statusElement.textContent = '';
-                statusElement.className = 'nutrition-status';
-            }, 3000);
-            return;
-        }
-
-        const dishName = dishNameInput.value.trim();
-        statusElement.textContent = '🔍 Fetching nutrition info...';
-        statusElement.className = 'nutrition-status loading';
-
-        setTimeout(() => {
-            this.setEstimatedNutrition(dishName);
-            statusElement.textContent = '✅ Estimated nutrition values filled';
-            statusElement.className = 'nutrition-status success';
-            
-            setTimeout(() => {
-                statusElement.textContent = '';
-                statusElement.className = 'nutrition-status';
-            }, 3000);
-        }, 1000);
-    }
-
-    setEstimatedNutrition(dishName) {
-        const dishLower = dishName.toLowerCase();
-        let nutrition = {};
-
-        // Breakfast-specific estimations
-        if (dishLower.includes('dosa')) {
-            nutrition = { calories: 120, protein: 4, carbs: 22, fat: 2 };
-        } else if (dishLower.includes('idli')) {
-            nutrition = { calories: 35, protein: 2, carbs: 6, fat: 0.5 };
-        } else if (dishLower.includes('vada')) {
-            nutrition = { calories: 180, protein: 6, carbs: 20, fat: 8 };
-        } else if (dishLower.includes('upma')) {
-            nutrition = { calories: 200, protein: 5, carbs: 35, fat: 5 };
-        } else if (dishLower.includes('poha')) {
-            nutrition = { calories: 180, protein: 4, carbs: 32, fat: 4 };
-        } else if (dishLower.includes('paratha')) {
-            nutrition = { calories: 250, protein: 6, carbs: 35, fat: 10 };
-        } else if (dishLower.includes('uttapam')) {
-            nutrition = { calories: 150, protein: 5, carbs: 28, fat: 3 };
-        } else if (dishLower.includes('sheera') || dishLower.includes('kesari')) {
-            nutrition = { calories: 220, protein: 4, carbs: 40, fat: 6 };
-        } else if (dishLower.includes('chutney')) {
-            nutrition = { calories: 25, protein: 1, carbs: 4, fat: 1 };
-        } else {
-            // Generic breakfast estimation
-            nutrition = { calories: 150, protein: 4, carbs: 25, fat: 4 };
-        }
-
-        this.populateNutritionFields({ nutrition });
-    }
-
-    populateNutritionFields(data) {
-        const nutrition = data.nutrition || data;
-        
-        if (nutrition.calories) {
-            document.getElementById('calories').value = Math.round(nutrition.calories);
-        }
-        if (nutrition.protein) {
-            document.getElementById('protein').value = Math.round(nutrition.protein * 10) / 10;
-        }
-        if (nutrition.carbs || nutrition.carbohydrates) {
-            document.getElementById('carbs').value = Math.round((nutrition.carbs || nutrition.carbohydrates) * 10) / 10;
-        }
-        if (nutrition.fat) {
-            document.getElementById('fat').value = Math.round(nutrition.fat * 10) / 10;
-        }
-    }
-
-    // Modal-related methods removed - dishes are added via Dashboard's "Add New Dish" feature
-    // Only delete functionality is retained for catalog management
-    
     deleteItem(itemId) {
         const item = this.allFoodItems.find(item => (item.id || item.name) === itemId);
         if (!item) return;
 
-        this.deleteItemId = itemId;
-        document.getElementById('deleteDishName').textContent = item.name;
-        document.getElementById('deleteModal').classList.add('active');
-    }
-
-    async confirmDelete() {
-        const index = this.allFoodItems.findIndex(item => (item.id || item.name) === this.deleteItemId);
-        if (index !== -1) {
-            this.allFoodItems.splice(index, 1);
-            await this.persistChanges();
-            this.applyFilters();
-            this.showAlert('Breakfast item deleted successfully!', 'success');
+        if (confirm(`Are you sure you want to delete "${item.name}"?`)) {
+            const index = this.allFoodItems.findIndex(item => (item.id || item.name) === itemId);
+            if (index !== -1) {
+                this.allFoodItems.splice(index, 1);
+                this.applyFilters();
+                this.showAlert('Main dish deleted successfully!', 'success');
+                
+                // Save to localStorage if available
+                this.saveToLocalStorage();
+            }
         }
-        this.closeDeleteModal();
     }
 
-    closeDeleteModal() {
-        document.getElementById('deleteModal').classList.remove('active');
-        this.deleteItemId = null;
+    async saveToLocalStorage() {
+        try {
+            const existingLocalData = JSON.parse(localStorage.getItem('mains-catalog')) || { items: [] };
+            existingLocalData.items = this.allFoodItems.filter(item => item.id && item.id.includes('user_'));
+            localStorage.setItem('mains-catalog', JSON.stringify(existingLocalData));
+            console.log('Mains catalog saved to localStorage');
+        } catch (error) {
+            console.error('Error saving to localStorage:', error);
+        }
     }
 
     showAlert(message, type = 'info') {
+        // Clear any existing alerts of the same type to prevent stacking
+        const existingAlerts = document.querySelectorAll(`.alert.alert-${type}`);
+        existingAlerts.forEach(alert => {
+            if (alert.parentNode) {
+                alert.parentNode.removeChild(alert);
+            }
+        });
+        
+        // Create alert element
         const alert = document.createElement('div');
         alert.className = `alert alert-${type}`;
         alert.innerHTML = message;
@@ -409,6 +371,7 @@ class BreakfastCatalog {
         alert.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
         alert.style.fontWeight = '500';
         
+        // Set colors based on type
         switch(type) {
             case 'success':
                 alert.style.backgroundColor = '#d4edda';
@@ -433,12 +396,14 @@ class BreakfastCatalog {
         
         document.body.appendChild(alert);
         
+        // Auto remove after 4 seconds
         setTimeout(() => {
             if (alert.parentNode) {
                 alert.parentNode.removeChild(alert);
             }
-        }, 5000);
+        }, 4000);
         
+        // Add click to dismiss
         alert.addEventListener('click', () => {
             if (alert.parentNode) {
                 alert.parentNode.removeChild(alert);
@@ -447,9 +412,4 @@ class BreakfastCatalog {
     }
 }
 
-// Initialize when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-    if (document.querySelector('.breakfast-catalog-module')) {
-        window.breakfastCatalog = new BreakfastCatalog();
-    }
-});
+// This module is initialized by main.js after DOM and dependencies are loaded

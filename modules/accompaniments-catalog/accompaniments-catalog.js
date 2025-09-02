@@ -47,31 +47,43 @@ class AccompanimentsCatalog {
 
     async loadData() {
         try {
-            // First check if we have data in localStorage
-            const storedItems = window.dataStorage?.getCatalogData('accompaniments-catalog');
-            
-            if (storedItems && storedItems.length > 0) {
-                this.allFoodItems = storedItems;
-                console.log(`Loaded ${this.allFoodItems.length} accompaniment items from localStorage`);
-                return;
-            }
-
-            // If no localStorage data, load from JSON file
+            // Load from JSON file first
             const accompanimentsResponse = await fetch('/data/accompaniments-catalog.json');
             const accompanimentsJson = await accompanimentsResponse.json();
             
-            this.allFoodItems = this.extractItems(accompanimentsJson);
+            // Extract items from the JSON structure
+            const sourceItems = this.extractItems(accompanimentsJson);
             
-            // Save to localStorage for future use
-            if (window.dataStorage) {
-                window.dataStorage.saveCatalogData('accompaniments-catalog', this.allFoodItems);
-            }
+            // Merge with localStorage data (same logic as dashboard)
+            this.allFoodItems = await this.mergeWithLocalStorage(sourceItems, 'accompaniments-catalog');
             
-            console.log(`Loaded ${this.allFoodItems.length} accompaniment items from JSON file`);
+            console.log(`Loaded ${this.allFoodItems.length} accompaniment items (${sourceItems.length} from source + ${this.allFoodItems.length - sourceItems.length} from localStorage)`);
             
         } catch (error) {
             console.error('Error loading accompaniments data:', error);
             this.showAlert('Failed to load accompaniments data. Please refresh the page.', 'error');
+        }
+    }
+
+    // Merge source data with any new items added to localStorage
+    async mergeWithLocalStorage(sourceItems, storageKey) {
+        try {
+            const localData = localStorage.getItem(storageKey);
+            if (localData) {
+                const parsedData = JSON.parse(localData);
+                const localItems = parsedData.items || [];
+                
+                // Find items that are in localStorage but not in source data
+                const sourceIds = new Set(sourceItems.map(item => item.id));
+                const newLocalItems = localItems.filter(item => !sourceIds.has(item.id));
+                
+                // Merge arrays
+                return [...sourceItems, ...newLocalItems];
+            }
+            return sourceItems;
+        } catch (error) {
+            console.warn(`Error merging localStorage for ${storageKey}:`, error);
+            return sourceItems;
         }
     }
 
@@ -97,11 +109,6 @@ class AccompanimentsCatalog {
             typeFilter.addEventListener('change', () => this.applyFilters());
         }
 
-        const addAccompanimentBtn = document.getElementById('addAccompanimentBtn');
-        if (addAccompanimentBtn) {
-            addAccompanimentBtn.addEventListener('click', () => this.showAddModal());
-        }
-
         const accompanimentForm = document.getElementById('accompanimentForm');
         if (accompanimentForm) {
             accompanimentForm.addEventListener('submit', (e) => this.handleFormSubmit(e));
@@ -115,10 +122,7 @@ class AccompanimentsCatalog {
         const foodGrid = document.getElementById('foodGrid');
         if (foodGrid) {
             foodGrid.addEventListener('click', (e) => {
-                if (e.target.classList.contains('edit-btn')) {
-                    const itemId = e.target.getAttribute('data-id');
-                    this.editItem(itemId);
-                } else if (e.target.classList.contains('delete-btn')) {
+                if (e.target.classList.contains('delete-btn')) {
                     const itemId = e.target.getAttribute('data-id');
                     this.deleteItem(itemId);
                 }
@@ -159,7 +163,13 @@ class AccompanimentsCatalog {
         foodGrid.classList.remove('hidden');
         emptyState.classList.add('hidden');
 
-        foodGrid.innerHTML = this.filteredItems.map(item => this.createFoodCard(item)).join('');
+        // Render food items
+        const foodCards = this.filteredItems.map(item => this.createFoodCard(item)).join('');
+        
+        // Add "Add New Dish" card at the end
+        const addNewCard = this.createAddNewCard();
+        
+        foodGrid.innerHTML = foodCards + addNewCard;
     }
 
     createFoodCard(item) {
@@ -206,15 +216,50 @@ class AccompanimentsCatalog {
                 ` : ''}
                 
                 <div class="food-card-actions">
-                    <button class="action-btn edit-btn" data-id="${item.id || item.name}">
-                        ✏️ Edit
-                    </button>
                     <button class="action-btn delete-btn" data-id="${item.id || item.name}">
                         🗑️ Delete
                     </button>
                 </div>
             </div>
         `;
+    }
+
+    createAddNewCard() {
+        return `
+            <div class="food-card add-new-card" onclick="window.accompanimentsCatalog?.openAddDishModal()">
+                <div class="add-new-content">
+                    <div class="add-new-icon">➕</div>
+                    <h4 class="add-new-title">Add New Dish</h4>
+                    <p class="add-new-description">Add a new accompaniment to your collection</p>
+                </div>
+            </div>
+        `;
+    }
+
+    async openAddDishModal() {
+        console.log('Opening Add Dish modal from Accompaniments catalog...');
+        
+        // Navigate to Dashboard and then show the modal with pre-selected type
+        if (window.navigation && window.navigation.navigateToModule) {
+            // Navigate to dashboard
+            window.navigation.navigateToModule('dashboard');
+            
+            // Wait a bit for Dashboard to load and then show modal with pre-selected type
+            setTimeout(() => {
+                if (window.dashboard && typeof window.dashboard.showAddDishModal === 'function') {
+                    window.dashboard.showAddDishModal('accompaniment');
+                } else {
+                    console.warn('Dashboard not ready, trying again...');
+                    setTimeout(() => {
+                        if (window.dashboard && typeof window.dashboard.showAddDishModal === 'function') {
+                            window.dashboard.showAddDishModal('accompaniment');
+                        }
+                    }, 500);
+                }
+            }, 300);
+        } else {
+            alert('Unable to open Add Dish modal. Please navigate to Dashboard manually.');
+        }
     }
 
     getDishEmoji(item) {
@@ -267,26 +312,6 @@ class AccompanimentsCatalog {
             const avgCal = this.filteredItems.length > 0 ? Math.round(totalCalories / this.filteredItems.length) : 0;
             avgCalories.textContent = avgCal;
         }
-    }
-
-    showAddModal() {
-        this.currentEditId = null;
-        document.getElementById('modalTitle').textContent = 'Add New Accompaniment';
-        document.getElementById('submitBtnText').textContent = 'Add Accompaniment';
-        this.clearForm();
-        document.getElementById('accompanimentModal').classList.add('active');
-    }
-
-    editItem(itemId) {
-        const item = this.allFoodItems.find(item => (item.id || item.name) === itemId);
-        if (!item) return;
-
-        this.currentEditId = itemId;
-        document.getElementById('modalTitle').textContent = 'Edit Accompaniment';
-        document.getElementById('submitBtnText').textContent = 'Update Accompaniment';
-        
-        this.populateForm(item);
-        document.getElementById('accompanimentModal').classList.add('active');
     }
 
     populateForm(item) {

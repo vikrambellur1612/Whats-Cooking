@@ -144,34 +144,6 @@ class Dashboard {
             });
         }
 
-        // Developer tools buttons
-        const downloadAllBtn = document.getElementById('downloadAllCatalogsBtn');
-        if (downloadAllBtn) {
-            downloadAllBtn.addEventListener('click', () => {
-                this.downloadAllCatalogs();
-            });
-        }
-
-        const clearLocalStorageBtn = document.getElementById('clearLocalStorageBtn');
-        if (clearLocalStorageBtn) {
-            clearLocalStorageBtn.addEventListener('click', () => {
-                this.clearLocalStorage();
-            });
-        }
-
-        // Make toggleDevTools globally available
-        window.toggleDevTools = () => {
-            const devTools = document.getElementById('devTools');
-            const toggleBtn = document.getElementById('toggleDevToolsBtn');
-            if (devTools.style.display === 'none') {
-                devTools.style.display = 'block';
-                toggleBtn.textContent = '🔧 Hide Developer Tools';
-            } else {
-                devTools.style.display = 'none';
-                toggleBtn.textContent = '🔧 Developer Tools';
-            }
-        };
-
         // Breakfast card click
         const breakfastCard = document.getElementById('breakfastCard');
         if (breakfastCard) {
@@ -453,20 +425,30 @@ class Dashboard {
     }
 
     showAlert(message, type = 'info') {
+        // Clear any existing alerts of the same type to prevent stacking
+        const existingAlerts = document.querySelectorAll(`.alert.alert-${type}`);
+        existingAlerts.forEach(alert => {
+            if (alert.parentNode) {
+                alert.parentNode.removeChild(alert);
+            }
+        });
+        
         // Create alert element
         const alert = document.createElement('div');
         alert.className = `alert alert-${type}`;
-        alert.innerHTML = message;
+        alert.innerHTML = message.replace(/\n/g, '<br>'); // Convert newlines to <br>
         alert.style.position = 'fixed';
         alert.style.top = '20px';
         alert.style.right = '20px';
         alert.style.zIndex = '9999';
-        alert.style.minWidth = '300px';
+        alert.style.minWidth = '350px';
         alert.style.maxWidth = '500px';
-        alert.style.padding = '15px 20px';
+        alert.style.padding = '20px';
         alert.style.borderRadius = '8px';
         alert.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
         alert.style.fontWeight = '500';
+        alert.style.lineHeight = '1.5';
+        alert.style.whiteSpace = 'pre-line'; // Preserve line breaks
         
         // Set colors based on type
         switch(type) {
@@ -493,12 +475,13 @@ class Dashboard {
         
         document.body.appendChild(alert);
         
-        // Auto remove after 5 seconds
+        // Auto remove after 8 seconds for longer messages
+        const autoRemoveTime = message.length > 100 ? 8000 : 4000;
         setTimeout(() => {
             if (alert.parentNode) {
                 alert.parentNode.removeChild(alert);
             }
-        }, 5000);
+        }, autoRemoveTime);
         
         // Add click to dismiss
         alert.addEventListener('click', () => {
@@ -506,6 +489,26 @@ class Dashboard {
                 alert.parentNode.removeChild(alert);
             }
         });
+        
+        // Add close button for longer messages
+        if (message.length > 100) {
+            const closeBtn = document.createElement('button');
+            closeBtn.innerHTML = '&times;';
+            closeBtn.style.position = 'absolute';
+            closeBtn.style.top = '5px';
+            closeBtn.style.right = '10px';
+            closeBtn.style.background = 'none';
+            closeBtn.style.border = 'none';
+            closeBtn.style.fontSize = '20px';
+            closeBtn.style.cursor = 'pointer';
+            closeBtn.style.color = 'inherit';
+            closeBtn.onclick = () => {
+                if (alert.parentNode) {
+                    alert.parentNode.removeChild(alert);
+                }
+            };
+            alert.appendChild(closeBtn);
+        }
     }
 
     // Global search functionality
@@ -564,11 +567,22 @@ class Dashboard {
     }
 
     // Add New Dish Modal functionality
-    showAddDishModal() {
+    showAddDishModal(preselectedType = null) {
         const modal = document.getElementById('addDishModal');
         if (modal) {
             modal.classList.add('active');
             this.resetAddDishForm();
+            
+            // Pre-select dish type if provided
+            if (preselectedType) {
+                const dishTypeRadio = document.querySelector(`input[name="dishType"][value="${preselectedType}"]`);
+                if (dishTypeRadio) {
+                    dishTypeRadio.checked = true;
+                    // Trigger visual feedback
+                    dishTypeRadio.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+            }
+            
             this.showStep(1); // Start with first step
         }
     }
@@ -628,6 +642,13 @@ class Dashboard {
 
     async handleAddDishSubmit() {
         const form = document.getElementById('addDishForm');
+        const submitBtn = form.querySelector('button[type="submit"]');
+        
+        // Prevent multiple submissions
+        if (submitBtn.disabled) {
+            return;
+        }
+        
         const formData = new FormData(form);
         
         // Get form values
@@ -655,12 +676,11 @@ class Dashboard {
 
         try {
             // Show loading state
-            const submitBtn = form.querySelector('button[type="submit"]');
             const originalText = submitBtn.textContent;
             submitBtn.textContent = '🔄 Adding...';
             submitBtn.disabled = true;
 
-            // Save dish to appropriate category in localStorage
+            // Save dish to appropriate category in localStorage (this will trigger file download silently)
             await this.saveDishToStorage(dishData);
             
             // Add to current data arrays
@@ -671,14 +691,19 @@ class Dashboard {
             
             // Close modal and show success message
             this.closeAddDishModal();
-            this.showAlert(`🎉 ${dishData.name} has been added successfully!`, 'success');
+            this.showAlert(`🎉 ${dishData.name} has been added successfully! The dish has been saved to the ${this.getTypeDisplayName(dishData.type)} catalog and will persist permanently.`, 'success');
             
         } catch (error) {
             console.error('Error adding dish:', error);
-            this.showAlert('Failed to add dish. Please try again.', 'error');
+            
+            // Show appropriate error message based on the error
+            const errorMessage = error.message.includes('Failed to save dish to server') 
+                ? `⚠️ ${dishData.name} was saved locally but couldn't be saved to the server. ${error.message}`
+                : 'Failed to add dish. Please try again.';
+            
+            this.showAlert(errorMessage, error.message.includes('saved locally') ? 'warning' : 'error');
         } finally {
             // Reset button state
-            const submitBtn = form.querySelector('button[type="submit"]');
             if (submitBtn) {
                 submitBtn.textContent = '✨ Add Dish to Collection';
                 submitBtn.disabled = false;
@@ -758,62 +783,95 @@ class Dashboard {
 
     async saveDishToStorage(dishData) {
         // Determine which storage category to use
-        let storageKey, sourceDataStructure;
+        let storageKey, fileName, sourceDataStructure;
         if (dishData.type === 'breakfast') {
             storageKey = 'breakfast-catalog';
+            fileName = 'breakfast-catalog.json';
             sourceDataStructure = 'breakfast';
         } else if (dishData.type === 'main-dish') {
             storageKey = 'mains-catalog';
+            fileName = 'mains-catalog.json';
             sourceDataStructure = 'mains';
         } else if (dishData.type === 'side-dish-gravy' || dishData.type === 'side-dish-sabji') {
             storageKey = 'side-dishes-catalog';
+            fileName = 'side-dishes-catalog.json';
             sourceDataStructure = 'sideDishes';
         } else if (dishData.type === 'accompaniment') {
             storageKey = 'accompaniments-catalog';
+            fileName = 'accompaniments-catalog.json';
             sourceDataStructure = 'accompaniments';
         } else {
             storageKey = 'mains-catalog';
+            fileName = 'mains-catalog.json';
             sourceDataStructure = 'mains';
         }
 
-        // Get existing data from localStorage (if any)
-        const existingLocalData = JSON.parse(localStorage.getItem(storageKey)) || { items: [] };
-        
-        // Add new dish to localStorage
-        existingLocalData.items.push(dishData);
-        localStorage.setItem(storageKey, JSON.stringify(existingLocalData));
-
-        // Create the complete merged data structure for download
-        await this.createCompleteUpdatedCatalog(storageKey, sourceDataStructure, dishData);
-    }
-
-    async createCompleteUpdatedCatalog(storageKey, sourceDataStructure, newDishData) {
         try {
-            // Load the original source file to get the complete structure
-            const sourceFileName = `${storageKey}.json`;
-            const response = await fetch(`/data/${sourceFileName}`);
+            // Load the current source file to get the complete structure
+            const response = await fetch(`/data/${fileName}`);
             const originalData = await response.json();
 
             // Add the new dish to the original structure
             if (originalData[sourceDataStructure] && originalData[sourceDataStructure].items) {
-                originalData[sourceDataStructure].items.push(newDishData);
+                originalData[sourceDataStructure].items.push(dishData);
             } else {
                 // Fallback structure if original doesn't exist
                 originalData[sourceDataStructure] = {
-                    items: [newDishData]
+                    items: [dishData]
                 };
             }
 
-            // Download the complete updated file
-            this.downloadUpdatedCatalog(storageKey, originalData);
-            
-            console.log(`Created complete updated ${sourceFileName} with ${originalData[sourceDataStructure].items.length} items`);
+            // Save the updated data to the server
+            const saveResponse = await fetch('/api/save-catalog', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    filename: fileName,
+                    data: originalData
+                })
+            });
+
+            if (!saveResponse.ok) {
+                const errorData = await saveResponse.json();
+                throw new Error(errorData.error || 'Failed to save dish to server');
+            }
+
+            const result = await saveResponse.json();
+            console.log(`Dish "${dishData.name}" saved successfully:`, result.message);
+
+            // Also update localStorage for immediate UI consistency
+            const existingLocalData = JSON.parse(localStorage.getItem(storageKey)) || { items: [] };
+            existingLocalData.items.push(dishData);
+            localStorage.setItem(storageKey, JSON.stringify(existingLocalData));
+
         } catch (error) {
-            console.error('Error creating complete catalog:', error);
-            // Fallback to simple download
-            const fallbackData = { items: [newDishData] };
-            this.downloadUpdatedCatalog(storageKey, fallbackData);
+            console.error('Error saving dish:', error);
+            
+            // Fallback: save only to localStorage if server fails
+            const existingLocalData = JSON.parse(localStorage.getItem(storageKey)) || { items: [] };
+            existingLocalData.items.push(dishData);
+            localStorage.setItem(storageKey, JSON.stringify(existingLocalData));
+            
+            throw new Error(`Failed to save dish to server: ${error.message}. Dish saved locally only.`);
         }
+    }
+
+    addDishToArrays(dishData) {
+        // Add to appropriate array based on type
+        if (dishData.type === 'breakfast') {
+            this.breakfastItems.push(dishData);
+        } else if (dishData.type === 'main-dish') {
+            this.mainsItems.push(dishData);
+        } else if (dishData.type === 'side-dish-gravy' || dishData.type === 'side-dish-sabji') {
+            this.sideDishesItems.push(dishData);
+        } else if (dishData.type === 'accompaniment') {
+            this.accompanimentsItems.push(dishData);
+        }
+        
+        // Add to all items array
+        this.allFoodItems.push(dishData);
     }
 
     downloadUpdatedCatalog(catalogName, data) {
@@ -839,54 +897,12 @@ class Dashboard {
             
             console.log(`Downloaded updated ${catalogName}.json file`);
             
-            // Show helpful message to user
-            this.showAlert(
-                `📥 ${catalogName}.json downloaded! Please replace the file in your /data/ directory and commit to Git.`, 
-                'info'
-            );
+            console.log(`Downloaded updated ${catalogName}.json file`);
+            
+            // Only show simple notification for individual dish additions, not detailed instructions
+            // Detailed instructions are shown only when using Developer Tools section
         } catch (error) {
             console.error('Error downloading catalog:', error);
-        }
-    }
-
-    // Utility method to download all current catalogs (helpful for backup/sync)
-    downloadAllCatalogs() {
-        const catalogs = [
-            { key: 'breakfast-catalog', structure: 'breakfast', items: this.breakfastItems },
-            { key: 'mains-catalog', structure: 'mains', items: this.mainsItems },
-            { key: 'side-dishes-catalog', structure: 'sideDishes', items: this.sideDishesItems },
-            { key: 'accompaniments-catalog', structure: 'accompaniments', items: this.accompanimentsItems }
-        ];
-
-        catalogs.forEach(catalog => {
-            const data = {
-                [catalog.structure]: {
-                    items: catalog.items
-                }
-            };
-            setTimeout(() => {
-                this.downloadUpdatedCatalog(catalog.key, data);
-            }, 500); // Small delay between downloads
-        });
-
-        this.showAlert('📥 All catalog files will be downloaded. Please replace them in your /data/ directory.', 'info');
-    }
-
-    // Clear localStorage to reset to original data
-    clearLocalStorage() {
-        const catalogs = ['breakfast-catalog', 'mains-catalog', 'side-dishes-catalog', 'accompaniments-catalog'];
-        
-        if (confirm('Are you sure you want to clear all local data? This will reset the app to use only the original catalog files.')) {
-            catalogs.forEach(key => {
-                localStorage.removeItem(key);
-            });
-            
-            this.showAlert('🗑️ Local data cleared! Please refresh the page to reload original data.', 'warning');
-            
-            // Automatically refresh after 2 seconds
-            setTimeout(() => {
-                window.location.reload();
-            }, 2000);
         }
     }
 
@@ -904,6 +920,17 @@ class Dashboard {
         
         // Add to all items array
         this.allFoodItems.push(dishData);
+    }
+
+    getTypeDisplayName(type) {
+        const typeMap = {
+            'breakfast': 'Breakfast',
+            'main-dish': 'Main Dishes',
+            'side-dish-gravy': 'Side Dishes',
+            'side-dish-sabji': 'Side Dishes',
+            'accompaniment': 'Accompaniments'
+        };
+        return typeMap[type] || 'Main Dishes';
     }
 }
 

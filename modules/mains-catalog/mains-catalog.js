@@ -5,8 +5,6 @@ class MainsCatalog {
         this.filteredItems = [];
         this.currentEditId = null;
         this.deleteItemId = null;
-        
-        // Don't auto-initialize - let main.js handle it
     }
 
     async init() {
@@ -20,51 +18,7 @@ class MainsCatalog {
         this.applyFilters();
         this.updateStatistics();
         
-        window.mainsCatalog = this;
-        console.log('Mains Catalog initialized. Global instance:', window.mainsCatalog);
-    }
-
-    async loadData() {
-        try {
-            // First check if we have data in localStorage
-            const storedItems = window.dataStorage?.getCatalogData('mains-catalog');
-            
-            if (storedItems && storedItems.length > 0) {
-                this.allFoodItems = storedItems;
-                console.log(`Loaded ${this.allFoodItems.length} mains items from localStorage`);
-                return;
-            }
-
-            // If no localStorage data, load from JSON file
-            const mainsResponse = await fetch('/data/mains-catalog.json');
-            const mainsJson = await mainsResponse.json();
-            
-            this.allFoodItems = this.extractItems(mainsJson);
-            
-            // Save to localStorage for future use
-            if (window.dataStorage) {
-                window.dataStorage.saveCatalogData('mains-catalog', this.allFoodItems);
-            }
-            
-            console.log(`Loaded ${this.allFoodItems.length} mains items from JSON file`);
-            
-        } catch (error) {
-            console.error('Error loading mains data:', error);
-            this.showAlert('Failed to load mains data. Please refresh the page.', 'error');
-        }
-    }
-
-    async init() {
-        console.log('Initializing Mains Catalog...');
-        await this.loadData();
-        
-        // Wait for DOM elements to be available
-        await this.waitForDOMElements();
-        
-        this.setupEventListeners();
-        this.applyFilters();
-        this.updateStatistics();
-        
+        // Ensure global access
         window.mainsCatalog = this;
         console.log('Mains Catalog initialized. Global instance:', window.mainsCatalog);
     }
@@ -74,7 +28,7 @@ class MainsCatalog {
         
         return new Promise((resolve, reject) => {
             let attempts = 0;
-            const maxAttempts = 20; // Increased from 10
+            const maxAttempts = 20;
             
             const checkElements = () => {
                 const foodGrid = document.getElementById('foodGrid');
@@ -91,18 +45,10 @@ class MainsCatalog {
                 attempts++;
                 if (attempts >= maxAttempts) {
                     console.error('MainsCatalog: DOM elements not found after', maxAttempts, 'attempts');
-                    
-                    // Debug: Check what's actually in the DOM
-                    const mainContent = document.getElementById('main-content');
-                    console.log('MainsCatalog: main-content innerHTML:', mainContent ? mainContent.innerHTML : 'null');
-                    console.log('MainsCatalog: All elements with id foodGrid:', document.querySelectorAll('#foodGrid'));
-                    console.log('MainsCatalog: All elements with id emptyState:', document.querySelectorAll('#emptyState'));
-                    
                     reject(new Error('Missing DOM elements - foodGrid: ' + foodGrid + ' emptyState: ' + emptyState));
                     return;
                 }
                 
-                // Use requestAnimationFrame instead of setTimeout for better timing
                 requestAnimationFrame(checkElements);
             };
             
@@ -112,15 +58,43 @@ class MainsCatalog {
 
     async loadData() {
         try {
+            // Load from JSON file first
             const mainsResponse = await fetch('/data/mains-catalog.json');
             const mainsJson = await mainsResponse.json();
             
-            this.allFoodItems = this.extractItems(mainsJson);
-            console.log(`Loaded ${this.allFoodItems.length} main dish items`);
+            // Extract items from the JSON structure
+            const sourceItems = this.extractItems(mainsJson);
+            
+            // Merge with localStorage data (same logic as dashboard)
+            this.allFoodItems = await this.mergeWithLocalStorage(sourceItems, 'mains-catalog');
+            
+            console.log(`Loaded ${this.allFoodItems.length} mains items (${sourceItems.length} from source + ${this.allFoodItems.length - sourceItems.length} from localStorage)`);
             
         } catch (error) {
             console.error('Error loading mains data:', error);
             this.showAlert('Failed to load mains data. Please refresh the page.', 'error');
+        }
+    }
+
+    // Merge source data with any new items added to localStorage
+    async mergeWithLocalStorage(sourceItems, storageKey) {
+        try {
+            const localData = localStorage.getItem(storageKey);
+            if (localData) {
+                const parsedData = JSON.parse(localData);
+                const localItems = parsedData.items || [];
+                
+                // Find items that are in localStorage but not in source data
+                const sourceIds = new Set(sourceItems.map(item => item.id));
+                const newLocalItems = localItems.filter(item => !sourceIds.has(item.id));
+                
+                // Merge arrays
+                return [...sourceItems, ...newLocalItems];
+            }
+            return sourceItems;
+        } catch (error) {
+            console.warn(`Error merging localStorage for ${storageKey}:`, error);
+            return sourceItems;
         }
     }
 
@@ -146,28 +120,10 @@ class MainsCatalog {
             typeFilter.addEventListener('change', () => this.applyFilters());
         }
 
-        const addMainBtn = document.getElementById('addMainBtn');
-        if (addMainBtn) {
-            addMainBtn.addEventListener('click', () => this.showAddModal());
-        }
-
-        const mainForm = document.getElementById('mainForm');
-        if (mainForm) {
-            mainForm.addEventListener('submit', (e) => this.handleFormSubmit(e));
-        }
-
-        const fetchNutritionBtn = document.getElementById('fetchNutritionBtn');
-        if (fetchNutritionBtn) {
-            fetchNutritionBtn.addEventListener('click', () => this.fetchNutritionInfo());
-        }
-
         const foodGrid = document.getElementById('foodGrid');
         if (foodGrid) {
             foodGrid.addEventListener('click', (e) => {
-                if (e.target.classList.contains('edit-btn')) {
-                    const itemId = e.target.getAttribute('data-id');
-                    this.editItem(itemId);
-                } else if (e.target.classList.contains('delete-btn')) {
+                if (e.target.classList.contains('delete-btn')) {
                     const itemId = e.target.getAttribute('data-id');
                     this.deleteItem(itemId);
                 }
@@ -214,8 +170,11 @@ class MainsCatalog {
         emptyState.classList.add('hidden');
 
         const cardsHTML = this.filteredItems.map(item => this.createFoodCard(item)).join('');
-        console.log('MainsCatalog: Generated cards HTML length:', cardsHTML.length);
-        foodGrid.innerHTML = cardsHTML;
+        
+        // Add "Add New Dish" card at the end
+        const addNewCard = this.createAddNewCard();
+        
+        foodGrid.innerHTML = cardsHTML + addNewCard;
     }
 
     createFoodCard(item) {
@@ -260,15 +219,50 @@ class MainsCatalog {
                 ` : ''}
                 
                 <div class="food-card-actions">
-                    <button class="action-btn edit-btn" data-id="${item.id || item.name}">
-                        ✏️ Edit
-                    </button>
                     <button class="action-btn delete-btn" data-id="${item.id || item.name}">
                         🗑️ Delete
                     </button>
                 </div>
             </div>
         `;
+    }
+
+    createAddNewCard() {
+        return `
+            <div class="food-card add-new-card" onclick="window.mainsCatalog?.openAddDishModal()">
+                <div class="add-new-content">
+                    <div class="add-new-icon">➕</div>
+                    <h4 class="add-new-title">Add New Dish</h4>
+                    <p class="add-new-description">Add a new main dish to your collection</p>
+                </div>
+            </div>
+        `;
+    }
+
+    async openAddDishModal() {
+        console.log('Opening Add Dish modal from Mains catalog...');
+        
+        // Navigate to Dashboard and then show the modal with pre-selected type
+        if (window.navigation && window.navigation.navigateToModule) {
+            // Navigate to dashboard
+            window.navigation.navigateToModule('dashboard');
+            
+            // Wait a bit for Dashboard to load and then show modal with pre-selected type
+            setTimeout(() => {
+                if (window.dashboard && typeof window.dashboard.showAddDishModal === 'function') {
+                    window.dashboard.showAddDishModal('main-dish');
+                } else {
+                    console.warn('Dashboard not ready, trying again...');
+                    setTimeout(() => {
+                        if (window.dashboard && typeof window.dashboard.showAddDishModal === 'function') {
+                            window.dashboard.showAddDishModal('main-dish');
+                        }
+                    }, 500);
+                }
+            }, 300);
+        } else {
+            alert('Unable to open Add Dish modal. Please navigate to Dashboard manually.');
+        }
     }
 
     getDishEmoji(item) {
@@ -290,6 +284,7 @@ class MainsCatalog {
     formatType(type) {
         const typeMap = {
             'mains': 'Mains',
+            'main-dish': 'Main Dish',
             'side-dish-gravy': 'Side Dish - Gravy',
             'side-dish-sabji': 'Side Dish - Sabji', 
             'vegetarian': 'Vegetarian',
@@ -308,7 +303,7 @@ class MainsCatalog {
         
         if (vegCount) {
             const vegetarianCount = this.filteredItems.filter(item => 
-                item.type === 'vegetarian' || item.type === 'mains' || item.type === 'side-dish-gravy' || item.type === 'side-dish-sabji'
+                item.type === 'vegetarian' || item.type === 'mains' || item.type === 'main-dish'
             ).length;
             vegCount.textContent = vegetarianCount;
         }
@@ -323,265 +318,44 @@ class MainsCatalog {
         }
     }
 
-    async fetchNutritionInfo() {
-        const dishNameInput = document.getElementById('dishName');
-        const statusElement = document.getElementById('nutritionStatus');
-        
-        if (!dishNameInput.value.trim()) {
-            statusElement.textContent = '⚠️ Please enter a dish name first';
-            statusElement.className = 'nutrition-status error';
-            setTimeout(() => {
-                statusElement.textContent = '';
-                statusElement.className = 'nutrition-status';
-            }, 3000);
-            return;
-        }
-
-        const dishName = dishNameInput.value.trim();
-        statusElement.textContent = '🔍 Fetching nutrition info...';
-        statusElement.className = 'nutrition-status loading';
-
-        setTimeout(() => {
-            this.setEstimatedNutrition(dishName);
-            statusElement.textContent = '✅ Estimated nutrition values filled';
-            statusElement.className = 'nutrition-status success';
-            
-            setTimeout(() => {
-                statusElement.textContent = '';
-                statusElement.className = 'nutrition-status';
-            }, 3000);
-        }, 1000);
-    }
-
-    setEstimatedNutrition(dishName) {
-        const dishLower = dishName.toLowerCase();
-        let nutrition = {};
-
-        // Meal-specific estimations
-        if (dishLower.includes('rice') || dishLower.includes('bath')) {
-            nutrition = { calories: 350, protein: 8, carbs: 65, fat: 8 };
-        } else if (dishLower.includes('curry') || dishLower.includes('sambar')) {
-            nutrition = { calories: 150, protein: 8, carbs: 22, fat: 4 };
-        } else if (dishLower.includes('dal')) {
-            nutrition = { calories: 120, protein: 9, carbs: 18, fat: 2 };
-        } else if (dishLower.includes('biryani')) {
-            nutrition = { calories: 450, protein: 12, carbs: 75, fat: 12 };
-        } else if (dishLower.includes('roti')) {
-            nutrition = { calories: 200, protein: 6, carbs: 38, fat: 4 };
-        } else if (dishLower.includes('fry') || dishLower.includes('sabji')) {
-            nutrition = { calories: 160, protein: 4, carbs: 20, fat: 7 };
-        } else {
-            // Generic meal estimation
-            nutrition = { calories: 220, protein: 7, carbs: 35, fat: 6 };
-        }
-
-        this.populateNutritionFields({ nutrition });
-    }
-
-    populateNutritionFields(data) {
-        const nutrition = data.nutrition || data;
-        
-        if (nutrition.calories) {
-            document.getElementById('calories').value = Math.round(nutrition.calories);
-        }
-        if (nutrition.protein) {
-            document.getElementById('protein').value = Math.round(nutrition.protein * 10) / 10;
-        }
-        if (nutrition.carbs || nutrition.carbohydrates) {
-            document.getElementById('carbs').value = Math.round((nutrition.carbs || nutrition.carbohydrates) * 10) / 10;
-        }
-        if (nutrition.fat) {
-            document.getElementById('fat').value = Math.round(nutrition.fat * 10) / 10;
-        }
-    }
-
-    showAddModal() {
-        this.currentEditId = null;
-        document.getElementById('modalTitle').textContent = 'Add New Main Dish';
-        document.getElementById('submitBtnText').textContent = 'Add Main Dish';
-        this.clearForm();
-        document.getElementById('mainModal').classList.add('active');
-    }
-
-    editItem(itemId) {
-        const item = this.allFoodItems.find(item => (item.id || item.name) === itemId);
-        if (!item) return;
-
-        this.currentEditId = itemId;
-        document.getElementById('modalTitle').textContent = 'Edit Main Dish';
-        document.getElementById('submitBtnText').textContent = 'Update Main Dish';
-        
-        this.populateForm(item);
-        document.getElementById('mainModal').classList.add('active');
-    }
-
-    populateForm(item) {
-        document.getElementById('dishName').value = item.name || '';
-        document.getElementById('dishDescription').value = item.description || '';
-        document.getElementById('dishType').value = item.type || '';
-        
-        document.getElementById('applicableLunch').checked = item.applicableFor?.includes('Lunch') || false;
-        document.getElementById('applicableDinner').checked = item.applicableFor?.includes('Dinner') || false;
-        
-        const nutrition = item.nutrition || {};
-        document.getElementById('calories').value = nutrition.calories || '';
-        document.getElementById('protein').value = nutrition.protein || '';
-        document.getElementById('carbs').value = nutrition.carbs || '';
-        document.getElementById('fat').value = nutrition.fat || '';
-    }
-
-    clearForm() {
-        document.getElementById('mainForm').reset();
-    }
-
-    closeModal() {
-        document.getElementById('mainModal').classList.remove('active');
-        this.clearForm();
-        this.currentEditId = null;
-    }
-
-    async handleFormSubmit(e) {
-        e.preventDefault();
-        
-        const formData = this.getFormData();
-        if (!this.validateFormData(formData)) return;
-
-        if (this.currentEditId) {
-            await this.updateItem(formData);
-        } else {
-            await this.addItem(formData);
-        }
-        
-        this.closeModal();
-        this.applyFilters();
-        
-        const action = this.currentEditId ? 'updated' : 'added';
-        this.showAlert(`Main dish ${action} successfully!`, 'success');
-    }
-
-    getFormData() {
-        const applicableFor = [];
-        if (document.getElementById('applicableLunch').checked) {
-            applicableFor.push('Lunch');
-        }
-        if (document.getElementById('applicableDinner').checked) {
-            applicableFor.push('Dinner');
-        }
-
-        return {
-            name: document.getElementById('dishName').value.trim(),
-            description: document.getElementById('dishDescription').value.trim(),
-            category: 'mains',
-            type: document.getElementById('dishType').value,
-            applicableFor: applicableFor,
-            nutrition: {
-                calories: parseInt(document.getElementById('calories').value) || 0,
-                protein: parseFloat(document.getElementById('protein').value) || 0,
-                carbs: parseFloat(document.getElementById('carbs').value) || 0,
-                fat: parseFloat(document.getElementById('fat').value) || 0
-            },
-            region: 'Karnataka'
-        };
-    }
-
-    validateFormData(data) {
-        if (!data.name) {
-            this.showAlert('Please enter a dish name', 'error');
-            return false;
-        }
-        
-        if (!data.description) {
-            this.showAlert('Please enter a description', 'error');
-            return false;
-        }
-        
-        if (!data.type) {
-            this.showAlert('Please select a type', 'error');
-            return false;
-        }
-        
-        return true;
-    }
-
-    async saveToLocalStorage() {
-        try {
-            if (window.dataStorage) {
-                const success = window.dataStorage.saveCatalogData('mains-catalog', this.allFoodItems);
-                if (success) {
-                    console.log('Successfully saved mains data to localStorage');
-                    return true;
-                } else {
-                    console.error('Failed to save mains data to localStorage');
-                    return false;
-                }
-            } else {
-                console.error('DataStorage not available');
-                return false;
-            }
-        } catch (error) {
-            console.error('Error saving to localStorage:', error);
-            return false;
-        }
-    }
-
-    async persistChanges() {
-        try {
-            await this.saveToLocalStorage();
-            console.log('Mains changes persisted to localStorage');
-        } catch (error) {
-            console.error('Failed to persist changes:', error);
-            this.showAlert('Changes saved locally in browser memory.', 'warning');
-        }
-    }
-
-    async addItem(data) {
-        const newItem = {
-            ...data,
-            id: 'ml_user_' + Date.now()
-        };
-        
-        this.allFoodItems.push(newItem);
-        await this.persistChanges();
-    }
-
-    async updateItem(data) {
-        const index = this.allFoodItems.findIndex(item => (item.id || item.name) === this.currentEditId);
-        if (index !== -1) {
-            const updatedItem = {
-                ...this.allFoodItems[index],
-                ...data
-            };
-            this.allFoodItems[index] = updatedItem;
-            await this.persistChanges();
-        }
-    }
-
     deleteItem(itemId) {
         const item = this.allFoodItems.find(item => (item.id || item.name) === itemId);
         if (!item) return;
 
-        this.deleteItemId = itemId;
-        document.getElementById('deleteDishName').textContent = item.name;
-        document.getElementById('deleteModal').classList.add('active');
-    }
-
-    async confirmDelete() {
-        const index = this.allFoodItems.findIndex(item => (item.id || item.name) === this.deleteItemId);
-        if (index !== -1) {
-            this.allFoodItems.splice(index, 1);
-            await this.persistChanges();
-            this.applyFilters();
-            this.showAlert('Main dish deleted successfully!', 'success');
+        if (confirm(`Are you sure you want to delete "${item.name}"?`)) {
+            const index = this.allFoodItems.findIndex(item => (item.id || item.name) === itemId);
+            if (index !== -1) {
+                this.allFoodItems.splice(index, 1);
+                this.applyFilters();
+                this.showAlert('Main dish deleted successfully!', 'success');
+                
+                // Save to localStorage if available
+                this.saveToLocalStorage();
+            }
         }
-        this.closeDeleteModal();
     }
 
-    closeDeleteModal() {
-        document.getElementById('deleteModal').classList.remove('active');
-        this.deleteItemId = null;
+    async saveToLocalStorage() {
+        try {
+            const existingLocalData = JSON.parse(localStorage.getItem('mains-catalog')) || { items: [] };
+            existingLocalData.items = this.allFoodItems.filter(item => item.id && item.id.includes('user_'));
+            localStorage.setItem('mains-catalog', JSON.stringify(existingLocalData));
+            console.log('Mains catalog saved to localStorage');
+        } catch (error) {
+            console.error('Error saving to localStorage:', error);
+        }
     }
 
     showAlert(message, type = 'info') {
+        // Clear any existing alerts of the same type to prevent stacking
+        const existingAlerts = document.querySelectorAll(`.alert.alert-${type}`);
+        existingAlerts.forEach(alert => {
+            if (alert.parentNode) {
+                alert.parentNode.removeChild(alert);
+            }
+        });
+        
+        // Create alert element
         const alert = document.createElement('div');
         alert.className = `alert alert-${type}`;
         alert.innerHTML = message;
@@ -596,6 +370,7 @@ class MainsCatalog {
         alert.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
         alert.style.fontWeight = '500';
         
+        // Set colors based on type
         switch(type) {
             case 'success':
                 alert.style.backgroundColor = '#d4edda';
@@ -620,12 +395,14 @@ class MainsCatalog {
         
         document.body.appendChild(alert);
         
+        // Auto remove after 4 seconds
         setTimeout(() => {
             if (alert.parentNode) {
                 alert.parentNode.removeChild(alert);
             }
-        }, 5000);
+        }, 4000);
         
+        // Add click to dismiss
         alert.addEventListener('click', () => {
             if (alert.parentNode) {
                 alert.parentNode.removeChild(alert);
@@ -634,5 +411,4 @@ class MainsCatalog {
     }
 }
 
-// Mains Catalog Module - Dedicated to Karnataka Main Dishes (Lunch & Dinner)
 // This module is initialized by main.js after DOM and dependencies are loaded

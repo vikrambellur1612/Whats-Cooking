@@ -389,6 +389,66 @@
     border-top: 1px solid #e1e8ed;
 }
 
+/* Add New Dish Card Styles */
+.add-new-card {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border: 2px dashed #6c757d;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+    border-radius: 12px;
+    opacity: 0.8;
+}
+
+.add-new-card:hover {
+    background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+    border-color: #495057;
+    opacity: 1;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+.add-new-content {
+    text-align: center;
+    padding: 20px;
+}
+
+.add-new-icon {
+    font-size: 3rem;
+    margin-bottom: 15px;
+    color: #6c757d;
+    transition: color 0.3s ease;
+}
+
+.add-new-card:hover .add-new-icon {
+    color: #495057;
+}
+
+.add-new-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 8px;
+}
+
+.add-new-description {
+    font-size: 0.95rem;
+    color: #6c757d;
+    margin: 0;
+    line-height: 1.4;
+}
+
+.add-new-card:hover .add-new-title {
+    color: #343a40;
+}
+
+.add-new-card:hover .add-new-description {
+    color: #495057;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .action-bar {

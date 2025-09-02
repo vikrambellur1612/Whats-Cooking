@@ -6,14 +6,8 @@
             <p class="module-description">Salads, raitas, chutneys and other accompaniments to complement your meals</p>
         </div>
 
-        <!-- Action Bar -->
-        <div class="action-bar">
-            <div class="action-bar-content">
-                <button id="addAccompanimentBtn" class="btn btn-primary">
-                    ➕ Add New Accompaniment
-                </button>
-            </div>
-        </div>
+        <!-- Action Bar - Removed Add New Accompaniment button -->
+        <!-- Users can add new dishes from the Dashboard's "Add New Dish" feature -->
 
         <!-- Statistics Cards -->
         <div class="statistics-grid grid grid-3">
@@ -49,125 +43,7 @@
         <div id="emptyState" class="empty-state hidden">
             <div class="empty-icon">�</div>
             <h3>No accompaniments found</h3>
-            <p>Try adjusting your search or add a new accompaniment to get started!</p>
-            <button class="btn btn-primary" onclick="window.accompanimentsCatalog && window.accompanimentsCatalog.showAddModal()">
-                Add Your First Accompaniment
-            </button>
-        </div>
-    </div>
-
-    <!-- Add/Edit Accompaniment Modal -->
-    <div id="accompanimentModal" class="modal">
-        <div class="modal-backdrop"></div>
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 id="modalTitle">Add New Accompaniment</h3>
-                <button class="modal-close" onclick="window.accompanimentsCatalog?.closeModal()">&times;</button>
-            </div>
-            <div class="modal-body">
-                <form id="accompanimentForm" class="form">
-                    <div class="form-group">
-                        <label for="dishName" class="form-label">Accompaniment Name *</label>
-                        <input type="text" id="dishName" name="dishName" class="form-input" placeholder="Enter accompaniment name" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="dishDescription" class="form-label">Description *</label>
-                        <textarea id="dishDescription" name="dishDescription" class="form-textarea" rows="3" placeholder="Describe the accompaniment..." required></textarea>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="dishType" class="form-label">Type *</label>
-                            <select id="dishType" name="dishType" class="form-select" required>
-                                <option value="">Select type</option>
-                                <option value="breakfast">🌅 Breakfast</option>
-                                <option value="main-dish">🍽️ Main Dish</option>
-                                <option value="side-dish-gravy">🥘 Side Dish - Gravy</option>
-                                <option value="side-dish-sabji">🥗 Side Dish - Sabji</option>
-                                <option value="accompaniment">🍯 Accompaniment</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="cuisineType" class="form-label">Cuisine *</label>
-                            <select id="cuisineType" name="cuisineType" class="form-select" required>
-                                <option value="">Select cuisine</option>
-                                <option value="South Indian">South Indian</option>
-                                <option value="North Indian">North Indian</option>
-                                <option value="Regional">Regional</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Meal Classification</label>
-                        <div class="checkbox-group">
-                            <label class="checkbox-label">
-                                <input type="checkbox" id="vegetarian" name="mealType" value="vegetarian">
-                                <span class="checkbox-text">🥬 Vegetarian</span>
-                            </label>
-                            <label class="checkbox-label">
-                                <input type="checkbox" id="nonVegetarian" name="mealType" value="non-vegetarian">
-                                <span class="checkbox-text">🍖 Non-Vegetarian</span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Applicable For</label>
-                        <div class="checkbox-group">
-                            <label class="checkbox-label">
-                                <input type="checkbox" id="applicableLunch" name="applicableFor" value="Lunch">
-                                <span class="checkbox-custom"></span>
-                                Lunch
-                            </label>
-                            <label class="checkbox-label">
-                                <input type="checkbox" id="applicableDinner" name="applicableFor" value="Dinner">
-                                <span class="checkbox-custom"></span>
-                                Dinner
-                            </label>
-                        </div>
-                    </div>
-
-                    <!-- Nutrition Information Section -->
-                    <div class="form-section">
-                        <div class="form-section-header">
-                            <h4>Nutrition Information</h4>
-                            <button type="button" id="fetchNutritionBtn" class="btn btn-secondary btn-sm">
-                                🔍 Auto-fill Nutrition
-                            </button>
-                        </div>
-                        <div id="nutritionStatus" class="nutrition-status"></div>
-                        
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="calories" class="form-label">Calories</label>
-                                <input type="number" id="calories" name="calories" class="form-input" min="0" placeholder="0">
-                            </div>
-                            <div class="form-group">
-                                <label for="protein" class="form-label">Protein (g)</label>
-                                <input type="number" id="protein" name="protein" class="form-input" min="0" step="0.1" placeholder="0.0">
-                            </div>
-                            <div class="form-group">
-                                <label for="carbs" class="form-label">Carbs (g)</label>
-                                <input type="number" id="carbs" name="carbs" class="form-input" min="0" step="0.1" placeholder="0.0">
-                            </div>
-                            <div class="form-group">
-                                <label for="fat" class="form-label">Fat (g)</label>
-                                <input type="number" id="fat" name="fat" class="form-input" min="0" step="0.1" placeholder="0.0">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-actions">
-                        <button type="button" class="btn btn-secondary" onclick="window.accompanimentsCatalog?.closeModal()">Cancel</button>
-                        <button type="submit" class="btn btn-primary">
-                            <span id="submitBtnText">Add Accompaniment</span>
-                        </button>
-                    </div>
-                </form>
-            </div>
+            <p>Use the "Add New Dish" feature on the Dashboard to add accompaniments!</p>
         </div>
     </div>
 

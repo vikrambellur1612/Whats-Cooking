@@ -6,14 +6,8 @@
             <p class="module-description">Traditional Indian breakfast dishes to start your day</p>
         </div>
 
-        <!-- Action Bar -->
-        <div class="action-bar">
-            <div class="action-bar-content">
-                <button id="addBreakfastBtn" class="btn btn-primary">
-                    ➕ Add New Breakfast
-                </button>
-            </div>
-        </div>
+        <!-- Action Bar - Removed Add New Breakfast button -->
+        <!-- Users can add new dishes from the Dashboard's "Add New Dish" feature -->
 
         <!-- Statistics Cards -->
         <div class="statistics-grid grid grid-3">
@@ -49,133 +43,7 @@
         <div id="emptyState" class="empty-state hidden">
             <div class="empty-icon">🌅</div>
             <h3>No breakfast dishes found</h3>
-            <p>Try adjusting your search or add a new breakfast dish to get started!</p>
-            <button class="btn btn-primary" onclick="window.breakfastCatalog && window.breakfastCatalog.showAddModal()">
-                Add Your First Breakfast
-            </button>
-        </div>
-    </div>
-</div>
-
-<!-- Add/Edit Breakfast Modal -->
-<div id="breakfastModal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3 id="modalTitle" class="modal-title">Add New Breakfast</h3>
-            <button class="modal-close" onclick="window.breakfastCatalog && window.breakfastCatalog.closeModal()">&times;</button>
-        </div>
-        <div class="modal-body">
-            <form id="breakfastForm">
-                <div class="form-group">
-                    <label class="form-label">Dish Name *</label>
-                    <input type="text" id="dishName" class="form-input" required>
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">Description *</label>
-                    <textarea id="dishDescription" class="form-textarea" required 
-                        placeholder="Describe the breakfast dish, its ingredients, and what makes it special..."></textarea>
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">Type *</label>
-                    <select id="dishType" class="form-select" required>
-                        <option value="">Select dish type...</option>
-                        <option value="breakfast">🌅 Breakfast</option>
-                        <option value="main-dish">🍽️ Main Dish</option>
-                        <option value="side-dish-gravy">🥘 Side Dish - Gravy</option>
-                        <option value="side-dish-sabji">🥗 Side Dish - Sabji</option>
-                        <option value="accompaniment">🍯 Accompaniment</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">Meal Classification</label>
-                    <div class="checkbox-group">
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="isVegetarian" value="vegetarian">
-                            <span class="checkbox-text">🥬 Vegetarian</span>
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="isNonVegetarian" value="non-vegetarian">
-                            <span class="checkbox-text">🍖 Non-Vegetarian</span>
-                        </label>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">Applicable For</label>
-                    <div class="checkbox-group">
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="applicableBreakfast" value="Breakfast" checked disabled>
-                            Breakfast
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="applicableBrunch" value="Brunch">
-                            Brunch
-                        </label>
-                    </div>
-                </div>
-                
-                <fieldset class="nutrition-fieldset">
-                    <legend>Nutritional Information (per serving)</legend>
-                    <div class="nutrition-fetch-controls">
-                        <button type="button" id="fetchNutritionBtn" class="btn btn-secondary btn-small">
-                            🔍 Auto-fetch Nutrition Info
-                        </button>
-                        <span id="nutritionStatus" class="nutrition-status"></span>
-                    </div>
-                    <div class="nutrition-grid grid grid-2">
-                        <div class="form-group">
-                            <label class="form-label">Calories</label>
-                            <input type="number" id="calories" class="form-input" min="0" step="1">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Protein (g)</label>
-                            <input type="number" id="protein" class="form-input" min="0" step="0.1">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Carbs (g)</label>
-                            <input type="number" id="carbs" class="form-input" min="0" step="0.1">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Fat (g)</label>
-                            <input type="number" id="fat" class="form-input" min="0" step="0.1">
-                        </div>
-                    </div>
-                </fieldset>
-                
-                <div class="form-actions">
-                    <button type="button" class="btn btn-secondary" onclick="window.breakfastCatalog && window.breakfastCatalog.closeModal()">
-                        Cancel
-                    </button>
-                    <button type="submit" class="btn btn-primary">
-                        <span id="submitBtnText">Add Breakfast</span>
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<!-- Delete Confirmation Modal -->
-<div id="deleteModal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3 class="modal-title">Confirm Delete</h3>
-            <button class="modal-close" onclick="window.breakfastCatalog && window.breakfastCatalog.closeDeleteModal()">&times;</button>
-        </div>
-        <div class="modal-body">
-            <p>Are you sure you want to delete <strong id="deleteDishName"></strong>?</p>
-            <p class="text-muted">This action cannot be undone.</p>
-            <div class="form-actions">
-                <button type="button" class="btn btn-secondary" onclick="window.breakfastCatalog && window.breakfastCatalog.closeDeleteModal()">
-                    Cancel
-                </button>
-                <button type="button" class="btn btn-error" onclick="window.breakfastCatalog && window.breakfastCatalog.confirmDelete()">
-                    Delete Breakfast
-                </button>
-            </div>
+            <p>Use the "Add New Dish" feature on the Dashboard to add breakfast items!</p>
         </div>
     </div>
 </div>

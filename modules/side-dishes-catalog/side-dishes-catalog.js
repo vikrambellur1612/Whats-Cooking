@@ -67,31 +67,43 @@ class SideDishesCatalog {
 
     async loadData() {
         try {
-            // First check if we have data in localStorage
-            const storedItems = window.dataStorage?.getCatalogData('side-dishes-catalog');
-            
-            if (storedItems && storedItems.length > 0) {
-                this.allFoodItems = storedItems;
-                console.log(`Loaded ${this.allFoodItems.length} side dish items from localStorage`);
-                return;
-            }
-
-            // If no localStorage data, load from JSON file
+            // Load from JSON file first
             const sideDishesResponse = await fetch('/data/side-dishes-catalog.json');
             const sideDishesJson = await sideDishesResponse.json();
             
-            this.allFoodItems = this.extractItems(sideDishesJson);
+            // Extract items from the JSON structure
+            const sourceItems = this.extractItems(sideDishesJson);
             
-            // Save to localStorage for future use
-            if (window.dataStorage) {
-                window.dataStorage.saveCatalogData('side-dishes-catalog', this.allFoodItems);
-            }
+            // Merge with localStorage data (same logic as dashboard)
+            this.allFoodItems = await this.mergeWithLocalStorage(sourceItems, 'side-dishes-catalog');
             
-            console.log(`Loaded ${this.allFoodItems.length} side dish items from JSON file`);
+            console.log(`Loaded ${this.allFoodItems.length} side dish items (${sourceItems.length} from source + ${this.allFoodItems.length - sourceItems.length} from localStorage)`);
             
         } catch (error) {
             console.error('Error loading side dishes data:', error);
             this.showAlert('Failed to load side dishes data. Please refresh the page.', 'error');
+        }
+    }
+
+    // Merge source data with any new items added to localStorage
+    async mergeWithLocalStorage(sourceItems, storageKey) {
+        try {
+            const localData = localStorage.getItem(storageKey);
+            if (localData) {
+                const parsedData = JSON.parse(localData);
+                const localItems = parsedData.items || [];
+                
+                // Find items that are in localStorage but not in source data
+                const sourceIds = new Set(sourceItems.map(item => item.id));
+                const newLocalItems = localItems.filter(item => !sourceIds.has(item.id));
+                
+                // Merge arrays
+                return [...sourceItems, ...newLocalItems];
+            }
+            return sourceItems;
+        } catch (error) {
+            console.warn(`Error merging localStorage for ${storageKey}:`, error);
+            return sourceItems;
         }
     }
 
@@ -122,11 +134,6 @@ class SideDishesCatalog {
             cuisineFilter.addEventListener('change', () => this.applyFilters());
         }
 
-        const addSideDishBtn = document.getElementById('addSideDishBtn');
-        if (addSideDishBtn) {
-            addSideDishBtn.addEventListener('click', () => this.showAddModal());
-        }
-
         const sideDishForm = document.getElementById('sideDishForm');
         if (sideDishForm) {
             sideDishForm.addEventListener('submit', (e) => this.handleFormSubmit(e));
@@ -140,10 +147,7 @@ class SideDishesCatalog {
         const foodGrid = document.getElementById('foodGrid');
         if (foodGrid) {
             foodGrid.addEventListener('click', (e) => {
-                if (e.target.classList.contains('edit-btn')) {
-                    const itemId = e.target.getAttribute('data-id');
-                    this.editItem(itemId);
-                } else if (e.target.classList.contains('delete-btn')) {
+                if (e.target.classList.contains('delete-btn')) {
                     const itemId = e.target.getAttribute('data-id');
                     this.deleteItem(itemId);
                 }
@@ -193,7 +197,11 @@ class SideDishesCatalog {
 
         const cardsHTML = this.filteredItems.map(item => this.createFoodCard(item)).join('');
         console.log('SideDishesCatalog: Generated cards HTML length:', cardsHTML.length);
-        foodGrid.innerHTML = cardsHTML;
+        
+        // Add "Add New Dish" card at the end
+        const addNewCard = this.createAddNewCard();
+        
+        foodGrid.innerHTML = cardsHTML + addNewCard;
     }
 
     createFoodCard(item) {
@@ -240,15 +248,50 @@ class SideDishesCatalog {
                 ` : ''}
                 
                 <div class="food-card-actions">
-                    <button class="action-btn edit-btn" data-id="${item.id || item.name}">
-                        ✏️ Edit
-                    </button>
                     <button class="action-btn delete-btn" data-id="${item.id || item.name}">
                         🗑️ Delete
                     </button>
                 </div>
             </div>
         `;
+    }
+
+    createAddNewCard() {
+        return `
+            <div class="food-card add-new-card" onclick="window.sideDishesCatalog?.openAddDishModal()">
+                <div class="add-new-content">
+                    <div class="add-new-icon">➕</div>
+                    <h4 class="add-new-title">Add New Dish</h4>
+                    <p class="add-new-description">Add a new side dish to your collection</p>
+                </div>
+            </div>
+        `;
+    }
+
+    async openAddDishModal() {
+        console.log('Opening Add Dish modal from Side Dishes catalog...');
+        
+        // Navigate to Dashboard and then show the modal with pre-selected type
+        if (window.navigation && window.navigation.navigateToModule) {
+            // Navigate to dashboard
+            window.navigation.navigateToModule('dashboard');
+            
+            // Wait a bit for Dashboard to load and then show modal with pre-selected type
+            setTimeout(() => {
+                if (window.dashboard && typeof window.dashboard.showAddDishModal === 'function') {
+                    window.dashboard.showAddDishModal('side-dish-gravy');
+                } else {
+                    console.warn('Dashboard not ready, trying again...');
+                    setTimeout(() => {
+                        if (window.dashboard && typeof window.dashboard.showAddDishModal === 'function') {
+                            window.dashboard.showAddDishModal('side-dish-gravy');
+                        }
+                    }, 500);
+                }
+            }, 300);
+        } else {
+            alert('Unable to open Add Dish modal. Please navigate to Dashboard manually.');
+        }
     }
 
     getDishEmoji(item) {
@@ -304,26 +347,6 @@ class SideDishesCatalog {
             const avgCal = this.filteredItems.length > 0 ? Math.round(totalCalories / this.filteredItems.length) : 0;
             avgCalories.textContent = avgCal;
         }
-    }
-
-    showAddModal() {
-        this.currentEditId = null;
-        document.getElementById('modalTitle').textContent = 'Add New Side Dish';
-        document.getElementById('submitBtnText').textContent = 'Add Side Dish';
-        this.clearForm();
-        document.getElementById('sideDishModal').classList.add('active');
-    }
-
-    editItem(itemId) {
-        const item = this.allFoodItems.find(item => (item.id || item.name) === itemId);
-        if (!item) return;
-
-        this.currentEditId = itemId;
-        document.getElementById('modalTitle').textContent = 'Edit Side Dish';
-        document.getElementById('submitBtnText').textContent = 'Update Side Dish';
-        
-        this.populateForm(item);
-        document.getElementById('sideDishModal').classList.add('active');
     }
 
     populateForm(item) {

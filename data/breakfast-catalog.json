@@ -126,6 +126,23 @@
           "fat": 4
         },
         "region": "Karnataka"
+      },
+      {
+        "name": "Shavige Bath",
+        "description": "A delicious dish",
+        "type": "breakfast",
+        "cuisine": "South Indian",
+        "mealTypes": [
+          "vegetarian"
+        ],
+        "nutrition": {
+          "calories": 200,
+          "protein": 8,
+          "carbs": 30,
+          "fat": 6
+        },
+        "id": "1756806236837",
+        "dateAdded": "2025-09-02T09:43:56.837Z"
       }
     ]
   }

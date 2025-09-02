@@ -112,6 +112,20 @@
           "fat": 4
         },
         "region": "Karnataka"
+      },
+      {
+        "id": "bf_user_1756749880638",
+        "name": "Pongal",
+        "description": "Pongal",
+        "type": "mains",
+        "category": "breakfast",
+        "nutrition": {
+          "calories": 150,
+          "protein": 4,
+          "carbs": 25,
+          "fat": 4
+        },
+        "region": "Karnataka"
       }
     ]
   }

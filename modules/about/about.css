@@ -1,0 +1,300 @@
+/* About Module Styles */
+.about-container {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.about-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 2px solid var(--accent-color, #4CAF50);
+}
+
+.about-title {
+    font-size: 3rem;
+    color: var(--primary-color, #2c3e50);
+    margin-bottom: 1rem;
+    font-weight: bold;
+}
+
+.about-tagline {
+    font-size: 1.3rem;
+    color: var(--text-muted, #666);
+    margin-bottom: 2rem;
+    font-style: italic;
+}
+
+.hobby-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 0.7rem 1.5rem;
+    border-radius: 25px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.about-content {
+    display: grid;
+    gap: 3rem;
+}
+
+.about-section {
+    background: var(--card-bg, #fff);
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border-left: 4px solid var(--accent-color, #4CAF50);
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    font-size: 1.8rem;
+    color: var(--primary-color, #2c3e50);
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+}
+
+.section-title .section-icon {
+    margin-right: 0.7rem;
+    font-size: 2rem;
+}
+
+.section-text {
+    color: var(--text-color, #333);
+    line-height: 1.6;
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.feature-item {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    padding: 1.5rem;
+    border-radius: 10px;
+    border-left: 3px solid var(--accent-color, #4CAF50);
+}
+
+.feature-title {
+    font-weight: 600;
+    color: var(--primary-color, #2c3e50);
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.feature-description {
+    color: var(--text-muted, #666);
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.tech-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.tech-badge {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border-radius: 20px;
+    font-weight: 500;
+    font-size: 0.9rem;
+    text-align: center;
+    transition: transform 0.2s ease;
+}
+
+.tech-badge:hover {
+    transform: translateY(-2px);
+}
+
+.developer-info {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    text-align: center;
+    padding: 2rem;
+    border-radius: 12px;
+    margin: 2rem 0;
+}
+
+.developer-name {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.developer-title {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    margin-bottom: 1rem;
+}
+
+.developer-description {
+    font-size: 1rem;
+    line-height: 1.6;
+    opacity: 0.95;
+}
+
+/* Developer Tools Section */
+.dev-tools-section {
+    background: linear-gradient(135deg, #f1f3f4 0%, #e8eaed 100%);
+    border-left-color: #ff6b6b;
+    border-radius: 12px;
+    padding: 2rem;
+    margin-top: 2rem;
+}
+
+.dev-tools-title {
+    color: #d63031;
+    display: flex;
+    align-items: center;
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+}
+
+.dev-tools-title .section-icon {
+    margin-right: 0.7rem;
+}
+
+.dev-tools-description {
+    color: #666;
+    margin-bottom: 2rem;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+.dev-tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.dev-tool-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e9ecef;
+}
+
+.dev-tool-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.dev-tool-icon {
+    font-size: 1.5rem;
+    margin-right: 0.7rem;
+}
+
+.dev-tool-title {
+    font-weight: 600;
+    color: var(--primary-color, #2c3e50);
+    font-size: 1.2rem;
+}
+
+.dev-tool-description {
+    color: var(--text-muted, #666);
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+}
+
+.dev-tool-button {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.dev-tool-button.download {
+    background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+    color: white;
+}
+
+.dev-tool-button.download:hover {
+    background: linear-gradient(135deg, #0984e3 0%, #74b9ff 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(116, 185, 255, 0.3);
+}
+
+.dev-tool-button.clear {
+    background: linear-gradient(135deg, #ff7675 0%, #d63031 100%);
+    color: white;
+}
+
+.dev-tool-button.clear:hover {
+    background: linear-gradient(135deg, #d63031 0%, #ff7675 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(255, 118, 117, 0.3);
+}
+
+.acknowledgments {
+    background: linear-gradient(135deg, #fdcb6e 0%, #e17055 100%);
+    color: white;
+    padding: 2rem;
+    border-radius: 12px;
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.acknowledgments-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.acknowledgments-text {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    opacity: 0.95;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .about-container {
+        padding: 1rem;
+    }
+    
+    .about-title {
+        font-size: 2.2rem;
+    }
+    
+    .about-tagline {
+        font-size: 1.1rem;
+    }
+    
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .tech-stack {
+        justify-content: center;
+    }
+    
+    .dev-tools-grid {
+        grid-template-columns: 1fr;
+    }
+}

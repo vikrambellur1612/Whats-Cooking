@@ -136,6 +136,12 @@ class App {
                 cssPath: 'modules/accompaniments-catalog/accompaniments-catalog.css',
                 jsPath: 'modules/accompaniments-catalog/accompaniments-catalog.js',
                 className: 'AccompanimentsCatalog'
+            },
+            'about': {
+                htmlPath: 'modules/about/about.html',
+                cssPath: 'modules/about/about.css',
+                jsPath: 'modules/about/about.js',
+                className: 'About'
             }
         };
         
@@ -228,6 +234,14 @@ class App {
                 console.log('Accompaniments Catalog module initialized and globally accessible');
             } else {
                 console.error('AccompanimentsCatalog class not found');
+            }
+        } else if (moduleId === 'about') {
+            if (typeof About !== 'undefined') {
+                this.modules.about = new About();
+                window.about = this.modules.about;
+                console.log('About module initialized and globally accessible');
+            } else {
+                console.error('About class not found');
             }
         }
     }
