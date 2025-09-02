@@ -221,8 +221,8 @@
     padding: 0;
     border-radius: var(--border-radius);
     width: 100%;
-    max-width: 500px;
-    max-height: 60vh;
+    max-width: 700px;
+    max-height: 80vh;
     overflow-y: auto;
     position: relative;
     animation: modalSlideIn 0.3s ease-out;
@@ -285,6 +285,38 @@
 
 .modal-body {
     padding: 0 20px 20px 20px;
+}
+
+/* Modal Form Layout Improvements */
+.modal .nutrition-grid.grid-2 {
+    gap: 15px;
+    grid-template-columns: 1fr 1fr;
+}
+
+.modal .form-group {
+    margin-bottom: 15px;
+}
+
+.modal .form-input {
+    padding: 10px 14px;
+    font-size: 0.95rem;
+}
+
+.modal .form-label {
+    font-size: 0.9rem;
+    margin-bottom: 6px;
+}
+
+/* Responsive form adjustments within modals */
+@media (max-width: 600px) {
+    .modal .nutrition-grid.grid-2 {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    
+    .modal .form-group {
+        margin-bottom: 12px;
+    }
 }
 
 /* Badge Components */
@@ -364,10 +396,12 @@
         width: 100vw;
         min-height: 100vh;
         max-height: 100vh;
+        padding: 25px;
     }
     
     .modal-content {
-        max-height: 55vh;
+        max-height: 80vh;
+        max-width: 650px;
     }
 }
 
@@ -379,10 +413,12 @@
         width: calc(100vw - 280px);
         min-height: 100vh;
         max-height: 100vh;
+        padding: 30px;
     }
     
     .modal-content {
-        max-height: 50vh;
+        max-height: 75vh;
+        max-width: 800px;
     }
 }
 
@@ -394,7 +430,7 @@
     }
     
     .modal {
-        padding: 10px;
+        padding: 15px;
         left: 0;
         width: 100vw;
         min-height: 100vh;
@@ -402,18 +438,18 @@
     }
     
     .modal-content {
-        width: calc(100% - 20px);
+        width: calc(100% - 30px);
         max-width: none;
-        max-height: 60vh;
+        max-height: 85vh;
         border-radius: 12px;
     }
     
     .modal-header {
-        padding: 15px 15px 0 15px;
+        padding: 20px 20px 0 20px;
     }
     
     .modal-body {
-        padding: 0 15px 15px 15px;
+        padding: 0 20px 20px 20px;
     }
 }
 
