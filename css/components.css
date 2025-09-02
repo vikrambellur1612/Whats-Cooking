@@ -751,8 +751,16 @@
 }
 
 .dish-type-card:has(input:checked) {
-    border-color: var(--primary-color);
-    background: linear-gradient(145deg, var(--card-background), rgba(var(--primary-color-rgb), 0.05));
+    border-color: var(--primary-color) !important;
+    background: linear-gradient(145deg, var(--card-background), rgba(74, 144, 226, 0.15)) !important;
+    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.25) !important;
+}
+
+/* Fallback for browsers that don't support :has() */
+.dish-type-card.selected {
+    border-color: var(--primary-color) !important;
+    background: linear-gradient(145deg, var(--card-background), rgba(74, 144, 226, 0.15)) !important;
+    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.25) !important;
 }
 
 .dish-type-content {
@@ -760,6 +768,7 @@
     flex-direction: column;
     align-items: center;
     gap: 8px;
+    transition: all 0.3s ease;
 }
 
 .dish-type-emoji {
@@ -802,9 +811,11 @@
 }
 
 .toggle-option input:checked + .toggle-content {
-    border-color: var(--primary-color);
-    background: rgba(var(--primary-color-rgb), 0.1);
-    color: var(--primary-color);
+    border-color: var(--primary-color) !important;
+    background: rgba(74, 144, 226, 0.15) !important;
+    color: var(--primary-color) !important;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(74, 144, 226, 0.2);
 }
 
 /* Nutrition Section */
@@ -1002,5 +1013,42 @@
     
     .progress-step:not(:last-child)::after {
         display: none;
+    }
+
+    /* Fix button layout on mobile */
+    .form-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-top: 25px;
+    }
+
+    .form-actions .btn {
+        width: 100%;
+        order: 2;
+    }
+
+    .form-actions .btn-secondary {
+        order: 1;
+    }
+
+    .form-actions .btn-primary,
+    .form-actions .btn-success {
+        order: 3;
+    }
+}
+
+/* Desktop button layout */
+@media (min-width: 769px) {
+    .form-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        margin-top: 25px;
+    }
+
+    .form-actions .btn {
+        min-width: 140px;
     }
 }

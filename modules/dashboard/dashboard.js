@@ -97,6 +97,29 @@ class Dashboard {
                 e.preventDefault();
                 this.handleAddDishSubmit();
             });
+
+            // Add visual feedback for dish type selection
+            addDishForm.addEventListener('change', (e) => {
+                if (e.target.name === 'dishType') {
+                    // Remove selected class from all cards
+                    document.querySelectorAll('.dish-type-card').forEach(card => {
+                        card.classList.remove('selected');
+                    });
+                    // Add selected class to the parent card
+                    const selectedCard = e.target.closest('.dish-type-card');
+                    if (selectedCard) {
+                        selectedCard.classList.add('selected');
+                    }
+                }
+            });
+        }
+
+        // Auto-fetch nutrition button
+        const fetchNutritionBtn = document.getElementById('fetchNutritionBtn');
+        if (fetchNutritionBtn) {
+            fetchNutritionBtn.addEventListener('click', () => {
+                this.fetchNutritionInfo();
+            });
         }
 
         // Breakfast card click
@@ -515,6 +538,17 @@ class Dashboard {
         // Reset all steps to inactive
         document.querySelectorAll('.form-step').forEach(step => step.classList.remove('active'));
         document.querySelectorAll('.progress-step').forEach(step => step.classList.remove('active'));
+        
+        // Reset visual feedback for dish type cards
+        document.querySelectorAll('.dish-type-card').forEach(card => {
+            card.classList.remove('selected');
+        });
+        
+        // Clear nutrition status
+        const nutritionStatus = document.getElementById('nutritionStatus');
+        if (nutritionStatus) {
+            nutritionStatus.innerHTML = '';
+        }
     }
 
     showStep(stepNumber) {
@@ -549,7 +583,7 @@ class Dashboard {
         // Get form values
         const dishData = {
             name: formData.get('dishName'),
-            description: formData.get('dishDescription'),
+            description: formData.get('dishDescription') || 'A delicious dish', // Default description if empty
             type: formData.get('dishType'),
             cuisine: formData.get('cuisineType'),
             mealTypes: formData.getAll('mealType'),
@@ -564,8 +598,8 @@ class Dashboard {
         };
 
         // Validate required fields
-        if (!dishData.name || !dishData.description || !dishData.type || !dishData.cuisine) {
-            this.showAlert('Please fill in all required fields.', 'warning');
+        if (!dishData.name || !dishData.type || !dishData.cuisine) {
+            this.showAlert('Please fill in all required fields (Name, Type, and Cuisine).', 'warning');
             return;
         }
 
@@ -573,7 +607,7 @@ class Dashboard {
             // Show loading state
             const submitBtn = form.querySelector('button[type="submit"]');
             const originalText = submitBtn.textContent;
-            submitBtn.textContent = 'Adding...';
+            submitBtn.textContent = '🔄 Adding...';
             submitBtn.disabled = true;
 
             // Save dish to appropriate category in localStorage
@@ -595,9 +629,81 @@ class Dashboard {
         } finally {
             // Reset button state
             const submitBtn = form.querySelector('button[type="submit"]');
-            submitBtn.textContent = originalText;
-            submitBtn.disabled = false;
+            if (submitBtn) {
+                submitBtn.textContent = '✨ Add Dish to Collection';
+                submitBtn.disabled = false;
+            }
         }
+    }
+
+    // Auto-fetch nutrition information
+    async fetchNutritionInfo() {
+        const dishNameInput = document.getElementById('dishName');
+        const dishName = dishNameInput.value.trim();
+        
+        if (!dishName) {
+            this.showAlert('Please enter a dish name first to fetch nutrition info.', 'warning');
+            return;
+        }
+
+        const nutritionStatus = document.getElementById('nutritionStatus');
+        const fetchBtn = document.getElementById('fetchNutritionBtn');
+        
+        try {
+            // Show loading state
+            fetchBtn.disabled = true;
+            fetchBtn.textContent = '🔄 Fetching...';
+            nutritionStatus.innerHTML = '<small style="color: #007bff;">Fetching nutrition data...</small>';
+
+            // Simulate API call with some mock data based on dish name
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            
+            // Mock nutrition data (in a real app, this would be an API call)
+            const mockNutrition = this.generateMockNutrition(dishName);
+            
+            // Fill in the nutrition fields
+            document.getElementById('calories').value = mockNutrition.calories;
+            document.getElementById('protein').value = mockNutrition.protein;
+            document.getElementById('carbs').value = mockNutrition.carbs;
+            document.getElementById('fat').value = mockNutrition.fat;
+            
+            nutritionStatus.innerHTML = '<small style="color: #28a745;">✓ Nutrition data updated successfully!</small>';
+            
+        } catch (error) {
+            console.error('Error fetching nutrition:', error);
+            nutritionStatus.innerHTML = '<small style="color: #dc3545;">Failed to fetch nutrition data. Please enter manually.</small>';
+        } finally {
+            fetchBtn.disabled = false;
+            fetchBtn.textContent = '🔍 Auto-fetch nutrition data';
+            
+            // Clear status after 3 seconds
+            setTimeout(() => {
+                if (nutritionStatus) {
+                    nutritionStatus.innerHTML = '';
+                }
+            }, 3000);
+        }
+    }
+
+    generateMockNutrition(dishName) {
+        const name = dishName.toLowerCase();
+        
+        // Basic nutrition estimates based on dish name
+        let calories = 200, protein = 8, carbs = 30, fat = 6;
+        
+        if (name.includes('rice') || name.includes('biryani')) {
+            calories = 350; protein = 12; carbs = 65; fat = 8;
+        } else if (name.includes('dal') || name.includes('sambar')) {
+            calories = 150; protein = 12; carbs = 25; fat = 3;
+        } else if (name.includes('dosa') || name.includes('idli')) {
+            calories = 120; protein = 4; carbs = 22; fat = 2;
+        } else if (name.includes('curry') || name.includes('sabji')) {
+            calories = 180; protein = 6; carbs = 15; fat = 10;
+        } else if (name.includes('sweet') || name.includes('dessert')) {
+            calories = 280; protein = 4; carbs = 45; fat = 12;
+        }
+        
+        return { calories, protein, carbs, fat };
     }
 
     async saveDishToStorage(dishData) {
@@ -623,6 +729,36 @@ class Dashboard {
         
         // Save back to localStorage
         localStorage.setItem(storageKey, JSON.stringify(existingData));
+
+        // Also save to downloadable JSON file for local development
+        this.downloadUpdatedCatalog(storageKey, existingData);
+    }
+
+    downloadUpdatedCatalog(catalogName, data) {
+        try {
+            // Create downloadable JSON file
+            const jsonString = JSON.stringify(data, null, 2);
+            const blob = new Blob([jsonString], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            
+            // Create temporary download link
+            const downloadLink = document.createElement('a');
+            downloadLink.href = url;
+            downloadLink.download = `${catalogName}.json`;
+            downloadLink.style.display = 'none';
+            
+            // Trigger download
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+            
+            // Clean up
+            URL.revokeObjectURL(url);
+            
+            console.log(`Downloaded updated ${catalogName}.json file`);
+        } catch (error) {
+            console.error('Error downloading catalog:', error);
+        }
     }
 
     addDishToArrays(dishData) {
