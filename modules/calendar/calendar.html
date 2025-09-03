@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<div class="calendar-module">
+    <!-- Header Section -->
+    <div class="container">
+        <div class="calendar-header">
+            <h2 class="module-title">📅 Menu Calendar</h2>
+            <p class="module-description">Plan your meals for the week with our interactive calendar</p>
+        </div>
+
+        <!-- View Toggle -->
+        <div class="view-toggle">
+            <button id="calendarViewBtn" class="btn btn-primary active">📅 Calendar View</button>
+            <button id="weeklyViewBtn" class="btn btn-secondary">📋 Weekly Planner</button>
+            <!-- Debug button for testing -->
+            <button onclick="window.calendar && window.calendar.addSampleMenuForToday()" class="btn btn-outline">🧪 Test Sample Menu</button>
+        </div>
+
+        <!-- Calendar View -->
+        <div id="calendarView" class="calendar-view">
+            <div class="calendar-navigation">
+                <button id="prevMonth" class="btn btn-outline">← Previous</button>
+                <h3 id="currentMonthYear" class="calendar-month-title"></h3>
+                <button id="nextMonth" class="btn btn-outline">Next →</button>
+            </div>
+
+            <div class="calendar-grid">
+                <div class="calendar-header-row">
+                    <div class="calendar-day-header">Sun</div>
+                    <div class="calendar-day-header">Mon</div>
+                    <div class="calendar-day-header">Tue</div>
+                    <div class="calendar-day-header">Wed</div>
+                    <div class="calendar-day-header">Thu</div>
+                    <div class="calendar-day-header">Fri</div>
+                    <div class="calendar-day-header">Sat</div>
+                </div>
+                <div id="calendarDays" class="calendar-days">
+                    <!-- Calendar days will be dynamically generated here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Weekly View -->
+        <div id="weeklyView" class="weekly-view hidden">
+            <div class="weekly-navigation">
+                <button id="prevWeek" class="btn btn-outline">← Previous Week</button>
+                <h3 id="currentWeekRange" class="weekly-title"></h3>
+                <button id="nextWeek" class="btn btn-outline">Next Week →</button>
+            </div>
+
+            <div class="weekly-planner">
+                <table class="weekly-table">
+                    <thead>
+                        <tr>
+                            <th class="day-column">Day</th>
+                            <th class="meal-column">🌅 Breakfast</th>
+                            <th class="meal-column">🍽️ Mains</th>
+                            <th class="meal-column">🥗 Side Dishes</th>
+                            <th class="meal-column">🍛 Accompaniments</th>
+                        </tr>
+                    </thead>
+                    <tbody id="weeklyTableBody">
+                        <!-- Weekly table rows will be dynamically generated here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="calendar-stats grid grid-4">
+            <div class="stat-card card">
+                <div class="stat-icon">📅</div>
+                <div class="stat-content">
+                    <h3 id="plannedDays" class="stat-number">0</h3>
+                    <p class="stat-label">Planned Days</p>
+                </div>
+            </div>
+            <div class="stat-card card">
+                <div class="stat-icon">🌅</div>
+                <div class="stat-content">
+                    <h3 id="breakfastCount" class="stat-number">0</h3>
+                    <p class="stat-label">Breakfast Items</p>
+                </div>
+            </div>
+            <div class="stat-card card">
+                <div class="stat-icon">🍽️</div>
+                <div class="stat-content">
+                    <h3 id="mainsCount" class="stat-number">0</h3>
+                    <p class="stat-label">Main Dishes</p>
+                </div>
+            </div>
+            <div class="stat-card card">
+                <div class="stat-icon">🥗</div>
+                <div class="stat-content">
+                    <h3 id="sidesCount" class="stat-number">0</h3>
+                    <p class="stat-label">Side Dishes</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Day Detail Modal -->
+<div id="dayDetailModal" class="modal">
+    <div class="modal-content modal-large">
+        <div class="modal-header">
+            <h3 id="dayDetailTitle" class="modal-title">📅 Menu for Day</h3>
+            <button class="modal-close" onclick="window.calendar && window.calendar.closeDayModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="day-menu-planning">
+                <!-- Breakfast Section -->
+                <div class="meal-section">
+                    <h4 class="meal-section-title">🌅 Breakfast</h4>
+                    <div class="meal-items" id="breakfastItems">
+                        <div class="add-meal-item" onclick="window.calendar && window.calendar.showMealSelector('breakfast')">
+                            <span class="add-icon">➕</span>
+                            <span>Add Breakfast Item</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mains Section -->
+                <div class="meal-section">
+                    <h4 class="meal-section-title">🍽️ Mains</h4>
+                    <div class="meal-items" id="mainsItems">
+                        <div class="add-meal-item" onclick="window.calendar && window.calendar.showMealSelector('mains')">
+                            <span class="add-icon">➕</span>
+                            <span>Add Main Dish</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Side Dishes Section -->
+                <div class="meal-section">
+                    <h4 class="meal-section-title">🥗 Side Dishes</h4>
+                    <div class="meal-items" id="sideItems">
+                        <div class="add-meal-item" onclick="window.calendar && window.calendar.showMealSelector('sides')">
+                            <span class="add-icon">➕</span>
+                            <span>Add Side Dish</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Accompaniments Section -->
+                <div class="meal-section">
+                    <h4 class="meal-section-title">🍛 Accompaniments</h4>
+                    <div class="meal-items" id="accompanimentItems">
+                        <div class="add-meal-item" onclick="window.calendar && window.calendar.showMealSelector('accompaniments')">
+                            <span class="add-icon">➕</span>
+                            <span>Add Accompaniment</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" onclick="window.calendar && window.calendar.closeDayModal()">
+                Close
+            </button>
+            <button type="button" class="btn btn-primary" onclick="window.calendar && window.calendar.saveDayMenu()">
+                💾 Save Menu
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Meal Selector Modal -->
+<div id="mealSelectorModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="mealSelectorTitle" class="modal-title">Select Items</h3>
+            <button class="modal-close" onclick="window.calendar && window.calendar.closeMealSelector()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="meal-selector-search">
+                <input type="text" id="mealSearchInput" class="form-input" placeholder="🔍 Search items...">
+            </div>
+            <div id="mealSelectorGrid" class="meal-selector-grid">
+                <!-- Available meal items will be shown here -->
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" onclick="window.calendar && window.calendar.closeMealSelector()">
+                Cancel
+            </button>
+            <button type="button" class="btn btn-primary" onclick="window.calendar && window.calendar.addSelectedMeals()">
+                ➕ Add Selected
+            </button>
+        </div>
+    </div>
+</div>

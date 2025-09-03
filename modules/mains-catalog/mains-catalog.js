@@ -380,17 +380,30 @@ class MainsCatalog {
         const item = this.allFoodItems.find(item => (item.id || item.name) === itemId);
         if (!item) return;
 
-        if (confirm(`Are you sure you want to delete "${item.name}"?`)) {
-            const index = this.allFoodItems.findIndex(item => (item.id || item.name) === itemId);
-            if (index !== -1) {
-                this.allFoodItems.splice(index, 1);
-                this.applyFilters();
-                this.showAlert('Main dish deleted successfully!', 'success');
-                
-                // Save to localStorage if available
-                this.saveToLocalStorage();
-            }
+        this.deleteItemId = itemId;
+        document.getElementById('deleteDishName').textContent = item.name;
+        document.getElementById('deleteModal').classList.add('active');
+    }
+
+    async confirmDelete() {
+        const index = this.allFoodItems.findIndex(item => (item.id || item.name) === this.deleteItemId);
+        if (index !== -1) {
+            this.allFoodItems.splice(index, 1);
+            await this.persistChanges();
+            this.applyFilters();
+            this.showAlert('Main dish deleted successfully!', 'success');
         }
+        this.closeDeleteModal();
+    }
+
+    closeDeleteModal() {
+        document.getElementById('deleteModal').classList.remove('active');
+        this.deleteItemId = null;
+    }
+
+    async persistChanges() {
+        // Save to localStorage
+        await this.saveToLocalStorage();
     }
 
     async saveToLocalStorage() {

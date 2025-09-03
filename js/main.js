@@ -137,6 +137,12 @@ class App {
                 jsPath: 'modules/accompaniments-catalog/accompaniments-catalog.js',
                 className: 'AccompanimentsCatalog'
             },
+            'calendar': {
+                htmlPath: 'modules/calendar/calendar.html',
+                cssPath: 'modules/calendar/calendar.css',
+                jsPath: 'modules/calendar/calendar.js',
+                className: 'Calendar'
+            },
             'about': {
                 htmlPath: 'modules/about/about.html',
                 cssPath: 'modules/about/about.css',
@@ -234,6 +240,15 @@ class App {
                 console.log('Accompaniments Catalog module initialized and globally accessible');
             } else {
                 console.error('AccompanimentsCatalog class not found');
+            }
+        } else if (moduleId === 'calendar') {
+            if (typeof Calendar !== 'undefined') {
+                this.modules.calendar = new Calendar();
+                window.calendar = this.modules.calendar;
+                await this.modules.calendar.init();
+                console.log('Calendar module initialized and globally accessible');
+            } else {
+                console.error('Calendar class not found');
             }
         } else if (moduleId === 'about') {
             if (typeof About !== 'undefined') {

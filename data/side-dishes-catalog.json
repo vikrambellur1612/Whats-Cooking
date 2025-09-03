@@ -7,7 +7,9 @@
         "description": "Traditional South Indian lentil soup with vegetables and tamarind",
         "type": "side-dish-gravy",
         "cuisine": "South Indian",
-        "mealTypes": ["vegetarian"],
+        "mealTypes": [
+          "vegetarian"
+        ],
         "nutrition": {
           "calories": 150,
           "protein": 8,
@@ -22,7 +24,9 @@
         "description": "Tangy soup with tamarind, tomatoes and spices, aids digestion",
         "type": "side-dish-gravy",
         "cuisine": "South Indian",
-        "mealTypes": ["vegetarian"],
+        "mealTypes": [
+          "vegetarian"
+        ],
         "nutrition": {
           "calories": 80,
           "protein": 3,
@@ -37,7 +41,9 @@
         "description": "Tangy and spicy gravy made with tamarind and jaggery",
         "type": "side-dish-gravy",
         "cuisine": "South Indian",
-        "mealTypes": ["vegetarian"],
+        "mealTypes": [
+          "vegetarian"
+        ],
         "nutrition": {
           "calories": 120,
           "protein": 2,
@@ -52,7 +58,9 @@
         "description": "Buttermilk curry with vegetables, cooling and digestive",
         "type": "side-dish-gravy",
         "cuisine": "South Indian",
-        "mealTypes": ["vegetarian"],
+        "mealTypes": [
+          "vegetarian"
+        ],
         "nutrition": {
           "calories": 100,
           "protein": 5,
@@ -67,7 +75,9 @@
         "description": "Simple dal preparation with minimal spices, comfort food",
         "type": "side-dish-gravy",
         "cuisine": "South Indian",
-        "mealTypes": ["vegetarian"],
+        "mealTypes": [
+          "vegetarian"
+        ],
         "nutrition": {
           "calories": 140,
           "protein": 9,
@@ -82,7 +92,9 @@
         "description": "Stuffed baby brinjals cooked with spices and peanuts",
         "type": "side-dish-sabji",
         "cuisine": "South Indian",
-        "mealTypes": ["vegetarian"],
+        "mealTypes": [
+          "vegetarian"
+        ],
         "nutrition": {
           "calories": 180,
           "protein": 5,
@@ -97,7 +109,9 @@
         "description": "Stir-fried green beans with coconut and spices - Karnataka style",
         "type": "side-dish-sabji",
         "cuisine": "South Indian",
-        "mealTypes": ["vegetarian"],
+        "mealTypes": [
+          "vegetarian"
+        ],
         "nutrition": {
           "calories": 85,
           "protein": 4,
@@ -112,7 +126,9 @@
         "description": "Simple and healthy stir-fried cabbage with minimal spices",
         "type": "side-dish-sabji",
         "cuisine": "South Indian",
-        "mealTypes": ["vegetarian"],
+        "mealTypes": [
+          "vegetarian"
+        ],
         "nutrition": {
           "calories": 65,
           "protein": 2,
@@ -127,7 +143,9 @@
         "description": "North Indian dry curry with potatoes and cauliflower",
         "type": "side-dish-sabji",
         "cuisine": "North Indian",
-        "mealTypes": ["vegetarian"],
+        "mealTypes": [
+          "vegetarian"
+        ],
         "nutrition": {
           "calories": 140,
           "protein": 4,
@@ -142,7 +160,9 @@
         "description": "Rich and creamy North Indian paneer curry in tomato-based gravy",
         "type": "side-dish-gravy",
         "cuisine": "North Indian",
-        "mealTypes": ["vegetarian"],
+        "mealTypes": [
+          "vegetarian"
+        ],
         "nutrition": {
           "calories": 300,
           "protein": 15,
@@ -157,7 +177,9 @@
         "description": "Creamy black lentil curry slow-cooked with butter and cream",
         "type": "side-dish-gravy",
         "cuisine": "North Indian",
-        "mealTypes": ["vegetarian"],
+        "mealTypes": [
+          "vegetarian"
+        ],
         "nutrition": {
           "calories": 250,
           "protein": 12,
@@ -172,7 +194,9 @@
         "description": "Spiced okra curry with onions, tomatoes and aromatic spices",
         "type": "side-dish-sabji",
         "cuisine": "North Indian",
-        "mealTypes": ["vegetarian"],
+        "mealTypes": [
+          "vegetarian"
+        ],
         "nutrition": {
           "calories": 120,
           "protein": 3,
@@ -180,6 +204,23 @@
           "fat": 6
         },
         "dateAdded": "2025-09-02T10:11:00.000Z"
+      },
+      {
+        "name": "Paneer Burji",
+        "description": "A delicious dish",
+        "type": "side-dish-sabji",
+        "cuisine": "North Indian",
+        "mealTypes": [
+          "vegetarian"
+        ],
+        "nutrition": {
+          "calories": 200,
+          "protein": 8,
+          "carbs": 30,
+          "fat": 6
+        },
+        "id": "1756883215888",
+        "dateAdded": "2025-09-03T07:06:55.888Z"
       }
     ]
   }

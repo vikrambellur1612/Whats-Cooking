@@ -21,6 +21,10 @@ class Navigation {
             'accompaniments-catalog': {
                 title: 'Accompaniments Catalog',
                 description: 'Browse salads, raitas, chutneys and other accompaniments'
+            },
+            'calendar': {
+                title: 'Menu Calendar',
+                description: 'Plan your weekly meals with interactive calendar and menu planner'
             }
         };
         
@@ -180,6 +184,8 @@ class Navigation {
             initialModule = 'side-dishes-catalog';
         } else if (currentPath.includes('accompaniments')) {
             initialModule = 'accompaniments-catalog';
+        } else if (currentPath.includes('calendar')) {
+            initialModule = 'calendar';
         }
 
         // Set initial state without updating history

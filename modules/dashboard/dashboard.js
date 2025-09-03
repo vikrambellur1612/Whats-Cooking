@@ -482,14 +482,19 @@ class Dashboard {
         alert.style.top = '20px';
         alert.style.right = '20px';
         alert.style.zIndex = '9999';
-        alert.style.minWidth = '350px';
-        alert.style.maxWidth = '500px';
-        alert.style.padding = '20px';
-        alert.style.borderRadius = '8px';
-        alert.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
+        alert.style.minWidth = '280px';
+        alert.style.maxWidth = '400px';
+        alert.style.padding = '12px 16px';
+        alert.style.borderRadius = '6px';
+        alert.style.boxShadow = '0 3px 8px rgba(0, 0, 0, 0.12)';
         alert.style.fontWeight = '500';
-        alert.style.lineHeight = '1.5';
+        alert.style.fontSize = '0.9em';
+        alert.style.lineHeight = '1.4';
         alert.style.whiteSpace = 'pre-line'; // Preserve line breaks
+        alert.style.transition = 'all 0.3s ease';
+        alert.style.transform = 'translateX(100%)';
+        alert.style.opacity = '0';
+        alert.style.cursor = 'pointer';
         
         // Set colors based on type
         switch(type) {
@@ -516,18 +521,37 @@ class Dashboard {
         
         document.body.appendChild(alert);
         
-        // Auto remove after 8 seconds for longer messages
-        const autoRemoveTime = message.length > 100 ? 8000 : 4000;
+        // Add smooth fade-in animation
+        requestAnimationFrame(() => {
+            alert.style.transform = 'translateX(0)';
+            alert.style.opacity = '1';
+        });
+        
+        // Auto remove after shorter time for better UX
+        const autoRemoveTime = type === 'success' ? 2500 : (message.length > 100 ? 4000 : 3000);
         setTimeout(() => {
             if (alert.parentNode) {
-                alert.parentNode.removeChild(alert);
+                // Smooth fade-out animation
+                alert.style.transform = 'translateX(100%)';
+                alert.style.opacity = '0';
+                setTimeout(() => {
+                    if (alert.parentNode) {
+                        alert.parentNode.removeChild(alert);
+                    }
+                }, 300);
             }
         }, autoRemoveTime);
         
-        // Add click to dismiss
+        // Add click to dismiss with smooth animation
         alert.addEventListener('click', () => {
             if (alert.parentNode) {
-                alert.parentNode.removeChild(alert);
+                alert.style.transform = 'translateX(100%)';
+                alert.style.opacity = '0';
+                setTimeout(() => {
+                    if (alert.parentNode) {
+                        alert.parentNode.removeChild(alert);
+                    }
+                }, 300);
             }
         });
         
@@ -848,7 +872,7 @@ class Dashboard {
             // Close modal and show success message
             this.closeAddDishModal();
             const actionWord = isEditing ? 'updated' : 'added';
-            this.showAlert(`🎉 ${dishData.name} has been ${actionWord} successfully! The dish has been saved to the ${this.getTypeDisplayName(dishData.type)} catalog and will persist permanently.`, 'success');
+            this.showAlert(`✅ ${dishData.name} ${actionWord} successfully!`, 'success');
             
         } catch (error) {
             console.error(`Error ${isEditing ? 'updating' : 'adding'} dish:`, error);

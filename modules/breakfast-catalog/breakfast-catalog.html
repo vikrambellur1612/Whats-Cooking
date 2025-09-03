@@ -47,3 +47,30 @@
         </div>
     </div>
 </div>
+
+<!-- Delete Confirmation Modal -->
+<div id="deleteModal" class="modal">
+    <div class="modal-content modal-small">
+        <div class="modal-header">
+            <h3 class="modal-title">🗑️ Delete Breakfast Item</h3>
+            <button class="modal-close" onclick="window.breakfastCatalog && window.breakfastCatalog.closeDeleteModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="delete-confirmation">
+                <div class="delete-icon">⚠️</div>
+                <p class="delete-message">
+                    Are you sure you want to delete "<span id="deleteDishName"></span>"?
+                </p>
+                <p class="delete-warning">This action cannot be undone.</p>
+            </div>
+            <div class="form-actions">
+                <button type="button" class="btn btn-secondary" onclick="window.breakfastCatalog && window.breakfastCatalog.closeDeleteModal()">
+                    Cancel
+                </button>
+                <button type="button" class="btn btn-danger" onclick="window.breakfastCatalog && window.breakfastCatalog.confirmDelete()">
+                    🗑️ Delete
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
