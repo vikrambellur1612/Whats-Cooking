@@ -138,10 +138,10 @@ class App {
                 className: 'AccompanimentsCatalog'
             },
             'calendar': {
-                htmlPath: 'modules/calendar/calendar.html',
-                cssPath: 'modules/calendar/calendar.css',
-                jsPath: 'modules/calendar/calendar.js',
-                className: 'Calendar'
+                htmlPath: 'modules/calendar/home.html',
+                cssPath: 'modules/calendar/home.css',
+                jsPath: 'modules/calendar/home.js',
+                className: 'Home'
             },
             'about': {
                 htmlPath: 'modules/about/about.html',

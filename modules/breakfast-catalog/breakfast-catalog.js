@@ -208,9 +208,9 @@ class BreakfastCatalog {
         
         // Navigate to Home/Calendar first, then use its showAddDishModal method
         if (window.navigation && window.navigation.navigateToModule) {
-            // First try Calendar module which can handle add dish requests
-            if (window.calendar && typeof window.calendar.showAddDishModal === 'function') {
-                window.calendar.showAddDishModal('breakfast');
+            // First try Home module which can handle add dish requests
+            if (window.home && typeof window.home.showAddDishModal === 'function') {
+                window.home.showAddDishModal('breakfast');
                 return;
             }
             

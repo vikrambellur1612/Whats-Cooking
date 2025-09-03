@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<div class="home-module">
+    <!-- Header Section -->
+    <div class="container">
+        <div class="home-header">
+            <h2 class="module-title">🏠 Home</h2>
+            <p class="module-description">Plan your daily meals with smart suggestions</p>
+        </div>
+
+        <!-- Main Content - Card-based meal planning -->
+        <div id="homeContent" class="home-content">
+            <div id="mealPlanCards" class="meal-plan-cards">
+                <!-- Dynamic meal plan cards will be inserted here -->
+            </div>
+            
+            <!-- Add New Menu Card (Always visible) -->
+            <div class="add-menu-card" onclick="window.home.showMealSuggestionModal()">
+                <div class="add-menu-content">
+                    <div class="add-menu-icon">🍽️</div>
+                    <h3 class="add-menu-title kannada-text">ನಾಳೆ ಅಡುಗೆ ಏನು?</h3>
+                    <p class="add-menu-description">Get smart meal suggestions for any day</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Simplified Statistics -->
+        <div id="homeStats" class="home-stats">
+            <div class="stat-card">
+                <div class="stat-value" id="plannedDaysCount">0</div>
+                <div class="stat-label">Days Planned</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="totalMealsCount">0</div>
+                <div class="stat-label">Total Meals</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Meal Suggestion Modal -->
+    <div id="mealSuggestionModal" class="modal">
+        <div class="modal-content meal-suggestion-content">
+            <div class="modal-header">
+                <h3 id="suggestionModalTitle" class="kannada-text">ನಾಳೆ ಅಡುಗೆ ಏನು?</h3>
+                <button class="modal-close" id="closeSuggestionModal">&times;</button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="date-selection">
+                    <label for="selectedDate">Select Date:</label>
+                    <input type="date" id="selectedDate" class="date-input">
+                </div>
+
+                <div class="meal-suggestions">
+                    <!-- Breakfast Section -->
+                    <div class="meal-category">
+                        <div class="category-header">
+                            <h4 class="category-title">🌅 Breakfast</h4>
+                            <button class="refresh-suggestions" onclick="window.home.refreshCategorySuggestions('breakfast')">🔄</button>
+                        </div>
+                        <div class="suggested-items" id="suggestedBreakfast">
+                            <!-- Suggested breakfast items will appear here -->
+                        </div>
+                        <div class="add-more-btn" onclick="window.home.showCategorySelector('breakfast')">
+                            + Add More Breakfast Items
+                        </div>
+                    </div>
+
+                    <!-- Main Dishes Section -->
+                    <div class="meal-category">
+                        <div class="category-header">
+                            <h4 class="category-title">🍛 Main Dishes</h4>
+                            <button class="refresh-suggestions" onclick="window.home.refreshCategorySuggestions('mains')">🔄</button>
+                        </div>
+                        <div class="suggested-items" id="suggestedMains">
+                            <!-- Suggested main dishes will appear here -->
+                        </div>
+                        <div class="add-more-btn" onclick="window.home.showCategorySelector('mains')">
+                            + Add More Main Dishes
+                        </div>
+                    </div>
+
+                    <!-- Side Dishes Section -->
+                    <div class="meal-category">
+                        <div class="category-header">
+                            <h4 class="category-title">🥗 Side Dishes</h4>
+                            <button class="refresh-suggestions" onclick="window.home.refreshCategorySuggestions('sides')">🔄</button>
+                        </div>
+                        <div class="suggested-items" id="suggestedSides">
+                            <!-- Suggested side dishes will appear here -->
+                        </div>
+                        <div class="add-more-btn" onclick="window.home.showCategorySelector('sides')">
+                            + Add More Side Dishes
+                        </div>
+                    </div>
+
+                    <!-- Accompaniments Section -->
+                    <div class="meal-category">
+                        <div class="category-header">
+                            <h4 class="category-title">🫓 Accompaniments</h4>
+                            <button class="refresh-suggestions" onclick="window.home.refreshCategorySuggestions('accompaniments')">🔄</button>
+                        </div>
+                        <div class="suggested-items" id="suggestedAccompaniments">
+                            <!-- Suggested accompaniments will appear here -->
+                        </div>
+                        <div class="add-more-btn" onclick="window.home.showCategorySelector('accompaniments')">
+                            + Add More Accompaniments
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button id="saveMealPlan" class="btn btn-primary">Save Menu Plan</button>
+                <button id="cancelMealPlan" class="btn btn-secondary">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Category Selector Modal -->
+    <div id="categorySelectorModal" class="modal">
+        <div class="modal-content category-selector-content">
+            <div class="modal-header">
+                <h3 id="categorySelectorTitle">Select Items</h3>
+                <button class="modal-close" id="closeCategorySelector">&times;</button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="item-search">
+                    <input type="text" id="categorySearch" placeholder="Search items..." class="search-input">
+                </div>
+                <div id="categoryItems" class="category-items-grid">
+                    <!-- Dynamic items will be loaded here -->
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button id="addSelectedItems" class="btn btn-primary">Add Selected Items</button>
+                <button id="cancelCategorySelection" class="btn btn-secondary">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -250,9 +250,9 @@ class MainsCatalog {
         
         // Navigate to Home/Calendar first, then use its showAddDishModal method
         if (window.navigation && window.navigation.navigateToModule) {
-            // First try Calendar module which can handle add dish requests
-            if (window.calendar && typeof window.calendar.showAddDishModal === 'function') {
-                window.calendar.showAddDishModal('mains-rice'); // Default to rice-based
+            // First try Home module which can handle add dish requests
+            if (window.home && typeof window.home.showAddDishModal === 'function') {
+                window.home.showAddDishModal('mains-rice'); // Default to rice-based
                 return;
             }
             
@@ -284,7 +284,7 @@ class MainsCatalog {
         const type = item.type;
         
         // Rice-based dishes
-        if (type === 'mains-rice' || name.includes('rice') || name.includes('bath') || name.includes('biryani') || name.includes('pulao')) return '�';
+        if (type === 'mains-rice' || name.includes('rice') || name.includes('bath') || name.includes('biryani') || name.includes('pulao')) return '🍚';
         
         // Wheat/Cereal-based dishes  
         if (type === 'mains-wheat' || name.includes('roti') || name.includes('chapati') || name.includes('naan') || name.includes('bread')) return '🫓';
@@ -292,7 +292,7 @@ class MainsCatalog {
         // Other specific dishes
         if (name.includes('curry')) return '🍛';
         if (name.includes('sambar')) return '🍲';
-        if (name.includes('rasam')) return '�';
+        if (name.includes('rasam')) return '🥣';
         if (name.includes('dal')) return '🥘';
         if (name.includes('fry') || name.includes('sabji')) return '🥗';
         
@@ -353,13 +353,13 @@ class MainsCatalog {
             return;
         }
 
-        // Try Calendar module first, then fallback to Dashboard
-        if (window.calendar && typeof window.calendar.showAddDishModal === 'function') {
+        // Try Home module first, then fallback to Dashboard
+        if (window.home && typeof window.home.showAddDishModal === 'function') {
             let dishType = item.type;
             if (dishType === 'mains' || dishType === 'main-dish') {
                 dishType = 'mains-rice'; // Default to rice-based for legacy items
             }
-            window.calendar.showAddDishModal(dishType, item);
+            window.home.showAddDishModal(dishType, item);
             return;
         }
 
