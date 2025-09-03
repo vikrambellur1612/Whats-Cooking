@@ -2,9 +2,13 @@
 class Navigation {
     constructor() {
         this.routes = {
+            'calendar': {
+                title: 'Menu Calendar - ನಾಳೆ ಅಡುಗೆ ಏನು?',
+                description: 'Plan your weekly meals with interactive calendar and menu planner'
+            },
             'dashboard': {
-                title: 'Home - ನಾಳೆ ಅಡುಗೆ ಏನು?',
-                description: 'Your Indian cuisine catalog at a glance'
+                title: 'Dashboard - ನಾಳೆ ಅಡುಗೆ ಏನು?',
+                description: 'Your Indian cuisine catalog management dashboard'
             },
             'breakfast-catalog': {
                 title: 'Breakfast Catalog',
@@ -21,10 +25,6 @@ class Navigation {
             'accompaniments-catalog': {
                 title: 'Accompaniments Catalog',
                 description: 'Browse salads, raitas, chutneys and other accompaniments'
-            },
-            'calendar': {
-                title: 'Menu Calendar',
-                description: 'Plan your weekly meals with interactive calendar and menu planner'
             }
         };
         
@@ -149,7 +149,7 @@ class Navigation {
 
         // Update URL without page refresh
         if (updateHistory) {
-            const url = moduleId === 'dashboard' ? '/' : `/${moduleId}`;
+            const url = moduleId === 'calendar' ? '/' : `/${moduleId}`;
             history.pushState({ module: moduleId }, '', url);
         }
 
@@ -174,7 +174,7 @@ class Navigation {
 
         // Set initial state
         const currentPath = window.location.pathname;
-        let initialModule = 'dashboard';
+        let initialModule = 'calendar'; // Changed default to calendar
         
         if (currentPath.includes('breakfast')) {
             initialModule = 'breakfast-catalog';
@@ -184,7 +184,9 @@ class Navigation {
             initialModule = 'side-dishes-catalog';
         } else if (currentPath.includes('accompaniments')) {
             initialModule = 'accompaniments-catalog';
-        } else if (currentPath.includes('calendar')) {
+        } else if (currentPath.includes('dashboard')) {
+            initialModule = 'dashboard';
+        } else if (currentPath === '/' || currentPath === '') {
             initialModule = 'calendar';
         }
 

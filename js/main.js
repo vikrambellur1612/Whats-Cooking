@@ -13,7 +13,7 @@ class App {
         this.setupNavigation();
         
         // Load initial module
-        await this.loadModule('dashboard');
+        await this.loadModule('calendar');
     }
 
     setupNavigation() {

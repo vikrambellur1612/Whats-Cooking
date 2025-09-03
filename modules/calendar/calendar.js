@@ -280,10 +280,44 @@ class Calendar {
             
             const dayClass = `calendar-day ${isToday ? 'today' : ''} ${hasMenu ? 'has-menu' : ''}`;
             
+            // Calculate nutritional information for the day
+            let totalCalories = 0;
+            let totalProtein = 0;
+            let mealCount = 0;
+            
+            if (hasMenu) {
+                const dayMenu = this.menuPlans[dateStr];
+                Object.values(dayMenu).forEach(mealArray => {
+                    if (Array.isArray(mealArray)) {
+                        mealArray.forEach(meal => {
+                            if (meal.nutrition) {
+                                totalCalories += meal.nutrition.calories || 0;
+                                totalProtein += meal.nutrition.protein || 0;
+                                mealCount++;
+                            }
+                        });
+                    }
+                });
+            }
+            
             calendarHTML += `
                 <div class="${dayClass}" data-date="${dateStr}" onclick="window.calendar.openDayDetail('${dateStr}')">
                     <div class="day-number">${day}</div>
-                    ${hasMenu ? '<div class="menu-indicator">🍽️</div>' : ''}
+                    ${hasMenu ? `
+                        <div class="nutrition-summary">
+                            <div class="nutrition-item">
+                                <span class="nutrition-icon">🔥</span>
+                                <span class="nutrition-value">${totalCalories}</span>
+                                <span class="nutrition-label">cal</span>
+                            </div>
+                            <div class="nutrition-item">
+                                <span class="nutrition-icon">💪</span>
+                                <span class="nutrition-value">${Math.round(totalProtein)}g</span>
+                                <span class="nutrition-label">protein</span>
+                            </div>
+                            ${mealCount > 0 ? `<div class="meal-count">${mealCount} meals</div>` : ''}
+                        </div>
+                    ` : ''}
                 </div>
             `;
         }
@@ -592,58 +626,6 @@ class Calendar {
         console.log('Refreshing available meals...');
         await this.loadAvailableMeals();
         this.showAlert('Meal catalogs refreshed!', 'success');
-    }
-
-    // Debug method to add sample menu for today (for testing)
-    addSampleMenuForToday() {
-        const today = this.formatDate(new Date());
-        
-        console.log('Adding sample menu for:', today);
-        console.log('Available meals:', {
-            breakfast: this.availableMeals.breakfast.length,
-            mains: this.availableMeals.mains.length,
-            sides: this.availableMeals.sides.length,
-            accompaniments: this.availableMeals.accompaniments.length
-        });
-        
-        if (!this.menuPlans[today]) {
-            this.menuPlans[today] = {};
-        }
-        
-        let addedCount = 0;
-        
-        // Add sample items if we have meals loaded
-        if (this.availableMeals.breakfast.length > 0) {
-            this.menuPlans[today].breakfast = [this.availableMeals.breakfast[0]];
-            addedCount++;
-        }
-        
-        if (this.availableMeals.mains.length > 0) {
-            this.menuPlans[today].mains = [this.availableMeals.mains[0]];
-            addedCount++;
-        }
-        
-        if (this.availableMeals.sides.length > 0) {
-            this.menuPlans[today].sides = [this.availableMeals.sides[0]];
-            addedCount++;
-        }
-        
-        if (this.availableMeals.accompaniments.length > 0) {
-            this.menuPlans[today].accompaniments = [this.availableMeals.accompaniments[0]];
-            addedCount++;
-        }
-        
-        if (addedCount === 0) {
-            this.showAlert('No meals available to add. Please ensure catalogs are loaded.', 'warning');
-            return;
-        }
-        
-        this.saveMenuPlans();
-        this.renderCalendarView();
-        this.renderWeeklyView();
-        this.updateStatistics();
-        
-        this.showAlert(`✅ Sample menu added for today with ${addedCount} items!`, 'success');
     }
 
     // Helper functions
