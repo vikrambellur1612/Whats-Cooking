@@ -206,9 +206,15 @@ class BreakfastCatalog {
     async openAddDishModal() {
         console.log('Opening Add Dish modal from Breakfast catalog...');
         
-        // Navigate to Dashboard and then show the modal with pre-selected type
+        // Navigate to Home/Calendar first, then use its showAddDishModal method
         if (window.navigation && window.navigation.navigateToModule) {
-            // Navigate to dashboard
+            // First try Calendar module which can handle add dish requests
+            if (window.calendar && typeof window.calendar.showAddDishModal === 'function') {
+                window.calendar.showAddDishModal('breakfast');
+                return;
+            }
+            
+            // Fallback: Navigate to Dashboard and then show modal
             window.navigation.navigateToModule('dashboard');
             
             // Wait a bit for Dashboard to load and then show modal with pre-selected type
@@ -220,12 +226,14 @@ class BreakfastCatalog {
                     setTimeout(() => {
                         if (window.dashboard && typeof window.dashboard.showAddDishModal === 'function') {
                             window.dashboard.showAddDishModal('breakfast');
+                        } else {
+                            this.showAlert('Unable to open Add Dish modal. Please use Dashboard menu to add dishes.', 'warning');
                         }
                     }, 500);
                 }
             }, 300);
         } else {
-            alert('Unable to open Add Dish modal. Please navigate to Dashboard manually.');
+            this.showAlert('Unable to open Add Dish modal. Please use Dashboard menu to add dishes.', 'warning');
         }
     }
 

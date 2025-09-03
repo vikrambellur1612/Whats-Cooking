@@ -3,7 +3,7 @@
     <!-- Header Section -->
     <div class="container">
         <div class="calendar-header">
-            <h2 class="module-title">📅 Menu Calendar</h2>
+            <h2 class="module-title">🏠 Home - Menu Calendar</h2>
             <p class="module-description">Plan your meals for the week with our interactive calendar</p>
         </div>
 
@@ -16,9 +16,13 @@
         <!-- Calendar View -->
         <div id="calendarView" class="calendar-view">
             <div class="calendar-navigation">
-                <button id="prevMonth" class="btn btn-outline">← Previous</button>
+                <button id="prevMonth" class="btn btn-outline">
+                    <span style="margin-right: 8px;">⬅️</span>Previous Month
+                </button>
                 <h3 id="currentMonthYear" class="calendar-month-title"></h3>
-                <button id="nextMonth" class="btn btn-outline">Next →</button>
+                <button id="nextMonth" class="btn btn-outline">
+                    Next Month<span style="margin-left: 8px;">➡️</span>
+                </button>
             </div>
 
             <div class="calendar-grid">
@@ -40,9 +44,13 @@
         <!-- Weekly View -->
         <div id="weeklyView" class="weekly-view hidden">
             <div class="weekly-navigation">
-                <button id="prevWeek" class="btn btn-outline">← Previous Week</button>
+                <button id="prevWeek" class="btn btn-outline">
+                    <span style="margin-right: 8px;">⬅️</span>Previous Week
+                </button>
                 <h3 id="currentWeekRange" class="weekly-title"></h3>
-                <button id="nextWeek" class="btn btn-outline">Next Week →</button>
+                <button id="nextWeek" class="btn btn-outline">
+                    Next Week<span style="margin-left: 8px;">➡️</span>
+                </button>
             </div>
 
             <div class="weekly-planner">

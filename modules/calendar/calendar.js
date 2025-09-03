@@ -628,6 +628,31 @@ class Calendar {
         this.showAlert('Meal catalogs refreshed!', 'success');
     }
 
+    // Method to show Add Dish modal for different meal types
+    showAddDishModal(mealType = 'breakfast', existingItem = null) {
+        // Navigate to Dashboard to use the Add Dish modal
+        if (window.navigation && window.navigation.navigateToModule) {
+            window.navigation.navigateToModule('dashboard');
+            
+            setTimeout(() => {
+                if (window.dashboard && typeof window.dashboard.showAddDishModal === 'function') {
+                    window.dashboard.showAddDishModal(mealType, existingItem);
+                } else {
+                    console.warn('Dashboard not ready, trying again...');
+                    setTimeout(() => {
+                        if (window.dashboard && typeof window.dashboard.showAddDishModal === 'function') {
+                            window.dashboard.showAddDishModal(mealType, existingItem);
+                        } else {
+                            this.showAlert('Unable to open Add Dish modal. Please use Dashboard menu to add dishes.', 'warning');
+                        }
+                    }, 500);
+                }
+            }, 300);
+        } else {
+            this.showAlert('Unable to open Add Dish modal. Please use Dashboard menu to add dishes.', 'warning');
+        }
+    }
+
     // Helper functions
     formatDate(date) {
         return date.toISOString().split('T')[0]; // YYYY-MM-DD format
