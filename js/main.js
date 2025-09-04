@@ -14,6 +14,13 @@ class App {
         
         // Load initial module
         await this.loadModule('calendar');
+        
+        // Set up global navigation helper
+        window.navigation = {
+            navigateToModule: async (moduleId) => {
+                await this.loadModule(moduleId);
+            }
+        };
     }
 
     setupNavigation() {

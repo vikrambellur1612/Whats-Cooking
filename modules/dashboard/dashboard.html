@@ -110,6 +110,104 @@
                 </div>
             </div>
         </div>
+
+        <!-- Meal History Analytics (3-Month Rolling Window) -->
+        <div class="history-analytics-section">
+            <h3 class="section-title">📊 Meal History Insights (Last 3 Months)</h3>
+            
+            <!-- Favorite Dishes -->
+            <div class="favorites-section">
+                <h4 class="subsection-title">⭐ Your Favorite Dishes</h4>
+                <div class="favorites-grid grid grid-4">
+                    <div class="favorite-card card">
+                        <div class="favorite-icon">🌅</div>
+                        <div class="favorite-content">
+                            <h5 id="favBreakfast" class="favorite-dish">No data</h5>
+                            <p class="favorite-label">Favorite Breakfast</p>
+                        </div>
+                    </div>
+                    <div class="favorite-card card">
+                        <div class="favorite-icon">🍛</div>
+                        <div class="favorite-content">
+                            <h5 id="favMains" class="favorite-dish">No data</h5>
+                            <p class="favorite-label">Favorite Main Dish</p>
+                        </div>
+                    </div>
+                    <div class="favorite-card card">
+                        <div class="favorite-icon">🥗</div>
+                        <div class="favorite-content">
+                            <h5 id="favSides" class="favorite-dish">No data</h5>
+                            <p class="favorite-label">Favorite Side Dish</p>
+                        </div>
+                    </div>
+                    <div class="favorite-card card">
+                        <div class="favorite-icon">🫓</div>
+                        <div class="favorite-content">
+                            <h5 id="favAccompaniments" class="favorite-dish">No data</h5>
+                            <p class="favorite-label">Favorite Accompaniment</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Nutrition Tracking -->
+            <div class="nutrition-tracking-section">
+                <h4 class="subsection-title">🥗 Nutrition Tracking</h4>
+                <div class="nutrition-summary-grid grid grid-4">
+                    <div class="nutrition-summary-card card">
+                        <div class="nutrition-icon">🔥</div>
+                        <div class="nutrition-content">
+                            <h5 id="avgDailyCalories" class="nutrition-value">0</h5>
+                            <p class="nutrition-label">Avg Daily Calories</p>
+                        </div>
+                    </div>
+                    <div class="nutrition-summary-card card">
+                        <div class="nutrition-icon">💪</div>
+                        <div class="nutrition-content">
+                            <h5 id="avgDailyProtein" class="nutrition-value">0g</h5>
+                            <p class="nutrition-label">Avg Daily Protein</p>
+                        </div>
+                    </div>
+                    <div class="nutrition-summary-card card">
+                        <div class="nutrition-icon">🍽️</div>
+                        <div class="nutrition-content">
+                            <h5 id="totalMealsTracked" class="nutrition-value">0</h5>
+                            <p class="nutrition-label">Total Meals Tracked</p>
+                        </div>
+                    </div>
+                    <div class="nutrition-summary-card card">
+                        <div class="nutrition-icon">📅</div>
+                        <div class="nutrition-content">
+                            <h5 id="daysTracked" class="nutrition-value">0</h5>
+                            <p class="nutrition-label">Days Tracked</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Weekly Nutrition Trends -->
+            <div class="weekly-trends-section">
+                <h4 class="subsection-title">📈 Weekly Nutrition Trends</h4>
+                <div class="weekly-chart-card card">
+                    <div class="chart-header">
+                        <p>Average calories and protein per week (last 8 weeks)</p>
+                    </div>
+                    <div id="weeklyNutritionChart" class="weekly-chart">
+                        <p>Loading nutrition trends...</p>
+                    </div>
+                    <div class="chart-legend">
+                        <div class="legend-item">
+                            <span class="legend-color calories-color"></span>
+                            <span>Calories</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color protein-color"></span>
+                            <span>Protein (g)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 

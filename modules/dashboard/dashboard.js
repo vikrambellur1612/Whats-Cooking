@@ -231,6 +231,77 @@ class Dashboard {
         
         const avgCal = this.allFoodItems.length > 0 ? Math.round(totalCalories / this.allFoodItems.length) : 0;
         if (avgCalories) avgCalories.textContent = avgCal;
+        
+        // Update meal history analytics
+        this.updateMealHistoryAnalytics();
+    }
+    
+    updateMealHistoryAnalytics() {
+        // Get analytics from Home module if available
+        const analytics = window.home ? window.home.getMealAnalytics() : null;
+        
+        if (analytics) {
+            // Update favorite dishes
+            const favBreakfastEl = document.getElementById('favBreakfast');
+            const favMainsEl = document.getElementById('favMains');
+            const favSidesEl = document.getElementById('favSides');
+            const favAccompanimentsEl = document.getElementById('favAccompaniments');
+            
+            if (favBreakfastEl) favBreakfastEl.textContent = analytics.favBreakfast.name;
+            if (favMainsEl) favMainsEl.textContent = analytics.favMains.name;
+            if (favSidesEl) favSidesEl.textContent = analytics.favSides.name;
+            if (favAccompanimentsEl) favAccompanimentsEl.textContent = analytics.favAccompaniments.name;
+            
+            // Update daily averages
+            const avgDailyCaloriesEl = document.getElementById('avgDailyCalories');
+            const avgDailyProteinEl = document.getElementById('avgDailyProtein');
+            const totalMealsTrackedEl = document.getElementById('totalMealsTracked');
+            const daysTrackedEl = document.getElementById('daysTracked');
+            
+            if (avgDailyCaloriesEl) avgDailyCaloriesEl.textContent = analytics.avgDaily.calories;
+            if (avgDailyProteinEl) avgDailyProteinEl.textContent = analytics.avgDaily.protein + 'g';
+            if (totalMealsTrackedEl) totalMealsTrackedEl.textContent = analytics.totalMealsTracked;
+            if (daysTrackedEl) daysTrackedEl.textContent = analytics.daysTracked;
+            
+            // Update weekly nutrition chart
+            this.updateWeeklyNutritionChart(analytics.avgNutritionWeekly);
+        } else {
+            // Show no data message for analytics
+            const analyticsElements = [
+                'favBreakfast', 'favMains', 'favSides', 'favAccompaniments',
+                'avgDailyCalories', 'avgDailyProtein', 'totalMealsTracked', 'daysTracked'
+            ];
+            
+            analyticsElements.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = 'No data';
+            });
+        }
+    }
+    
+    updateWeeklyNutritionChart(weeklyData) {
+        const chartContainer = document.getElementById('weeklyNutritionChart');
+        if (!chartContainer || !weeklyData) return;
+        
+        // Simple text-based chart (can be enhanced with chart libraries later)
+        const maxCalories = Math.max(...weeklyData.map(w => w.avgCalories), 1);
+        const maxProtein = Math.max(...weeklyData.map(w => w.avgProtein), 1);
+        
+        const chartHTML = weeklyData.slice(-8).map(week => `
+            <div class="chart-bar">
+                <div class="week-label">${week.week.replace('Week ', 'W')}</div>
+                <div class="bar-container">
+                    <div class="calories-bar" style="height: ${(week.avgCalories / maxCalories) * 100}%" title="${week.avgCalories} cal avg"></div>
+                    <div class="protein-bar" style="height: ${(week.avgProtein / maxProtein) * 100}%" title="${week.avgProtein}g protein avg"></div>
+                </div>
+                <div class="bar-values">
+                    <span class="calories-value">${week.avgCalories}</span>
+                    <span class="protein-value">${week.avgProtein}g</span>
+                </div>
+            </div>
+        `).join('');
+        
+        chartContainer.innerHTML = chartHTML || '<p>No nutrition data available</p>';
     }
 
     async generateMealPlan() {

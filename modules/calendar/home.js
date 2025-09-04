@@ -1,7 +1,8 @@
-// Home Module - Mobile-First Card-Based Meal Planning
+// Home Module - Mobile-First Card-Based Meal Planning with Historical Analytics
 class Home {
     constructor() {
         this.menuPlans = {};
+        this.mealHistory = {}; // Historical data for analytics
         this.availableMeals = {
             breakfast: [],
             mains: [],
@@ -17,6 +18,7 @@ class Home {
         this.currentDate = '';
         this.currentCategory = '';
         this.loadMenuPlans();
+        this.loadMealHistory();
     }
 
     async init() {
@@ -381,6 +383,9 @@ class Home {
         this.menuPlans[this.currentDate] = {...this.selectedItems};
         this.saveMenuPlans();
         
+        // Add to history when the date passes
+        this.updateMealHistory(this.currentDate, this.selectedItems);
+        
         // Refresh the display
         this.renderMealPlanCards();
         this.updateStatistics();
@@ -396,7 +401,24 @@ class Home {
         const container = document.getElementById('mealPlanCards');
         if (!container) return;
 
-        const sortedDates = Object.keys(this.menuPlans).sort();
+        const today = new Date();
+        const todayString = today.toISOString().split('T')[0];
+        
+        // Filter out past dates and sort remaining dates
+        const sortedDates = Object.keys(this.menuPlans)
+            .filter(date => date >= todayString)
+            .sort();
+        
+        // Move past dates to history
+        Object.keys(this.menuPlans).forEach(date => {
+            if (date < todayString) {
+                this.updateMealHistory(date, this.menuPlans[date]);
+                delete this.menuPlans[date];
+            }
+        });
+        
+        // Save updated menu plans
+        this.saveMenuPlans();
         
         if (sortedDates.length === 0) {
             container.innerHTML = '';
@@ -435,10 +457,10 @@ class Home {
                     </div>
                     
                     <div class="meal-card-actions">
-                        <button class="meal-card-btn edit" onclick="window.home.editMealPlan('${date}')">
+                        <button class="meal-card-btn edit" onclick="window.home?.editMealPlan?.('${date}') || console.error('Home module not loaded')">
                             Edit Menu
                         </button>
-                        <button class="meal-card-btn delete" onclick="window.home.deleteMealPlan('${date}')">
+                        <button class="meal-card-btn delete" onclick="window.home?.deleteMealPlan?.('${date}') || console.error('Home module not loaded')">
                             Delete
                         </button>
                     </div>
@@ -463,6 +485,8 @@ class Home {
     calculateDayNutrition(dayMenu) {
         let totalCalories = 0;
         let totalProtein = 0;
+        let totalCarbs = 0;
+        let totalFat = 0;
         
         Object.values(dayMenu).forEach(categoryItems => {
             if (Array.isArray(categoryItems)) {
@@ -470,6 +494,8 @@ class Home {
                     if (item.nutrition) {
                         totalCalories += parseInt(item.nutrition.calories) || 0;
                         totalProtein += parseFloat(item.nutrition.protein) || 0;
+                        totalCarbs += parseFloat(item.nutrition.carbs) || 0;
+                        totalFat += parseFloat(item.nutrition.fat) || 0;
                     }
                 });
             }
@@ -477,7 +503,9 @@ class Home {
         
         return {
             calories: totalCalories,
-            protein: Math.round(totalProtein * 10) / 10
+            protein: Math.round(totalProtein * 10) / 10,
+            carbs: Math.round(totalCarbs * 10) / 10,
+            fat: Math.round(totalFat * 10) / 10
         };
     }
 
@@ -609,6 +637,157 @@ class Home {
         return '🍽️';
     }
 
+    // Historical Data Methods
+    updateMealHistory(date, mealPlan) {
+        if (!this.mealHistory[date]) {
+            this.mealHistory[date] = {
+                ...mealPlan,
+                createdAt: new Date().toISOString(),
+                nutrition: this.calculateDayNutrition(mealPlan)
+            };
+            
+            // Clean up history older than 3 months
+            this.cleanOldHistory();
+            this.saveMealHistory();
+        }
+    }
+    
+    cleanOldHistory() {
+        const threeMonthsAgo = new Date();
+        threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
+        const cutoffDate = threeMonthsAgo.toISOString().split('T')[0];
+        
+        Object.keys(this.mealHistory).forEach(date => {
+            if (date < cutoffDate) {
+                delete this.mealHistory[date];
+            }
+        });
+    }
+    
+    // Analytics Methods for Dashboard
+    getMealAnalytics() {
+        const historyDates = Object.keys(this.mealHistory).sort();
+        if (historyDates.length === 0) {
+            return {
+                favBreakfast: { name: 'No data', count: 0 },
+                favMains: { name: 'No data', count: 0 },
+                favSides: { name: 'No data', count: 0 },
+                favAccompaniments: { name: 'No data', count: 0 },
+                avgNutritionWeekly: [],
+                totalMealsTracked: 0,
+                daysTracked: 0
+            };
+        }
+        
+        // Count frequency of each meal
+        const mealCounts = {
+            breakfast: {},
+            mains: {},
+            sides: {},
+            accompaniments: {}
+        };
+        
+        let totalCalories = 0;
+        let totalProtein = 0;
+        let totalCarbs = 0;
+        let totalFat = 0;
+        let totalDays = historyDates.length;
+        
+        historyDates.forEach(date => {
+            const dayData = this.mealHistory[date];
+            
+            // Count meal frequencies
+            Object.keys(mealCounts).forEach(category => {
+                if (dayData[category]) {
+                    dayData[category].forEach(item => {
+                        const key = item.name;
+                        mealCounts[category][key] = (mealCounts[category][key] || 0) + 1;
+                    });
+                }
+            });
+            
+            // Aggregate nutrition
+            if (dayData.nutrition) {
+                totalCalories += dayData.nutrition.calories || 0;
+                totalProtein += dayData.nutrition.protein || 0;
+                totalCarbs += dayData.nutrition.carbs || 0;
+                totalFat += dayData.nutrition.fat || 0;
+            }
+        });
+        
+        // Find favorites
+        const getFavorite = (category) => {
+            const items = mealCounts[category];
+            if (Object.keys(items).length === 0) return { name: 'No data', count: 0 };
+            
+            const sortedItems = Object.entries(items).sort((a, b) => b[1] - a[1]);
+            return { name: sortedItems[0][0], count: sortedItems[0][1] };
+        };
+        
+        // Calculate weekly averages for last 12 weeks
+        const weeklyNutrition = this.calculateWeeklyNutrition(historyDates);
+        
+        return {
+            favBreakfast: getFavorite('breakfast'),
+            favMains: getFavorite('mains'),
+            favSides: getFavorite('sides'),
+            favAccompaniments: getFavorite('accompaniments'),
+            avgNutritionWeekly: weeklyNutrition,
+            avgDaily: {
+                calories: Math.round(totalCalories / totalDays),
+                protein: Math.round((totalProtein / totalDays) * 10) / 10,
+                carbs: Math.round((totalCarbs / totalDays) * 10) / 10,
+                fat: Math.round((totalFat / totalDays) * 10) / 10
+            },
+            totalMealsTracked: Object.values(mealCounts).reduce((total, category) => {
+                return total + Object.values(category).reduce((sum, count) => sum + count, 0);
+            }, 0),
+            daysTracked: totalDays
+        };
+    }
+    
+    calculateWeeklyNutrition(historyDates) {
+        const weeks = [];
+        const today = new Date();
+        
+        for (let i = 11; i >= 0; i--) {
+            const weekStart = new Date(today);
+            weekStart.setDate(today.getDate() - (i * 7) - today.getDay());
+            const weekEnd = new Date(weekStart);
+            weekEnd.setDate(weekStart.getDate() + 6);
+            
+            const weekStartStr = weekStart.toISOString().split('T')[0];
+            const weekEndStr = weekEnd.toISOString().split('T')[0];
+            
+            const weekData = historyDates
+                .filter(date => date >= weekStartStr && date <= weekEndStr)
+                .map(date => this.mealHistory[date].nutrition);
+            
+            if (weekData.length > 0) {
+                const avgCalories = Math.round(weekData.reduce((sum, day) => sum + (day.calories || 0), 0) / weekData.length);
+                const avgProtein = Math.round((weekData.reduce((sum, day) => sum + (day.protein || 0), 0) / weekData.length) * 10) / 10;
+                
+                weeks.push({
+                    week: `Week ${12 - i}`,
+                    startDate: weekStartStr,
+                    avgCalories,
+                    avgProtein,
+                    daysTracked: weekData.length
+                });
+            } else {
+                weeks.push({
+                    week: `Week ${12 - i}`,
+                    startDate: weekStartStr,
+                    avgCalories: 0,
+                    avgProtein: 0,
+                    daysTracked: 0
+                });
+            }
+        }
+        
+        return weeks;
+    }
+
     // Data persistence
     loadMenuPlans() {
         try {
@@ -627,6 +806,28 @@ class Home {
             localStorage.setItem('home_menu_plans', JSON.stringify(this.menuPlans));
         } catch (error) {
             console.error('Error saving menu plans to localStorage:', error);
+        }
+    }
+    
+    loadMealHistory() {
+        try {
+            const stored = localStorage.getItem('home_meal_history');
+            if (stored) {
+                this.mealHistory = JSON.parse(stored);
+                // Clean old data on load
+                this.cleanOldHistory();
+            }
+        } catch (error) {
+            console.warn('Error loading meal history from localStorage:', error);
+            this.mealHistory = {};
+        }
+    }
+
+    saveMealHistory() {
+        try {
+            localStorage.setItem('home_meal_history', JSON.stringify(this.mealHistory));
+        } catch (error) {
+            console.error('Error saving meal history to localStorage:', error);
         }
     }
 
