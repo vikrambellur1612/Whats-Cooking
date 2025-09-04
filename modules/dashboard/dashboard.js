@@ -1,4 +1,4 @@
-// Dashboard Module - Landing Page with Statistics and Lucky Meal Plan
+// Dashboard Module - Landing Page with Statistics
 class Dashboard {
     constructor() {
         this.allFoodItems = [];
@@ -181,17 +181,7 @@ class Dashboard {
             });
         }
 
-        // Lucky button
-        const luckyBtn = document.getElementById('luckyBtn');
-        if (luckyBtn) {
-            console.log('Lucky button found, attaching event listener');
-            luckyBtn.addEventListener('click', () => {
-                console.log('Lucky button clicked!');
-                this.generateMealPlan();
-            });
-        } else {
-            console.error('Lucky button not found!');
-        }
+
     }
 
     navigateToModule(moduleId) {
@@ -328,157 +318,6 @@ class Dashboard {
         chartContainer.innerHTML = chartHTML || '<p>No nutrition data available</p>';
     }
 
-    async generateMealPlan() {
-        console.log('generateMealPlan called');
-        const luckyBtn = document.getElementById('luckyBtn');
-        
-        // Show loading state
-        luckyBtn.classList.add('loading');
-        luckyBtn.textContent = 'Generating...';
-
-        try {
-            // Add a small delay for better UX
-            await new Promise(resolve => setTimeout(resolve, 1000));
-
-            // Get random breakfast item
-            const randomBreakfast = this.getRandomItem(this.breakfastItems);
-            console.log('Random breakfast:', randomBreakfast);
-            
-            // Intelligent main dish selection - prefer rice-based dishes 70% of the time for variety
-            const riceBasedMains = this.mainsItems.filter(item => 
-                item.type === 'mains-rice' || 
-                item.name.toLowerCase().includes('rice') || 
-                item.name.toLowerCase().includes('biryani') || 
-                item.name.toLowerCase().includes('pulao')
-            );
-            
-            const wheatBasedMains = this.mainsItems.filter(item => 
-                item.type === 'mains-wheat' || 
-                item.name.toLowerCase().includes('roti') || 
-                item.name.toLowerCase().includes('chapati') || 
-                item.name.toLowerCase().includes('naan')
-            );
-            
-            const otherMains = this.mainsItems.filter(item => 
-                !riceBasedMains.includes(item) && !wheatBasedMains.includes(item)
-            );
-            
-            let randomMain;
-            const preferRice = Math.random() < 0.7; // 70% chance for rice-based
-            
-            if (preferRice && riceBasedMains.length > 0) {
-                randomMain = this.getRandomItem(riceBasedMains);
-            } else if (!preferRice && wheatBasedMains.length > 0) {
-                randomMain = this.getRandomItem(wheatBasedMains);
-            } else if (otherMains.length > 0) {
-                randomMain = this.getRandomItem(otherMains);
-            } else {
-                // Fallback to any available main dish
-                randomMain = this.getRandomItem(this.mainsItems);
-            }
-            
-            console.log('Random main (intelligent selection):', randomMain);
-
-            // Get random side dish
-            const randomSideDish = this.getRandomItem(this.sideDishesItems);
-            console.log('Random side dish:', randomSideDish);
-
-            // Get random accompaniment
-            const randomAccompaniment = this.getRandomItem(this.accompanimentsItems);
-            console.log('Random accompaniment:', randomAccompaniment);
-
-            // Display the meal plan
-            this.showMealPlan(randomBreakfast, randomMain, randomSideDish, randomAccompaniment);
-
-        } catch (error) {
-            console.error('Error generating meal plan:', error);
-            this.showAlert('Failed to generate meal plan. Please try again.', 'error');
-        } finally {
-            // Reset button state
-            luckyBtn.classList.remove('loading');
-            luckyBtn.textContent = '🎲 Get My Meal Plan';
-        }
-    }
-
-    getRandomItem(items) {
-        if (!items || items.length === 0) return null;
-        const randomIndex = Math.floor(Math.random() * items.length);
-        return items[randomIndex];
-    }
-
-    showMealPlan(breakfast, main, sideDish, accompaniment) {
-        console.log('showMealPlan called with:', { breakfast, main, sideDish, accompaniment });
-        
-        // Populate breakfast suggestion
-        const breakfastSection = document.getElementById('breakfastSuggestion');
-        if (breakfastSection && breakfast) {
-            breakfastSection.innerHTML = this.createSuggestionHtml(breakfast);
-            console.log('Breakfast suggestion populated');
-        } else {
-            console.warn('Breakfast section not found or no breakfast data');
-        }
-
-        // Populate main dish suggestion  
-        const mainSection = document.getElementById('mainSuggestion');
-        if (mainSection && main) {
-            mainSection.innerHTML = this.createSuggestionHtml(main);
-            console.log('Main dish suggestion populated');
-        } else {
-            console.warn('Main dish section not found or no main dish data');
-        }
-
-        // Populate side dish suggestion  
-        const sideDishSection = document.getElementById('sideDishSuggestion');
-        if (sideDishSection && sideDish) {
-            sideDishSection.innerHTML = this.createSuggestionHtml(sideDish);
-            console.log('Side dish suggestion populated');
-        } else {
-            console.warn('Side dish section not found or no side dish data');
-        }
-
-        // Populate accompaniment suggestion  
-        const accompanimentSection = document.getElementById('accompanimentSuggestion');
-        if (accompanimentSection && accompaniment) {
-            accompanimentSection.innerHTML = this.createSuggestionHtml(accompaniment);
-            console.log('Accompaniment suggestion populated');
-        } else {
-            console.warn('Accompaniment section not found or no accompaniment data');
-        }
-
-        // Show modal
-        const modal = document.getElementById('mealPlanModal');
-        if (modal) {
-            modal.classList.add('active');
-            
-            // Scroll to top for better mobile experience - ensures modal is visible
-            // Small delay to let modal opening animation start first
-            setTimeout(() => {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }, 100);
-            
-            console.log('Modal shown');
-        } else {
-            console.error('Modal not found!');
-        }
-    }
-
-    createSuggestionHtml(item) {
-        const emoji = this.getDishEmoji(item);
-        const typeLabel = this.formatType(item.type);
-        
-        return `
-            <div class="suggestion-dish">
-                <div class="suggestion-emoji">${emoji}</div>
-                <h5 class="suggestion-name">${item.name}</h5>
-                <p class="suggestion-description">${item.description}</p>
-                <div class="suggestion-badges">
-                    <span class="badge badge-${item.type}">${typeLabel}</span>
-                    ${item.nutrition?.calories ? `<span class="badge badge-nutrition">${item.nutrition.calories} cal</span>` : ''}
-                </div>
-            </div>
-        `;
-    }
-
     getDishEmoji(item) {
         const name = item.name.toLowerCase();
         const type = item.type;
@@ -552,13 +391,7 @@ class Dashboard {
         return typeMap[type] || type.charAt(0).toUpperCase() + type.slice(1);
     }
 
-    generateNewPlan() {
-        this.generateMealPlan();
-    }
 
-    closeMealPlanModal() {
-        document.getElementById('mealPlanModal').classList.remove('active');
-    }
 
     showAlert(message, type = 'info') {
         // Clear any existing alerts of the same type to prevent stacking

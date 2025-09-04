@@ -65,21 +65,7 @@
             </div>
         </div>
 
-        <!-- I'm Feeling Lucky Section -->
-        <div class="lucky-section">
-            <div class="lucky-card card">
-                <div class="lucky-header">
-                    <div class="lucky-icon">🎲</div>
-                    <div class="lucky-content">
-                        <h3>I'm Feeling Lucky!</h3>
-                        <p>Let us suggest your next meal plan with random dishes</p>
-                    </div>
-                </div>
-                <button id="luckyBtn" class="btn btn-primary btn-large">
-                    🎲 Get My Meal Plan
-                </button>
-            </div>
-        </div>
+
 
         <!-- Recent Activity -->
         <div class="activity-section">
@@ -411,60 +397,4 @@
         </div>
     </div>
 
-<!-- Lucky Meal Plan Modal -->
-<div id="mealPlanModal" class="modal">
-    <div class="modal-content meal-plan-modal">
-        <div class="modal-header">
-            <h3 class="modal-title">🎲 Your Lucky Meal Plan</h3>
-            <button class="modal-close" onclick="window.dashboard && window.dashboard.closeMealPlanModal()">&times;</button>
-        </div>
-        <div class="modal-body">
-            <div class="meal-plan-content">
-                <div class="meal-section">
-                    <div class="meal-header">
-                        <h4>🌅 Breakfast Suggestion</h4>
-                    </div>
-                    <div id="breakfastSuggestion" class="meal-suggestion">
-                        <!-- Breakfast dish will be loaded here -->
-                    </div>
-                </div>
-                
-                <div class="meal-section">
-                    <div class="meal-header">
-                        <h4>🍽️ Main Dish Suggestion</h4>
-                    </div>
-                    <div id="mainSuggestion" class="meal-suggestion">
-                        <!-- Main dish will be loaded here -->
-                    </div>
-                </div>
 
-                <div class="meal-section">
-                    <div class="meal-header">
-                        <h4>🥘 Side Dish Suggestion</h4>
-                    </div>
-                    <div id="sideDishSuggestion" class="meal-suggestion">
-                        <!-- Side dish will be loaded here -->
-                    </div>
-                </div>
-
-                <div class="meal-section">
-                    <div class="meal-header">
-                        <h4>🥗 Accompaniment Suggestion</h4>
-                    </div>
-                    <div id="accompanimentSuggestion" class="meal-suggestion">
-                        <!-- Accompaniment will be loaded here -->
-                    </div>
-                </div>
-            </div>
-            
-            <div class="meal-plan-actions">
-                <button type="button" class="btn btn-secondary" onclick="window.dashboard && window.dashboard.generateNewPlan()">
-                    🔄 Try Again
-                </button>
-                <button type="button" class="btn btn-primary" onclick="window.dashboard && window.dashboard.closeMealPlanModal()">
-                    ✨ Perfect!
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
