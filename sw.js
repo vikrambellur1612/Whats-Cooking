@@ -1,7 +1,7 @@
-// Service Worker for ನಾಳೆ ಅಡುಗೆ ಏನು? PWA
-const CACHE_NAME = 'naale-aduge-v1.2.1';
-const STATIC_CACHE_NAME = 'whats-cooking-static-v1.0.1';
-const DYNAMIC_CACHE_NAME = 'whats-cooking-dynamic-v1.0.1';
+// Service Worker for ನಾಳೆ ಅಡುಗೆ ಏನು? PWA v2.0.0
+const CACHE_NAME = 'naale-aduge-v2.0.0';
+const STATIC_CACHE_NAME = 'whats-cooking-static-v2.0.0';
+const DYNAMIC_CACHE_NAME = 'whats-cooking-dynamic-v2.0.0';
 
 // Files to cache immediately
 const STATIC_ASSETS = [
@@ -12,16 +12,30 @@ const STATIC_ASSETS = [
   '/js/main.js',
   '/js/navigation.js',
   '/data/breakfast-catalog.json',
-  '/data/meals-catalog.json',
+  '/data/mains-catalog.json',
+  '/data/side-dishes-catalog.json',
+  '/data/accompaniments-catalog.json',
   '/modules/dashboard/dashboard.html',
   '/modules/dashboard/dashboard.css',
   '/modules/dashboard/dashboard.js',
+  '/modules/calendar/home.html',
+  '/modules/calendar/home.css',
+  '/modules/calendar/home.js',
   '/modules/breakfast-catalog/breakfast-catalog.html',
   '/modules/breakfast-catalog/breakfast-catalog.css',
   '/modules/breakfast-catalog/breakfast-catalog.js',
-  '/modules/meals-catalog/meals-catalog.html',
-  '/modules/meals-catalog/meals-catalog.css',
-  '/modules/meals-catalog/meals-catalog.js',
+  '/modules/mains-catalog/mains-catalog.html',
+  '/modules/mains-catalog/mains-catalog.css',
+  '/modules/mains-catalog/mains-catalog.js',
+  '/modules/side-dishes-catalog/side-dishes-catalog.html',
+  '/modules/side-dishes-catalog/side-dishes-catalog.css',
+  '/modules/side-dishes-catalog/side-dishes-catalog.js',
+  '/modules/accompaniments-catalog/accompaniments-catalog.html',
+  '/modules/accompaniments-catalog/accompaniments-catalog.css',
+  '/modules/accompaniments-catalog/accompaniments-catalog.js',
+  '/modules/about/about.html',
+  '/modules/about/about.css',
+  '/modules/about/about.js',
   '/manifest.json',
   '/assets/icons/icon-192x192.png',
   '/assets/icons/icon-512x512.png'
@@ -261,7 +275,9 @@ async function doBackgroundSync() {
     // Refresh data files
     const dataFiles = [
       '/data/breakfast-catalog.json',
-      '/data/meals-catalog.json'
+      '/data/mains-catalog.json',
+      '/data/side-dishes-catalog.json',
+      '/data/accompaniments-catalog.json'
     ];
     
     const cache = await caches.open(DYNAMIC_CACHE_NAME);
