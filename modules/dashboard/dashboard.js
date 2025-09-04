@@ -14,10 +14,10 @@ class Dashboard {
         this.setupEventListeners();
         this.updateStatistics();
         
-        // Refresh analytics in case Home module data is available
+        // Refresh analytics in case Home module data is available (with longer delay)
         setTimeout(() => {
             this.updateMealHistoryAnalytics();
-        }, 500);
+        }, 1000);
         
         // Ensure global access
         window.dashboard = this;
@@ -242,45 +242,64 @@ class Dashboard {
     }
     
     updateMealHistoryAnalytics() {
-        // Get analytics from Home module if available
-        const analytics = window.home ? window.home.getMealAnalytics() : null;
+        try {
+            // Get analytics from Home module if available
+            const analytics = window.home && typeof window.home.getMealAnalytics === 'function' 
+                ? window.home.getMealAnalytics() 
+                : null;
+            
+            if (analytics && analytics.favBreakfast && analytics.avgDaily) {
+                // Update favorite dishes
+                const favBreakfastEl = document.getElementById('favBreakfast');
+                const favMainsEl = document.getElementById('favMains');
+                const favSidesEl = document.getElementById('favSides');
+                const favAccompanimentsEl = document.getElementById('favAccompaniments');
+                
+                if (favBreakfastEl) favBreakfastEl.textContent = analytics.favBreakfast?.name || 'No data';
+                if (favMainsEl) favMainsEl.textContent = analytics.favMains?.name || 'No data';
+                if (favSidesEl) favSidesEl.textContent = analytics.favSides?.name || 'No data';
+                if (favAccompanimentsEl) favAccompanimentsEl.textContent = analytics.favAccompaniments?.name || 'No data';
+                
+                // Update daily averages
+                const avgDailyCaloriesEl = document.getElementById('avgDailyCalories');
+                const avgDailyProteinEl = document.getElementById('avgDailyProtein');
+                const totalMealsTrackedEl = document.getElementById('totalMealsTracked');
+                const daysTrackedEl = document.getElementById('daysTracked');
+                
+                if (avgDailyCaloriesEl) avgDailyCaloriesEl.textContent = analytics.avgDaily?.calories || 0;
+                if (avgDailyProteinEl) avgDailyProteinEl.textContent = (analytics.avgDaily?.protein || 0) + 'g';
+                if (totalMealsTrackedEl) totalMealsTrackedEl.textContent = analytics.totalMealsTracked || 0;
+                if (daysTrackedEl) daysTrackedEl.textContent = analytics.daysTracked || 0;
+                
+                // Update weekly nutrition chart
+                if (analytics.avgNutritionWeekly) {
+                    this.updateWeeklyNutritionChart(analytics.avgNutritionWeekly);
+                }
+            } else {
+                this.showNoAnalyticsData();
+            }
+        } catch (error) {
+            console.warn('Error updating meal history analytics:', error);
+            this.showNoAnalyticsData();
+        }
+    }
+    
+    showNoAnalyticsData() {
+        // Show no data message for analytics
+        const analyticsElements = [
+            'favBreakfast', 'favMains', 'favSides', 'favAccompaniments',
+            'avgDailyCalories', 'avgDailyProtein', 'totalMealsTracked', 'daysTracked'
+        ];
         
-        if (analytics) {
-            // Update favorite dishes
-            const favBreakfastEl = document.getElementById('favBreakfast');
-            const favMainsEl = document.getElementById('favMains');
-            const favSidesEl = document.getElementById('favSides');
-            const favAccompanimentsEl = document.getElementById('favAccompaniments');
-            
-            if (favBreakfastEl) favBreakfastEl.textContent = analytics.favBreakfast.name;
-            if (favMainsEl) favMainsEl.textContent = analytics.favMains.name;
-            if (favSidesEl) favSidesEl.textContent = analytics.favSides.name;
-            if (favAccompanimentsEl) favAccompanimentsEl.textContent = analytics.favAccompaniments.name;
-            
-            // Update daily averages
-            const avgDailyCaloriesEl = document.getElementById('avgDailyCalories');
-            const avgDailyProteinEl = document.getElementById('avgDailyProtein');
-            const totalMealsTrackedEl = document.getElementById('totalMealsTracked');
-            const daysTrackedEl = document.getElementById('daysTracked');
-            
-            if (avgDailyCaloriesEl) avgDailyCaloriesEl.textContent = analytics.avgDaily.calories;
-            if (avgDailyProteinEl) avgDailyProteinEl.textContent = analytics.avgDaily.protein + 'g';
-            if (totalMealsTrackedEl) totalMealsTrackedEl.textContent = analytics.totalMealsTracked;
-            if (daysTrackedEl) daysTrackedEl.textContent = analytics.daysTracked;
-            
-            // Update weekly nutrition chart
-            this.updateWeeklyNutritionChart(analytics.avgNutritionWeekly);
-        } else {
-            // Show no data message for analytics
-            const analyticsElements = [
-                'favBreakfast', 'favMains', 'favSides', 'favAccompaniments',
-                'avgDailyCalories', 'avgDailyProtein', 'totalMealsTracked', 'daysTracked'
-            ];
-            
-            analyticsElements.forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.textContent = 'No data';
-            });
+        analyticsElements.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.textContent = 'No data';
+        });
+        
+        // Clear the chart
+        const chartContainer = document.getElementById('weeklyNutritionChart');
+        if (chartContainer) {
+            chartContainer.innerHTML = '<p>No nutrition data available yet. Start planning meals in the Home section!</p>';
         }
     }
     

@@ -674,6 +674,12 @@ class Home {
                 favSides: { name: 'No data', count: 0 },
                 favAccompaniments: { name: 'No data', count: 0 },
                 avgNutritionWeekly: [],
+                avgDaily: {
+                    calories: 0,
+                    protein: 0,
+                    carbs: 0,
+                    fat: 0
+                },
                 totalMealsTracked: 0,
                 daysTracked: 0
             };
