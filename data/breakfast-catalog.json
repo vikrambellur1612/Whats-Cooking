@@ -7,7 +7,9 @@
         "description": "Crispy dosa with spicy red chutney and potato filling, originated from Mysore",
         "type": "breakfast",
         "cuisine": "South Indian",
-        "mealTypes": ["vegetarian"],
+        "mealTypes": [
+          "vegetarian"
+        ],
         "nutrition": {
           "calories": 320,
           "protein": 8,
@@ -22,7 +24,9 @@
         "description": "Soft and fluffy dosas served in sets of 3-4, popular Karnataka breakfast",
         "type": "breakfast",
         "cuisine": "South Indian",
-        "mealTypes": ["vegetarian"],
+        "mealTypes": [
+          "vegetarian"
+        ],
         "nutrition": {
           "calories": 280,
           "protein": 7,
@@ -37,7 +41,9 @@
         "description": "Steamed semolina cakes with mustard seeds, curry leaves and cashews",
         "type": "breakfast",
         "cuisine": "South Indian",
-        "mealTypes": ["vegetarian"],
+        "mealTypes": [
+          "vegetarian"
+        ],
         "nutrition": {
           "calories": 150,
           "protein": 4,
@@ -52,7 +58,9 @@
         "description": "Savory semolina porridge with vegetables, mustard seeds and curry leaves",
         "type": "breakfast",
         "cuisine": "South Indian",
-        "mealTypes": ["vegetarian"],
+        "mealTypes": [
+          "vegetarian"
+        ],
         "nutrition": {
           "calories": 200,
           "protein": 5,
@@ -67,7 +75,9 @@
         "description": "Sweet semolina dessert with ghee, sugar and nuts",
         "type": "breakfast",
         "cuisine": "South Indian",
-        "mealTypes": ["vegetarian"],
+        "mealTypes": [
+          "vegetarian"
+        ],
         "nutrition": {
           "calories": 250,
           "protein": 4,
@@ -82,7 +92,9 @@
         "description": "Flattened rice cooked with onions, peanuts and spices, garnished with coriander",
         "type": "breakfast",
         "cuisine": "North Indian",
-        "mealTypes": ["vegetarian"],
+        "mealTypes": [
+          "vegetarian"
+        ],
         "nutrition": {
           "calories": 180,
           "protein": 4,
@@ -97,7 +109,9 @@
         "description": "Soft steamed cakes made from fermented rice and lentil batter",
         "type": "breakfast",
         "cuisine": "South Indian",
-        "mealTypes": ["vegetarian"],
+        "mealTypes": [
+          "vegetarian"
+        ],
         "nutrition": {
           "calories": 35,
           "protein": 2,
@@ -112,7 +126,9 @@
         "description": "Rice flour flatbread with vegetables and spices, cooked on griddle",
         "type": "breakfast",
         "cuisine": "South Indian",
-        "mealTypes": ["vegetarian"],
+        "mealTypes": [
+          "vegetarian"
+        ],
         "nutrition": {
           "calories": 200,
           "protein": 5,
@@ -127,7 +143,9 @@
         "description": "Nutritious finger millet flatbread with vegetables and spices",
         "type": "breakfast",
         "cuisine": "South Indian",
-        "mealTypes": ["vegetarian"],
+        "mealTypes": [
+          "vegetarian"
+        ],
         "nutrition": {
           "calories": 150,
           "protein": 4,
@@ -142,7 +160,9 @@
         "description": "Comforting rice and lentil porridge with black pepper and ghee",
         "type": "breakfast",
         "cuisine": "South Indian",
-        "mealTypes": ["vegetarian"],
+        "mealTypes": [
+          "vegetarian"
+        ],
         "nutrition": {
           "calories": 180,
           "protein": 6,
@@ -157,7 +177,9 @@
         "description": "Delicate vermicelli cooked with vegetables and mild spices",
         "type": "breakfast",
         "cuisine": "South Indian",
-        "mealTypes": ["vegetarian"],
+        "mealTypes": [
+          "vegetarian"
+        ],
         "nutrition": {
           "calories": 200,
           "protein": 8,
@@ -172,7 +194,9 @@
         "description": "Light and fluffy tapioca pearls cooked with peanuts and curry leaves",
         "type": "breakfast",
         "cuisine": "North Indian",
-        "mealTypes": ["vegetarian"],
+        "mealTypes": [
+          "vegetarian"
+        ],
         "nutrition": {
           "calories": 200,
           "protein": 8,
@@ -180,6 +204,23 @@
           "fat": 6
         },
         "dateAdded": "2025-09-02T10:11:00.000Z"
+      },
+      {
+        "name": "Bread Sandwich",
+        "description": "A delicious dish",
+        "type": "breakfast",
+        "cuisine": "Regional",
+        "mealTypes": [
+          "vegetarian"
+        ],
+        "nutrition": {
+          "calories": 200,
+          "protein": 8,
+          "carbs": 30,
+          "fat": 6
+        },
+        "id": "1756973777074",
+        "dateAdded": "2025-09-04T08:16:17.074Z"
       }
     ]
   }

@@ -104,13 +104,16 @@
     display: flex;
     gap: 1rem;
     background: rgba(102, 126, 234, 0.1);
-    padding: 0.75rem 1rem;
+    padding: 1rem;
     border-radius: 12px;
     margin-bottom: 1.5rem;
+    flex-wrap: wrap;
 }
 
 .nutrition-item {
     text-align: center;
+    flex: 1;
+    min-width: 60px;
 }
 
 .nutrition-value {
@@ -123,6 +126,7 @@
     font-size: 0.8rem;
     color: var(--text-muted);
     text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .meal-categories-grid {
@@ -154,35 +158,156 @@
     color: var(--text-muted);
 }
 
+/* Enhanced Meal Details Section */
+.meal-details-section {
+    display: grid;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.meal-category-detail {
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 12px;
+    padding: 1rem;
+    border: 1px solid rgba(102, 126, 234, 0.1);
+}
+
+.category-header-detail {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.category-icon-detail {
+    font-size: 1.2rem;
+    margin-right: 0.5rem;
+}
+
+.category-title-detail {
+    font-weight: 600;
+    color: var(--primary-color);
+    flex: 1;
+}
+
+.category-count-badge {
+    background: var(--primary-color);
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    min-width: 1.5rem;
+    text-align: center;
+}
+
+.category-items-detail {
+    display: grid;
+    gap: 0.5rem;
+}
+
+.category-items-detail.empty {
+    text-align: center;
+    padding: 1rem;
+}
+
+.no-items-text {
+    color: var(--text-muted);
+    font-style: italic;
+    margin: 0;
+}
+
+.meal-item-detail {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 8px;
+    padding: 0.75rem;
+    border-left: 3px solid var(--primary-color);
+    transition: all 0.2s ease;
+}
+
+.meal-item-detail:hover {
+    transform: translateX(2px);
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.15);
+}
+
+.item-name-detail {
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 0.25rem;
+}
+
+.item-nutrition-detail {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.nutrition-badge {
+    background: rgba(102, 126, 234, 0.1);
+    color: var(--primary-color);
+    padding: 0.2rem 0.5rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.category-nutrition-total {
+    background: rgba(81, 207, 102, 0.1);
+    border: 1px solid rgba(81, 207, 102, 0.2);
+    padding: 0.5rem;
+    border-radius: 8px;
+    text-align: center;
+    margin-top: 0.5rem;
+    color: var(--success-color);
+    font-size: 0.85rem;
+}
+
 .meal-card-actions {
     display: flex;
     gap: 0.5rem;
     margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .meal-card-btn {
     flex: 1;
-    padding: 0.75rem;
-    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    border-radius: 10px;
     border: none;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
 }
 
 .meal-card-btn.edit {
-    background: var(--warning-color);
+    background: linear-gradient(135deg, var(--warning-color), #ffeb3b);
     color: #333;
+    border: 1px solid rgba(255, 212, 59, 0.3);
+}
+
+.meal-card-btn.edit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 212, 59, 0.4);
+    background: linear-gradient(135deg, #ffeb3b, var(--warning-color));
 }
 
 .meal-card-btn.delete {
-    background: var(--accent-color);
+    background: linear-gradient(135deg, var(--accent-color), #ff5252);
     color: white;
+    border: 1px solid rgba(255, 107, 107, 0.3);
 }
 
-.meal-card-btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+.meal-card-btn.delete:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+    background: linear-gradient(135deg, #ff5252, var(--accent-color));
 }
 
 /* Add New Menu Card */
@@ -484,10 +609,26 @@
 }
 
 .suggestion-item p {
-    margin: 0;
+    margin: 0 0 0.5rem 0;
     font-size: 0.9rem;
     color: var(--text-muted);
     line-height: 1.4;
+}
+
+.item-nutrition {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.item-nutrition small {
+    background: rgba(102, 126, 234, 0.1);
+    color: var(--primary-color);
+    padding: 0.2rem 0.5rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 500;
 }
 
 .add-more-btn {
@@ -589,6 +730,21 @@
     font-size: 0.8rem;
     color: var(--text-muted);
     line-height: 1.3;
+    margin-bottom: 0.5rem;
+}
+
+.category-item .item-nutrition {
+    margin-top: 0.5rem;
+    justify-content: center;
+}
+
+.category-item .item-nutrition small {
+    background: rgba(102, 126, 234, 0.1);
+    color: var(--primary-color);
+    padding: 0.2rem 0.5rem;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    font-weight: 500;
 }
 
 /* Button Styles */
@@ -645,9 +801,34 @@
         padding: 1.5rem;
     }
     
+    .meal-card-nutrition {
+        gap: 0.5rem;
+    }
+    
+    .nutrition-item {
+        min-width: 50px;
+    }
+    
     .meal-categories-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 0.75rem;
+    }
+    
+    .meal-details-section {
+        gap: 0.75rem;
+    }
+    
+    .meal-item-detail {
+        padding: 0.5rem;
+    }
+    
+    .item-nutrition-detail {
+        gap: 0.25rem;
+    }
+    
+    .nutrition-badge {
+        font-size: 0.7rem;
+        padding: 0.15rem 0.4rem;
     }
     
     .home-stats {
@@ -680,8 +861,58 @@
         font-size: 1.3rem;
     }
     
+    .meal-card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    
+    .meal-card-nutrition {
+        padding: 0.75rem;
+        align-self: stretch;
+    }
+    
+    .nutrition-item {
+        min-width: 45px;
+    }
+    
+    .nutrition-value {
+        font-size: 1rem;
+    }
+    
+    .nutrition-label {
+        font-size: 0.7rem;
+    }
+    
     .meal-categories-grid {
         grid-template-columns: 1fr;
+    }
+    
+    .meal-details-section {
+        gap: 0.5rem;
+    }
+    
+    .category-header-detail {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+    
+    .meal-item-detail {
+        padding: 0.5rem;
+    }
+    
+    .item-name-detail {
+        font-size: 0.9rem;
+    }
+    
+    .meal-card-actions {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    
+    .meal-card-btn {
+        padding: 1rem;
+        font-size: 1rem;
     }
     
     .home-stats {

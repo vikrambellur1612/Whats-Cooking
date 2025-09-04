@@ -101,21 +101,48 @@ class Home {
         const today = new Date();
         const todayString = today.toISOString().split('T')[0];
         
+        const selectedDate = document.getElementById('selectedDate');
+        if (!selectedDate) {
+            console.warn('Date input element not found');
+            return;
+        }
+        
+        // Set minimum date to today
+        selectedDate.min = todayString;
+        
+        // Find the next available date (earliest day without a meal plan)
+        let nextAvailableDate = new Date();
+        nextAvailableDate.setDate(nextAvailableDate.getDate() + 1); // Start from tomorrow
+        
+        // Look for the first date without a meal plan (check up to 30 days ahead)
+        let daysChecked = 0;
+        const maxDaysToCheck = 30;
+        
+        while (daysChecked < maxDaysToCheck) {
+            const dateString = nextAvailableDate.toISOString().split('T')[0];
+            
+            // Check if this date already has a meal plan
+            if (!this.menuPlans[dateString]) {
+                // Found an available date
+                selectedDate.value = dateString;
+                this.currentDate = dateString;
+                console.log('Smart default date set to next available day:', dateString);
+                return;
+            }
+            
+            // Move to next day
+            nextAvailableDate.setDate(nextAvailableDate.getDate() + 1);
+            daysChecked++;
+        }
+        
+        // If all dates in the next 30 days have meal plans, just use tomorrow
         const tomorrow = new Date();
         tomorrow.setDate(tomorrow.getDate() + 1);
         const tomorrowString = tomorrow.toISOString().split('T')[0];
         
-        const selectedDate = document.getElementById('selectedDate');
-        if (selectedDate) {
-            // Set minimum date to today
-            selectedDate.min = todayString;
-            // Set default value to tomorrow
-            selectedDate.value = tomorrowString;
-            this.currentDate = tomorrowString;
-            console.log('Default date set to:', tomorrowString, 'min date:', todayString);
-        } else {
-            console.warn('Date input element not found');
-        }
+        selectedDate.value = tomorrowString;
+        this.currentDate = tomorrowString;
+        console.log('All upcoming dates have meal plans, defaulting to tomorrow:', tomorrowString);
     }
 
     async loadAvailableMeals() {
@@ -461,7 +488,6 @@ class Home {
         container.innerHTML = sortedDates.map(date => {
             const dayMenu = this.menuPlans[date];
             const nutrition = this.calculateDayNutrition(dayMenu);
-            const totalItems = this.countDayItems(dayMenu);
             
             return `
                 <div class="meal-plan-card">
@@ -473,28 +499,36 @@ class Home {
                         <div class="meal-card-nutrition">
                             <div class="nutrition-item">
                                 <div class="nutrition-value">${nutrition.calories}</div>
-                                <div class="nutrition-label">Cal</div>
+                                <div class="nutrition-label">Calories</div>
                             </div>
                             <div class="nutrition-item">
                                 <div class="nutrition-value">${nutrition.protein}g</div>
                                 <div class="nutrition-label">Protein</div>
                             </div>
+                            <div class="nutrition-item">
+                                <div class="nutrition-value">${nutrition.carbs}g</div>
+                                <div class="nutrition-label">Carbs</div>
+                            </div>
+                            <div class="nutrition-item">
+                                <div class="nutrition-value">${nutrition.fat}g</div>
+                                <div class="nutrition-label">Fat</div>
+                            </div>
                         </div>
                     </div>
                     
-                    <div class="meal-categories-grid">
-                        ${this.renderCategorySummary('breakfast', dayMenu.breakfast, '🌅')}
-                        ${this.renderCategorySummary('mains', dayMenu.mains, '🍛')}
-                        ${this.renderCategorySummary('sides', dayMenu.sides, '🥗')}
-                        ${this.renderCategorySummary('accompaniments', dayMenu.accompaniments, '🫓')}
+                    <div class="meal-details-section">
+                        ${this.renderDetailedCategorySummary('breakfast', dayMenu.breakfast, '🌅', 'Breakfast')}
+                        ${this.renderDetailedCategorySummary('mains', dayMenu.mains, '🍛', 'Main Dishes')}
+                        ${this.renderDetailedCategorySummary('sides', dayMenu.sides, '🥗', 'Side Dishes')}
+                        ${this.renderDetailedCategorySummary('accompaniments', dayMenu.accompaniments, '🫓', 'Accompaniments')}
                     </div>
                     
                     <div class="meal-card-actions">
                         <button class="meal-card-btn edit" onclick="window.home?.editMealPlan?.('${date}') || console.error('Home module not loaded')">
-                            Edit Menu
+                            ✏️ Edit Menu
                         </button>
                         <button class="meal-card-btn delete" onclick="window.home?.deleteMealPlan?.('${date}') || console.error('Home module not loaded')">
-                            Delete
+                            🗑️ Delete
                         </button>
                     </div>
                 </div>
@@ -511,6 +545,59 @@ class Home {
                 <div class="category-icon">${icon}</div>
                 <div class="category-count">${count}</div>
                 <div class="category-label">${label}</div>
+            </div>
+        `;
+    }
+
+    renderDetailedCategorySummary(category, items, icon, label) {
+        if (!items || items.length === 0) {
+            return `
+                <div class="meal-category-detail">
+                    <div class="category-header-detail">
+                        <span class="category-icon-detail">${icon}</span>
+                        <span class="category-title-detail">${label}</span>
+                        <span class="category-count-badge">0</span>
+                    </div>
+                    <div class="category-items-detail empty">
+                        <p class="no-items-text">No ${label.toLowerCase()} planned</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        const totalNutrition = items.reduce((sum, item) => {
+            if (item.nutrition) {
+                sum.calories += parseInt(item.nutrition.calories) || 0;
+                sum.protein += parseFloat(item.nutrition.protein) || 0;
+            }
+            return sum;
+        }, { calories: 0, protein: 0 });
+
+        return `
+            <div class="meal-category-detail">
+                <div class="category-header-detail">
+                    <span class="category-icon-detail">${icon}</span>
+                    <span class="category-title-detail">${label}</span>
+                    <span class="category-count-badge">${items.length}</span>
+                </div>
+                <div class="category-items-detail">
+                    ${items.map(item => `
+                        <div class="meal-item-detail">
+                            <div class="item-name-detail">${item.name}</div>
+                            ${item.nutrition ? `
+                                <div class="item-nutrition-detail">
+                                    <span class="nutrition-badge">${item.nutrition.calories || 0} cal</span>
+                                    <span class="nutrition-badge">${item.nutrition.protein || 0}g protein</span>
+                                </div>
+                            ` : ''}
+                        </div>
+                    `).join('')}
+                    ${items.length > 0 && totalNutrition.calories > 0 ? `
+                        <div class="category-nutrition-total">
+                            <strong>Total: ${totalNutrition.calories} cal, ${totalNutrition.protein.toFixed(1)}g protein</strong>
+                        </div>
+                    ` : ''}
+                </div>
             </div>
         `;
     }
