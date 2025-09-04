@@ -285,14 +285,19 @@ class Home {
         const items = this.selectedItems[category] || [];
         
         container.innerHTML = items.map(item => `
-            <div class="suggestion-item selected" onclick="window.home.toggleSuggestionItem('${category}', '${item.id}')">
-                <h5>${item.name}</h5>
-                <p>${item.description || ''}</p>
-                ${item.nutrition ? `
-                    <div class="item-nutrition">
-                        <small>${item.nutrition.calories || 0} cal • ${item.nutrition.protein || 0}g protein</small>
-                    </div>
-                ` : ''}
+            <div class="suggestion-item selected">
+                <div class="suggestion-content">
+                    <h5>${item.name}</h5>
+                    <p>${item.description || ''}</p>
+                    ${item.nutrition ? `
+                        <div class="item-nutrition">
+                            <small>${item.nutrition.calories || 0} cal • ${item.nutrition.protein || 0}g protein</small>
+                        </div>
+                    ` : ''}
+                </div>
+                <button class="remove-suggestion-btn" onclick="window.home.removeSuggestionItem('${category}', '${item.id}')" title="Remove this item">
+                    ✕
+                </button>
             </div>
         `).join('');
     }
@@ -312,6 +317,19 @@ class Home {
         }
         
         this.renderCategorySuggestions(category);
+    }
+
+    removeSuggestionItem(category, itemId) {
+        const itemIndex = this.selectedItems[category].findIndex(item => item.id === itemId);
+        
+        if (itemIndex > -1) {
+            // Remove item from suggestions
+            this.selectedItems[category].splice(itemIndex, 1);
+            this.renderCategorySuggestions(category);
+            
+            // Show a subtle feedback
+            console.log(`Removed ${this.availableMeals[category].find(item => item.id === itemId)?.name || 'item'} from suggestions`);
+        }
     }
 
     showCategorySelector(category) {

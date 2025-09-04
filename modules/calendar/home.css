@@ -833,9 +833,15 @@
     border: 2px solid #e9ecef;
     border-radius: 12px;
     padding: 1rem;
-    cursor: pointer;
     transition: all 0.2s ease;
     position: relative;
+    display: flex;
+    align-items: stretch;
+    gap: 0.75rem;
+}
+
+.suggestion-content {
+    flex: 1;
 }
 
 .suggestion-item:hover {
@@ -849,29 +855,45 @@
     background: rgba(81, 207, 102, 0.1);
 }
 
+/* Remove the old checkmark style */
 .suggestion-item.selected::after {
-    content: '✓';
-    position: absolute;
-    top: 0.5rem;
-    right: 0.5rem;
-    background: var(--success-color);
+    display: none;
+}
+
+/* X Button for removing suggestions */
+.remove-suggestion-btn {
+    background: #ff6b6b;
     color: white;
-    width: 1.5rem;
-    height: 1.5rem;
+    border: none;
+    width: 1.8rem;
+    height: 1.8rem;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+    align-self: flex-start;
+    margin-top: 0.25rem;
 }
 
+.remove-suggestion-btn:hover {
+    background: #ff5252;
+    transform: scale(1.1);
+    box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);
+}
+
+.suggestion-content h5,
 .suggestion-item h5 {
     margin: 0 0 0.5rem 0;
     color: var(--primary-color);
     font-weight: 600;
 }
 
+.suggestion-content p,
 .suggestion-item p {
     margin: 0 0 0.5rem 0;
     font-size: 0.9rem;
@@ -1267,6 +1289,13 @@
     .meal-card-actions {
         flex-direction: column;
         gap: 0.75rem;
+    }
+    
+    /* Keep compact meal card actions horizontal on mobile */
+    .meal-card-actions.compact {
+        flex-direction: row;
+        justify-content: flex-end;
+        gap: 0.5rem;
     }
     
     .meal-card-btn {
