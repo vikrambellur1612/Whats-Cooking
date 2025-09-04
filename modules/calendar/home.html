@@ -14,7 +14,7 @@
             </div>
             
             <!-- Add New Menu Card (Always visible) -->
-            <div class="add-menu-card" onclick="window.home.showMealSuggestionModal()">
+            <div class="add-menu-card" onclick="window.home?.showMealSuggestionModal?.() || console.error('Home module not loaded')">
                 <div class="add-menu-content">
                     <div class="add-menu-icon">🍽️</div>
                     <h3 class="add-menu-title kannada-text">ನಾಳೆ ಅಡುಗೆ ಏನು?</h3>
@@ -55,12 +55,12 @@
                     <div class="meal-category">
                         <div class="category-header">
                             <h4 class="category-title">🌅 Breakfast</h4>
-                            <button class="refresh-suggestions" onclick="window.home.refreshCategorySuggestions('breakfast')">🔄</button>
+                            <button class="refresh-suggestions" onclick="window.home?.refreshCategorySuggestions?.('breakfast') || console.error('Home module not loaded')">🔄</button>
                         </div>
                         <div class="suggested-items" id="suggestedBreakfast">
                             <!-- Suggested breakfast items will appear here -->
                         </div>
-                        <div class="add-more-btn" onclick="window.home.showCategorySelector('breakfast')">
+                        <div class="add-more-btn" onclick="window.home?.showCategorySelector?.('breakfast') || console.error('Home module not loaded')">
                             + Add More Breakfast Items
                         </div>
                     </div>
@@ -69,12 +69,12 @@
                     <div class="meal-category">
                         <div class="category-header">
                             <h4 class="category-title">🍛 Main Dishes</h4>
-                            <button class="refresh-suggestions" onclick="window.home.refreshCategorySuggestions('mains')">🔄</button>
+                            <button class="refresh-suggestions" onclick="window.home?.refreshCategorySuggestions?.('mains') || console.error('Home module not loaded')">🔄</button>
                         </div>
                         <div class="suggested-items" id="suggestedMains">
                             <!-- Suggested main dishes will appear here -->
                         </div>
-                        <div class="add-more-btn" onclick="window.home.showCategorySelector('mains')">
+                        <div class="add-more-btn" onclick="window.home?.showCategorySelector?.('mains') || console.error('Home module not loaded')">
                             + Add More Main Dishes
                         </div>
                     </div>
@@ -83,12 +83,12 @@
                     <div class="meal-category">
                         <div class="category-header">
                             <h4 class="category-title">🥗 Side Dishes</h4>
-                            <button class="refresh-suggestions" onclick="window.home.refreshCategorySuggestions('sides')">🔄</button>
+                            <button class="refresh-suggestions" onclick="window.home?.refreshCategorySuggestions?.('sides') || console.error('Home module not loaded')">🔄</button>
                         </div>
                         <div class="suggested-items" id="suggestedSides">
                             <!-- Suggested side dishes will appear here -->
                         </div>
-                        <div class="add-more-btn" onclick="window.home.showCategorySelector('sides')">
+                        <div class="add-more-btn" onclick="window.home?.showCategorySelector?.('sides') || console.error('Home module not loaded')">
                             + Add More Side Dishes
                         </div>
                     </div>
@@ -97,12 +97,12 @@
                     <div class="meal-category">
                         <div class="category-header">
                             <h4 class="category-title">🫓 Accompaniments</h4>
-                            <button class="refresh-suggestions" onclick="window.home.refreshCategorySuggestions('accompaniments')">🔄</button>
+                            <button class="refresh-suggestions" onclick="window.home?.refreshCategorySuggestions?.('accompaniments') || console.error('Home module not loaded')">🔄</button>
                         </div>
                         <div class="suggested-items" id="suggestedAccompaniments">
                             <!-- Suggested accompaniments will appear here -->
                         </div>
-                        <div class="add-more-btn" onclick="window.home.showCategorySelector('accompaniments')">
+                        <div class="add-more-btn" onclick="window.home?.showCategorySelector?.('accompaniments') || console.error('Home module not loaded')">
                             + Add More Accompaniments
                         </div>
                     </div>

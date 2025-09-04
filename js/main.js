@@ -242,13 +242,13 @@ class App {
                 console.error('AccompanimentsCatalog class not found');
             }
         } else if (moduleId === 'calendar') {
-            if (typeof Calendar !== 'undefined') {
-                this.modules.calendar = new Calendar();
-                window.calendar = this.modules.calendar;
+            if (typeof Home !== 'undefined') {
+                this.modules.calendar = new Home();
+                window.home = this.modules.calendar;
                 await this.modules.calendar.init();
-                console.log('Calendar module initialized and globally accessible');
+                console.log('Home module initialized and globally accessible');
             } else {
-                console.error('Calendar class not found');
+                console.error('Home class not found');
             }
         } else if (moduleId === 'about') {
             if (typeof About !== 'undefined') {

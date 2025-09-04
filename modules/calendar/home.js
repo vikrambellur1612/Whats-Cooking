@@ -22,17 +22,22 @@ class Home {
     async init() {
         console.log('Initializing Home module...');
         
-        await this.loadAvailableMeals();
-        this.setupEventListeners();
-        this.renderMealPlanCards();
-        this.updateStatistics();
-        
-        // Set default date to tomorrow
-        this.setDefaultDate();
-        
-        // Ensure global access
-        window.home = this;
-        console.log('Home module initialized successfully');
+        try {
+            await this.loadAvailableMeals();
+            this.setupEventListeners();
+            this.renderMealPlanCards();
+            this.updateStatistics();
+            
+            // Set default date to tomorrow
+            this.setDefaultDate();
+            
+            // Ensure global access
+            window.home = this;
+            console.log('Home module initialized successfully. Methods available:', Object.getOwnPropertyNames(Object.getPrototypeOf(this)));
+        } catch (error) {
+            console.error('Error during Home module initialization:', error);
+            throw error;
+        }
     }
 
     setupEventListeners() {
@@ -115,7 +120,7 @@ class Home {
             this.availableMeals.mains = this.extractItems(mainsData, 'mains');
 
             // Load sides items
-            const sidesResponse = await fetch('/data/sides-catalog.json');
+            const sidesResponse = await fetch('/data/side-dishes-catalog.json');
             const sidesData = await sidesResponse.json();
             this.availableMeals.sides = this.extractItems(sidesData, 'sides');
 
@@ -138,8 +143,14 @@ class Home {
     }
 
     extractItems(jsonData, category) {
-        if (jsonData[category] && jsonData[category].items) {
-            return jsonData[category].items;
+        if (category === 'breakfast' && jsonData.breakfast && jsonData.breakfast.items) {
+            return jsonData.breakfast.items;
+        } else if (category === 'mains' && jsonData.mains && jsonData.mains.items) {
+            return jsonData.mains.items;
+        } else if (category === 'sides' && jsonData.sideDishes && jsonData.sideDishes.items) {
+            return jsonData.sideDishes.items;
+        } else if (category === 'accompaniments' && jsonData.accompaniments && jsonData.accompaniments.items) {
+            return jsonData.accompaniments.items;
         } else if (Array.isArray(jsonData)) {
             return jsonData;
         } else {
@@ -707,7 +718,14 @@ class Home {
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     if (document.querySelector('.home-module')) {
+        console.log('Home module DOM found, initializing...');
         window.home = new Home();
-        window.home.init();
+        window.home.init().then(() => {
+            console.log('Home module fully initialized and ready');
+        }).catch(error => {
+            console.error('Error initializing Home module:', error);
+        });
+    } else {
+        console.warn('Home module DOM not found');
     }
 });
