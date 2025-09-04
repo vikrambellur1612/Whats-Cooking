@@ -16,7 +16,7 @@
           "carbs": 58,
           "fat": 7
         },
-        "dateAdded": "2025-09-04T11:25:06.559Z"
+        "dateAdded": "2025-09-02T10:00:00.000Z"
       },
       {
         "id": "bf002",
@@ -33,7 +33,7 @@
           "carbs": 52,
           "fat": 5
         },
-        "dateAdded": "2025-09-04T11:25:06.559Z"
+        "dateAdded": "2025-09-02T10:01:00.000Z"
       },
       {
         "id": "bf003",
@@ -50,11 +50,11 @@
           "carbs": 28,
           "fat": 3
         },
-        "dateAdded": "2025-09-04T11:25:06.559Z"
+        "dateAdded": "2025-09-02T10:02:00.000Z"
       },
       {
         "id": "bf004",
-        "name": "Uppittu",
+        "name": "Upma",
         "description": "Savory semolina porridge with vegetables, mustard seeds and curry leaves",
         "type": "breakfast",
         "cuisine": "South Indian",
@@ -67,7 +67,7 @@
           "carbs": 35,
           "fat": 5
         },
-        "dateAdded": "2025-09-04T11:25:06.559Z"
+        "dateAdded": "2025-09-02T10:03:00.000Z"
       },
       {
         "id": "bf005",
@@ -84,7 +84,7 @@
           "carbs": 45,
           "fat": 8
         },
-        "dateAdded": "2025-09-04T11:25:06.559Z"
+        "dateAdded": "2025-09-02T10:04:00.000Z"
       },
       {
         "id": "bf006",
@@ -101,7 +101,7 @@
           "carbs": 32,
           "fat": 4
         },
-        "dateAdded": "2025-09-04T11:25:06.559Z"
+        "dateAdded": "2025-09-02T10:05:00.000Z"
       },
       {
         "id": "bf007",
@@ -118,7 +118,7 @@
           "carbs": 6,
           "fat": 0.5
         },
-        "dateAdded": "2025-09-04T11:25:06.559Z"
+        "dateAdded": "2025-09-02T10:06:00.000Z"
       },
       {
         "id": "bf008",
@@ -135,7 +135,7 @@
           "carbs": 38,
           "fat": 4
         },
-        "dateAdded": "2025-09-04T11:25:06.559Z"
+        "dateAdded": "2025-09-02T10:07:00.000Z"
       },
       {
         "id": "bf009",
@@ -152,7 +152,7 @@
           "carbs": 25,
           "fat": 4
         },
-        "dateAdded": "2025-09-04T11:25:06.559Z"
+        "dateAdded": "2025-09-02T10:08:00.000Z"
       },
       {
         "id": "bf010",
@@ -169,7 +169,7 @@
           "carbs": 30,
           "fat": 4
         },
-        "dateAdded": "2025-09-04T11:25:06.559Z"
+        "dateAdded": "2025-09-02T10:09:00.000Z"
       },
       {
         "id": "bf011",
@@ -186,7 +186,7 @@
           "carbs": 30,
           "fat": 6
         },
-        "dateAdded": "2025-09-04T11:25:06.559Z"
+        "dateAdded": "2025-09-02T10:10:00.000Z"
       },
       {
         "id": "bf012",
@@ -203,78 +203,9 @@
           "carbs": 30,
           "fat": 6
         },
-        "dateAdded": "2025-09-04T11:25:06.559Z"
+        "dateAdded": "2025-09-02T10:11:00.000Z"
       },
       {
-        "id": "bf013",
-        "name": "Aloo/Gobi/Paneer Paratha",
-        "description": "Traditional whole wheat flatbread, soft and nutritious",
-        "type": "breakfast",
-        "cuisine": "North Indian",
-        "mealTypes": [
-          "vegetarian"
-        ],
-        "nutrition": {
-          "calories": 220,
-          "protein": 7,
-          "carbs": 35,
-          "fat": 6
-        },
-        "dateAdded": "2025-09-04T11:25:06.559Z"
-      },
-      {
-        "id": "bf016",
-        "name": "Paddu",
-        "description": "Soft and fluffy dosa balls served in sets of 3-4, popular Karnataka breakfast",
-        "type": "breakfast",
-        "cuisine": "South Indian",
-        "mealTypes": [
-          "vegetarian"
-        ],
-        "nutrition": {
-          "calories": 280,
-          "protein": 7,
-          "carbs": 52,
-          "fat": 5
-        },
-        "dateAdded": "2025-09-04T11:25:06.559Z"
-      },
-      {
-        "id": "bf017",
-        "name": "Poori",
-        "description": "",
-        "type": "breakfast",
-        "cuisine": "South Indian",
-        "mealTypes": [
-          "vegetarian"
-        ],
-        "nutrition": {
-          "calories": 200,
-          "protein": 8,
-          "carbs": 30,
-          "fat": 6
-        },
-        "dateAdded": "2025-09-04T11:25:06.559Z"
-      },
-      {
-        "id": "bf018",
-        "name": "Kharabath",
-        "description": "Savory semolina porridge with vegetables, mustard seeds and curry leaves",
-        "type": "breakfast",
-        "cuisine": "South Indian",
-        "mealTypes": [
-          "vegetarian"
-        ],
-        "nutrition": {
-          "calories": 200,
-          "protein": 5,
-          "carbs": 35,
-          "fat": 5
-        },
-        "dateAdded": "2025-09-04T11:25:06.559Z"
-      },
-      {
-        "id": "bf019",
         "name": "Bread Sandwich",
         "description": "A delicious dish",
         "type": "breakfast",
@@ -288,7 +219,8 @@
           "carbs": 30,
           "fat": 6
         },
-        "dateAdded": "2025-09-04T11:25:06.559Z"
+        "id": "1756973777074",
+        "dateAdded": "2025-09-04T08:16:17.074Z"
       }
     ]
   }

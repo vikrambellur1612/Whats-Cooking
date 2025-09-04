@@ -1,0 +1,156 @@
+{
+  "mains": {
+    "items": [
+      {
+        "id": "mn001",
+        "name": "Bisi Bele Bath",
+        "description": "Karnataka's signature rice dish with lentils, vegetables and aromatic spices",
+        "type": "mains-rice",
+        "cuisine": "South Indian",
+        "mealTypes": ["vegetarian"],
+        "nutrition": {
+          "calories": 380,
+          "protein": 12,
+          "carbs": 68,
+          "fat": 8
+        },
+        "dateAdded": "2025-09-02T10:00:00.000Z"
+      },
+      {
+        "id": "mn002",
+        "name": "Ragi Mudde",
+        "description": "Finger millet balls, staple food of Karnataka, highly nutritious",
+        "type": "mains-wheat",
+        "cuisine": "South Indian",
+        "mealTypes": ["vegetarian"],
+        "nutrition": {
+          "calories": 320,
+          "protein": 8,
+          "carbs": 65,
+          "fat": 2
+        },
+        "dateAdded": "2025-09-02T10:01:00.000Z"
+      },
+      {
+        "id": "mn003",
+        "name": "Vangi Bath",
+        "description": "Spiced rice with brinjal, aromatic and flavorful",
+        "type": "mains-rice",
+        "cuisine": "South Indian", 
+        "mealTypes": ["vegetarian"],
+        "nutrition": {
+          "calories": 340,
+          "protein": 7,
+          "carbs": 62,
+          "fat": 8
+        },
+        "dateAdded": "2025-09-02T10:02:00.000Z"
+      },
+      {
+        "id": "mn004",
+        "name": "Coconut Rice",
+        "description": "Fragrant rice with fresh coconut, curry leaves and mustard seeds",
+        "type": "mains-rice",
+        "cuisine": "South Indian",
+        "mealTypes": ["vegetarian"],
+        "nutrition": {
+          "calories": 280,
+          "protein": 5,
+          "carbs": 45,
+          "fat": 9
+        },
+        "dateAdded": "2025-09-02T10:03:00.000Z"
+      },
+      {
+        "id": "mn005",
+        "name": "Lemon Rice",
+        "description": "Tangy rice dish with lemon juice, turmeric and peanuts",
+        "type": "mains-rice",
+        "cuisine": "South Indian",
+        "mealTypes": ["vegetarian"],
+        "nutrition": {
+          "calories": 260,
+          "protein": 6,
+          "carbs": 48,
+          "fat": 6
+        },
+        "dateAdded": "2025-09-02T10:04:00.000Z"
+      },
+      {
+        "id": "mn006", 
+        "name": "Tomato Rice",
+        "description": "Spicy rice cooked with fresh tomatoes and aromatic spices",
+        "type": "mains-rice",
+        "cuisine": "South Indian",
+        "mealTypes": ["vegetarian"],
+        "nutrition": {
+          "calories": 290,
+          "protein": 6,
+          "carbs": 52,
+          "fat": 7
+        },
+        "dateAdded": "2025-09-02T10:05:00.000Z"
+      },
+      {
+        "id": "mn007",
+        "name": "Jolada Rotti",
+        "description": "Traditional Karnataka flatbread made from jowar (sorghum) flour",
+        "type": "mains-wheat",
+        "cuisine": "South Indian",
+        "mealTypes": ["vegetarian"],
+        "nutrition": {
+          "calories": 180,
+          "protein": 6,
+          "carbs": 35,
+          "fat": 3
+        },
+        "dateAdded": "2025-09-02T10:06:00.000Z"
+      },
+      {
+        "id": "mn008",
+        "name": "Vegetable Pulao",
+        "description": "Fragrant basmati rice cooked with mixed vegetables and aromatic spices",
+        "type": "mains-rice",
+        "cuisine": "South Indian",
+        "mealTypes": ["vegetarian"],
+        "nutrition": {
+          "calories": 320,
+          "protein": 8,
+          "carbs": 62,
+          "fat": 7
+        },
+        "dateAdded": "2025-09-02T10:07:00.000Z"
+      },
+      {
+        "id": "mn009",
+        "name": "Chapathi",
+        "description": "Traditional whole wheat flatbread, soft and nutritious",
+        "type": "mains-wheat",
+        "cuisine": "North Indian",
+        "mealTypes": ["vegetarian"],
+        "nutrition": {
+          "calories": 220,
+          "protein": 7,
+          "carbs": 35,
+          "fat": 6
+        },
+        "dateAdded": "2025-09-02T10:08:00.000Z"
+      },
+      {
+        "id": "mn010",
+        "name": "Jeera Rice",
+        "description": "Fragrant basmati rice cooked with cumin seeds and ghee",
+        "type": "mains-rice",
+        "cuisine": "North Indian",
+        "mealTypes": ["vegetarian"],
+        "nutrition": {
+          "calories": 350,
+          "protein": 8,
+          "carbs": 65,
+          "fat": 8
+        },
+        "dateAdded": "2025-09-02T10:09:00.000Z"
+      }
+    ]
+  }
+}

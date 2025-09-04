@@ -1,0 +1,9 @@
+category,id,name,description,type,cuisine,mealTypes,calories,protein,carbs,fat,notes
+breakfast,bf001,Dosa,Crispy dosa with spicy red chutney and potato filling originated from Mysore,breakfast,South Indian,vegetarian,320,8,58,7,Traditional Karnataka breakfast
+breakfast,bf002,Idli,Soft steamed rice cakes served with sambar and chutney,breakfast,South Indian,vegetarian,158,4,30,1,Popular breakfast item
+mains,mn001,Bisi Bele Bath,Karnataka's signature rice dish with lentils vegetables and aromatic spices,mains-rice,South Indian,vegetarian,380,12,68,8,Signature Karnataka dish
+mains,mn002,Ragi Mudde,Traditional finger millet balls served with sambar or rasam,mains-rice,South Indian,vegetarian,180,6,35,2,Nutritious finger millet dish
+sides,sd001,Gojju,Sweet and tangy tamarind-based curry with vegetables,side-curry,South Indian,vegetarian,120,3,25,4,Popular side dish
+sides,sd002,Kosambari,Fresh cucumber and moong dal salad with coconut and curry leaves,side-salad,South Indian,vegetarian,95,4,15,3,Refreshing salad
+accompaniments,ac001,Coconut Chutney,Fresh coconut chutney with green chilies and ginger,accompaniment-chutney,South Indian,vegetarian,45,1,3,4,Essential accompaniment
+accompaniments,ac002,Pickle,Spicy mango pickle with oil and spices,accompaniment-pickle,South Indian,vegetarian,25,0,2,2,Traditional pickle

@@ -3,7 +3,7 @@
     "items": [
       {
         "id": "sd001",
-        "name": "Sambar",
+        "name": "Veg Sambar",
         "description": "Traditional South Indian lentil soup with vegetables and tamarind",
         "type": "side-dish-gravy",
         "cuisine": "South Indian",
@@ -16,7 +16,7 @@
           "carbs": 22,
           "fat": 4
         },
-        "dateAdded": "2025-09-02T10:00:00.000Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
         "id": "sd002",
@@ -33,7 +33,7 @@
           "carbs": 12,
           "fat": 2
         },
-        "dateAdded": "2025-09-02T10:01:00.000Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
         "id": "sd003",
@@ -50,7 +50,7 @@
           "carbs": 25,
           "fat": 3
         },
-        "dateAdded": "2025-09-02T10:02:00.000Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
         "id": "sd004",
@@ -67,7 +67,7 @@
           "carbs": 12,
           "fat": 3
         },
-        "dateAdded": "2025-09-02T10:03:00.000Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
         "id": "sd005",
@@ -84,7 +84,7 @@
           "carbs": 20,
           "fat": 3
         },
-        "dateAdded": "2025-09-02T10:04:00.000Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
         "id": "sd006",
@@ -101,7 +101,7 @@
           "carbs": 20,
           "fat": 9
         },
-        "dateAdded": "2025-09-02T10:05:00.000Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
         "id": "sd007",
@@ -118,7 +118,7 @@
           "carbs": 12,
           "fat": 3
         },
-        "dateAdded": "2025-09-02T10:06:00.000Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
         "id": "sd008",
@@ -135,7 +135,7 @@
           "carbs": 10,
           "fat": 2
         },
-        "dateAdded": "2025-09-02T10:07:00.000Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
         "id": "sd009",
@@ -152,7 +152,7 @@
           "carbs": 25,
           "fat": 4
         },
-        "dateAdded": "2025-09-02T10:08:00.000Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
         "id": "sd010",
@@ -169,7 +169,7 @@
           "carbs": 12,
           "fat": 22
         },
-        "dateAdded": "2025-09-02T10:09:00.000Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
         "id": "sd011",
@@ -186,7 +186,7 @@
           "carbs": 18,
           "fat": 16
         },
-        "dateAdded": "2025-09-02T10:10:00.000Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
         "id": "sd012",
@@ -203,9 +203,10 @@
           "carbs": 15,
           "fat": 6
         },
-        "dateAdded": "2025-09-02T10:11:00.000Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
+        "id": "sd013",
         "name": "Paneer Burji",
         "description": "A delicious dish",
         "type": "side-dish-sabji",
@@ -219,8 +220,211 @@
           "carbs": 30,
           "fat": 6
         },
-        "id": "1756883215888",
-        "dateAdded": "2025-09-03T07:06:55.888Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
+      },
+      {
+        "id": "sd014",
+        "name": "Channa Masala",
+        "description": "",
+        "type": "side-dish-gravy",
+        "cuisine": "North Indian",
+        "mealTypes": [
+          "vegetarian"
+        ],
+        "nutrition": {
+          "calories": 200,
+          "protein": 8,
+          "carbs": 30,
+          "fat": 6
+        },
+        "dateAdded": "2025-09-04T11:25:06.559Z"
+      },
+      {
+        "id": "sd015",
+        "name": "Rajma Masala",
+        "description": "",
+        "type": "side-dish-gravy",
+        "cuisine": "North Indian",
+        "mealTypes": [
+          "vegetarian"
+        ],
+        "nutrition": {
+          "calories": 200,
+          "protein": 8,
+          "carbs": 30,
+          "fat": 6
+        },
+        "dateAdded": "2025-09-04T11:25:06.559Z"
+      },
+      {
+        "id": "sd016",
+        "name": "Hagalakayi Palya",
+        "description": "",
+        "type": "side-dish-sabji",
+        "cuisine": "South Indian",
+        "mealTypes": [
+          "vegetarian"
+        ],
+        "nutrition": {
+          "calories": 120,
+          "protein": 3,
+          "carbs": 15,
+          "fat": 6
+        },
+        "dateAdded": "2025-09-04T11:25:06.559Z"
+      },
+      {
+        "id": "sd017",
+        "name": "Cluser Beans Dal/Palya",
+        "description": "",
+        "type": "side-dish-sabji",
+        "cuisine": "South Indian",
+        "mealTypes": [
+          "vegetarian"
+        ],
+        "nutrition": {
+          "calories": 120,
+          "protein": 3,
+          "carbs": 15,
+          "fat": 6
+        },
+        "dateAdded": "2025-09-04T11:25:06.559Z"
+      },
+      {
+        "id": "sd018",
+        "name": "Thondekayi Palya",
+        "description": "",
+        "type": "side-dish-sabji",
+        "cuisine": "South Indian",
+        "mealTypes": [
+          "vegetarian"
+        ],
+        "nutrition": {
+          "calories": 120,
+          "protein": 3,
+          "carbs": 15,
+          "fat": 6
+        },
+        "dateAdded": "2025-09-04T11:25:06.559Z"
+      },
+      {
+        "id": "sd019",
+        "name": "Veg Khurma",
+        "description": "",
+        "type": "side-dish-gravy",
+        "cuisine": "North Indian",
+        "mealTypes": [
+          "vegetarian"
+        ],
+        "nutrition": {
+          "calories": 140,
+          "protein": 4,
+          "carbs": 25,
+          "fat": 4
+        },
+        "dateAdded": "2025-09-04T11:25:06.559Z"
+      },
+      {
+        "id": "sd020",
+        "name": "Veg Shahi Paneer",
+        "description": "",
+        "type": "side-dish-gravy",
+        "cuisine": "North Indian",
+        "mealTypes": [
+          "vegetarian"
+        ],
+        "nutrition": {
+          "calories": 300,
+          "protein": 15,
+          "carbs": 12,
+          "fat": 22
+        },
+        "dateAdded": "2025-09-04T11:25:06.559Z"
+      },
+      {
+        "id": "sd021",
+        "name": "Methi Malai Mutter",
+        "description": "",
+        "type": "side-dish-gravy",
+        "cuisine": "North Indian",
+        "mealTypes": [
+          "vegetarian"
+        ],
+        "nutrition": {
+          "calories": 140,
+          "protein": 4,
+          "carbs": 25,
+          "fat": 4
+        },
+        "dateAdded": "2025-09-04T11:25:06.559Z"
+      },
+      {
+        "id": "sd022",
+        "name": "Avarekalu Palya",
+        "description": "",
+        "type": "side-dish-sabji",
+        "cuisine": "South Indian",
+        "mealTypes": [
+          "vegetarian"
+        ],
+        "nutrition": {
+          "calories": 200,
+          "protein": 8,
+          "carbs": 30,
+          "fat": 6
+        },
+        "dateAdded": "2025-09-04T11:25:06.559Z"
+      },
+      {
+        "id": "sd023",
+        "name": "Soppu KaLu Palya",
+        "description": "",
+        "type": "side-dish-sabji",
+        "cuisine": "South Indian",
+        "mealTypes": [
+          "vegetarian"
+        ],
+        "nutrition": {
+          "calories": 200,
+          "protein": 8,
+          "carbs": 30,
+          "fat": 6
+        },
+        "dateAdded": "2025-09-04T11:25:06.559Z"
+      },
+      {
+        "id": "sd024",
+        "name": "Dal Palak",
+        "description": "",
+        "type": "side-dish-gravy",
+        "cuisine": "North Indian",
+        "mealTypes": [
+          "vegetarian"
+        ],
+        "nutrition": {
+          "calories": 250,
+          "protein": 12,
+          "carbs": 18,
+          "fat": 16
+        },
+        "dateAdded": "2025-09-04T11:25:06.559Z"
+      },
+      {
+        "id": "sd025",
+        "name": "Dal Pappu",
+        "description": "",
+        "type": "side-dish-gravy",
+        "cuisine": "South Indian",
+        "mealTypes": [
+          "vegetarian"
+        ],
+        "nutrition": {
+          "calories": 250,
+          "protein": 12,
+          "carbs": 18,
+          "fat": 16
+        },
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       }
     ]
   }

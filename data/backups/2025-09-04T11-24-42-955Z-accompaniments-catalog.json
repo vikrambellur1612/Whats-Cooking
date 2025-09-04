@@ -7,16 +7,14 @@
         "description": "Fresh Karnataka salad with cucumber, carrots and lentils",
         "type": "accompaniments",
         "cuisine": "South Indian",
-        "mealTypes": [
-          "vegetarian"
-        ],
+        "mealTypes": ["vegetarian"],
         "nutrition": {
           "calories": 80,
           "protein": 4,
           "carbs": 12,
           "fat": 2
         },
-        "dateAdded": "2025-09-04T11:25:06.559Z"
+        "dateAdded": "2025-09-02T10:00:00.000Z"
       },
       {
         "id": "ac002",
@@ -24,16 +22,14 @@
         "description": "Cool and refreshing yogurt salad with cucumber and mint",
         "type": "accompaniments",
         "cuisine": "North Indian",
-        "mealTypes": [
-          "vegetarian"
-        ],
+        "mealTypes": ["vegetarian"],
         "nutrition": {
           "calories": 60,
           "protein": 3,
           "carbs": 8,
           "fat": 2
         },
-        "dateAdded": "2025-09-04T11:25:06.559Z"
+        "dateAdded": "2025-09-02T10:01:00.000Z"
       },
       {
         "id": "ac003",
@@ -41,16 +37,14 @@
         "description": "Creamy yogurt with crispy gram flour balls and spices",
         "type": "accompaniments",
         "cuisine": "North Indian",
-        "mealTypes": [
-          "vegetarian"
-        ],
+        "mealTypes": ["vegetarian"],
         "nutrition": {
           "calories": 120,
           "protein": 5,
           "carbs": 15,
           "fat": 4
         },
-        "dateAdded": "2025-09-04T11:25:06.559Z"
+        "dateAdded": "2025-09-02T10:02:00.000Z"
       },
       {
         "id": "ac004",
@@ -58,16 +52,14 @@
         "description": "Yogurt salad with cucumber, tomato, onion and fresh herbs",
         "type": "accompaniments",
         "cuisine": "North Indian",
-        "mealTypes": [
-          "vegetarian"
-        ],
+        "mealTypes": ["vegetarian"],
         "nutrition": {
           "calories": 70,
           "protein": 4,
           "carbs": 10,
           "fat": 2
         },
-        "dateAdded": "2025-09-04T11:25:06.559Z"
+        "dateAdded": "2025-09-02T10:03:00.000Z"
       },
       {
         "id": "ac005",
@@ -75,16 +67,14 @@
         "description": "Traditional Karnataka salad with grated carrots, coconut and green chilies",
         "type": "accompaniments",
         "cuisine": "South Indian",
-        "mealTypes": [
-          "vegetarian"
-        ],
+        "mealTypes": ["vegetarian"],
         "nutrition": {
           "calories": 90,
           "protein": 3,
           "carbs": 14,
           "fat": 3
         },
-        "dateAdded": "2025-09-04T11:25:06.559Z"
+        "dateAdded": "2025-09-02T10:04:00.000Z"
       },
       {
         "id": "ac006",
@@ -92,16 +82,14 @@
         "description": "Healthy beetroot salad with coconut, curry leaves and mustard seeds",
         "type": "accompaniments",
         "cuisine": "South Indian",
-        "mealTypes": [
-          "vegetarian"
-        ],
+        "mealTypes": ["vegetarian"],
         "nutrition": {
           "calories": 75,
           "protein": 2,
           "carbs": 12,
           "fat": 2
         },
-        "dateAdded": "2025-09-04T11:25:06.559Z"
+        "dateAdded": "2025-09-02T10:05:00.000Z"
       },
       {
         "id": "ac007",
@@ -109,16 +97,14 @@
         "description": "Fresh and zesty mint chutney with coriander and green chilies",
         "type": "accompaniments",
         "cuisine": "North Indian",
-        "mealTypes": [
-          "vegetarian"
-        ],
+        "mealTypes": ["vegetarian"],
         "nutrition": {
           "calories": 25,
           "protein": 1,
           "carbs": 4,
           "fat": 1
         },
-        "dateAdded": "2025-09-04T11:25:06.559Z"
+        "dateAdded": "2025-09-02T10:06:00.000Z"
       },
       {
         "id": "ac008",
@@ -126,16 +112,14 @@
         "description": "Traditional South Indian coconut chutney with curry leaves and mustard seeds",
         "type": "accompaniments",
         "cuisine": "South Indian",
-        "mealTypes": [
-          "vegetarian"
-        ],
+        "mealTypes": ["vegetarian"],
         "nutrition": {
           "calories": 45,
           "protein": 1,
           "carbs": 3,
           "fat": 4
         },
-        "dateAdded": "2025-09-04T11:25:06.559Z"
+        "dateAdded": "2025-09-02T10:07:00.000Z"
       },
       {
         "id": "ac009",
@@ -143,16 +127,59 @@
         "description": "Simple fresh salad with tomatoes, onions and lemon dressing",
         "type": "accompaniments",
         "cuisine": "Pan-Indian",
-        "mealTypes": [
-          "vegetarian"
-        ],
+        "mealTypes": ["vegetarian"],
         "nutrition": {
           "calories": 35,
           "protein": 1,
           "carbs": 8,
           "fat": 0
         },
-        "dateAdded": "2025-09-04T11:25:06.559Z"
+        "dateAdded": "2025-09-02T10:08:00.000Z"
+      },
+      {
+        "id": "ac010",
+        "name": "Pickled Onions",
+        "description": "Tangy pickled onions with vinegar and spices",
+        "type": "accompaniments",
+        "cuisine": "Pan-Indian",
+        "mealTypes": ["vegetarian"],
+        "nutrition": {
+          "calories": 20,
+          "protein": 0,
+          "carbs": 5,
+          "fat": 0
+        },
+        "dateAdded": "2025-09-02T10:09:00.000Z"
+      },
+      {
+        "id": "ac011",
+        "name": "Papad",
+        "description": "Crispy lentil wafers, roasted or fried, traditional Indian accompaniment",
+        "type": "accompaniments",
+        "cuisine": "Pan-Indian",
+        "mealTypes": ["vegetarian"],
+        "nutrition": {
+          "calories": 40,
+          "protein": 2,
+          "carbs": 6,
+          "fat": 1
+        },
+        "dateAdded": "2025-09-02T10:10:00.000Z"
+      },
+      {
+        "id": "ac012",
+        "name": "Yogurt Rice",
+        "description": "Comfort food - rice mixed with yogurt, curry leaves and mustard seeds",
+        "type": "accompaniments",
+        "cuisine": "South Indian",
+        "mealTypes": ["vegetarian"],
+        "nutrition": {
+          "calories": 180,
+          "protein": 6,
+          "carbs": 32,
+          "fat": 3
+        },
+        "dateAdded": "2025-09-02T10:11:00.000Z"
       }
     ]
   }

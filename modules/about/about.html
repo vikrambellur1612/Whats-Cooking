@@ -136,6 +136,43 @@
                         🗑️ Clear Local Data
                     </button>
                 </div>
+
+                <div class="dev-tool-card card">
+                    <div class="dev-tool-header">
+                        <div class="dev-tool-icon">📊</div>
+                        <h4>Export to CSV</h4>
+                    </div>
+                    <p>Export all catalog items to CSV format for easy editing in spreadsheet applications. Perfect for bulk updates and data management.</p>
+                    <button id="exportToCsvBtn" class="btn btn-success">
+                        📊 Export All to CSV
+                    </button>
+                </div>
+                
+                <div class="dev-tool-card card">
+                    <div class="dev-tool-header">
+                        <div class="dev-tool-icon">📝</div>
+                        <h4>Download CSV Template</h4>
+                    </div>
+                    <p>Download a CSV template with sample data and proper formatting. Use this as a starting point for bulk catalog updates.</p>
+                    <button id="downloadCsvTemplateBtn" class="btn btn-info">
+                        📝 Download Template
+                    </button>
+                </div>
+
+                <div class="dev-tool-card card span-2">
+                    <div class="dev-tool-header">
+                        <div class="dev-tool-icon">⬆️</div>
+                        <h4>Import from CSV</h4>
+                    </div>
+                    <p>Import catalog items from a CSV file. This will backup existing catalogs and replace them with the imported data. Use the template for proper formatting.</p>
+                    <div class="csv-import-section">
+                        <input type="file" id="csvFileInput" accept=".csv" class="file-input" />
+                        <button id="importFromCsvBtn" class="btn btn-warning" disabled>
+                            ⬆️ Import CSV & Update Catalogs
+                        </button>
+                    </div>
+                    <div id="importStatus" class="import-status"></div>
+                </div>
             </div>
         </div>
 
