@@ -98,14 +98,23 @@ class Home {
     }
 
     setDefaultDate() {
+        const today = new Date();
+        const todayString = today.toISOString().split('T')[0];
+        
         const tomorrow = new Date();
         tomorrow.setDate(tomorrow.getDate() + 1);
-        const dateString = tomorrow.toISOString().split('T')[0];
+        const tomorrowString = tomorrow.toISOString().split('T')[0];
         
         const selectedDate = document.getElementById('selectedDate');
         if (selectedDate) {
-            selectedDate.value = dateString;
-            this.currentDate = dateString;
+            // Set minimum date to today
+            selectedDate.min = todayString;
+            // Set default value to tomorrow
+            selectedDate.value = tomorrowString;
+            this.currentDate = tomorrowString;
+            console.log('Default date set to:', tomorrowString, 'min date:', todayString);
+        } else {
+            console.warn('Date input element not found');
         }
     }
 
@@ -164,6 +173,9 @@ class Home {
     showMealSuggestionModal() {
         this.clearSelectedItems();
         this.generateRandomSuggestions();
+        
+        // Set default date to tomorrow every time modal opens
+        this.setDefaultDate();
         
         const modal = document.getElementById('mealSuggestionModal');
         if (modal) {
@@ -367,10 +379,31 @@ class Home {
     }
 
     saveMealPlan() {
-        if (!this.currentDate) {
+        // Get the selected date from the input field
+        const selectedDateInput = document.getElementById('selectedDate');
+        const selectedDate = selectedDateInput ? selectedDateInput.value : null;
+        
+        if (!selectedDate) {
             this.showAlert('Please select a date for the meal plan.', 'warning');
+            // Focus on the date input to help user
+            if (selectedDateInput) {
+                selectedDateInput.focus();
+            }
             return;
         }
+        
+        // Validate that the date is not in the past (except today)
+        const today = new Date().toISOString().split('T')[0];
+        if (selectedDate < today) {
+            this.showAlert('Please select today or a future date for your meal plan.', 'warning');
+            if (selectedDateInput) {
+                selectedDateInput.focus();
+            }
+            return;
+        }
+        
+        // Update current date
+        this.currentDate = selectedDate;
         
         // Check if at least one item is selected
         const totalItems = Object.values(this.selectedItems).reduce((sum, items) => sum + items.length, 0);
@@ -393,8 +426,8 @@ class Home {
         // Close modal
         this.closeMealSuggestionModal();
         
-        // Show success message
-        this.showAlert(`Menu plan saved for ${this.formatDateForDisplay(this.currentDate)}!`, 'success');
+        // Show success message with the selected date
+        this.showAlert(`Menu plan saved for ${this.formatDateForDisplay(this.currentDate)}! 🎉`, 'success');
     }
 
     renderMealPlanCards() {

@@ -350,30 +350,44 @@
 /* Date Selection */
 .date-selection {
     margin-bottom: 2rem;
-    padding: 1rem;
-    background: rgba(102, 126, 234, 0.05);
+    padding: 1.5rem;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.05));
     border-radius: 12px;
+    border: 1px solid rgba(102, 126, 234, 0.2);
 }
 
 .date-selection label {
     display: block;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.75rem;
     font-weight: 600;
     color: var(--primary-color);
+    font-size: 1.1rem;
 }
 
 .date-input {
     width: 100%;
-    padding: 0.75rem;
+    padding: 1rem;
     border: 2px solid #ddd;
-    border-radius: 8px;
-    font-size: 1rem;
-    transition: border-color 0.2s ease;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .date-input:focus {
     border-color: var(--primary-color);
     outline: none;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    transform: translateY(-1px);
+}
+
+.date-helper {
+    margin: 0.5rem 0 0 0;
+    font-size: 0.9rem;
+    color: #666;
+    font-style: italic;
 }
 
 /* Meal Suggestions */
