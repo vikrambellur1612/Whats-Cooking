@@ -48,8 +48,9 @@
 
 .meal-plan-cards {
     display: grid;
-    gap: 1.5rem;
+    gap: 1rem;
     margin-bottom: 2rem;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
 }
 
 /* Meal Plan Card (for existing planned meals) */
@@ -308,6 +309,269 @@
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
     background: linear-gradient(135deg, #ff5252, var(--accent-color));
+}
+
+/* Compact Meal Plan Cards */
+.meal-plan-card.compact {
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    max-height: none;
+}
+
+.meal-plan-card.compact .meal-card-header {
+    margin-bottom: 1rem;
+    align-items: flex-start;
+}
+
+.meal-plan-card.compact .date-section {
+    flex-shrink: 0;
+}
+
+.meal-plan-card.compact .meal-card-date {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 0.25rem;
+}
+
+.meal-plan-card.compact .meal-card-day {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.nutrition-summary {
+    text-align: right;
+    flex: 1;
+    margin-left: 1rem;
+}
+
+.nutrition-highlight {
+    display: flex;
+    align-items: baseline;
+    justify-content: flex-end;
+    gap: 0.25rem;
+    margin-bottom: 0.25rem;
+}
+
+.nutrition-highlight .nutrition-value {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--primary-color);
+    line-height: 1;
+}
+
+.nutrition-highlight .nutrition-label {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.nutrition-secondary {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+/* Compact Category Summary */
+.meal-summary-section {
+    margin-bottom: 1.5rem;
+    display: grid;
+    gap: 0.75rem;
+}
+
+.compact-category {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 12px;
+    padding: 0.75rem;
+    border-left: 3px solid var(--primary-color);
+    transition: all 0.2s ease;
+}
+
+.compact-category:hover {
+    transform: translateX(2px);
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.15);
+}
+
+.compact-category.empty {
+    border-left-color: var(--text-muted);
+    opacity: 0.7;
+}
+
+.compact-icon {
+    font-size: 1.2rem;
+    margin-right: 0.75rem;
+    flex-shrink: 0;
+}
+
+.compact-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.compact-label {
+    font-weight: 600;
+    color: var(--primary-color);
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+}
+
+.compact-items {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    line-height: 1.3;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+/* Compact Actions */
+.meal-card-actions.compact {
+    justify-content: flex-end;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.meal-card-actions.compact .meal-card-btn {
+    flex: none;
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0;
+    border-radius: 50%;
+    font-size: 0.9rem;
+}
+
+.meal-card-btn.expand {
+    background: linear-gradient(135deg, var(--success-color), #40c057);
+    color: white;
+    border: 1px solid rgba(81, 207, 102, 0.3);
+}
+
+.meal-card-btn.expand:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 6px 20px rgba(81, 207, 102, 0.4);
+    background: linear-gradient(135deg, #40c057, var(--success-color));
+}
+
+/* Meal Details Modal */
+.meal-details-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 1rem;
+    backdrop-filter: blur(5px);
+}
+
+.meal-details-content {
+    background: white;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 800px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.meal-details-modal .modal-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    background: white;
+    border-radius: 20px 20px 0 0;
+    z-index: 10;
+}
+
+.meal-details-modal .modal-header h2 {
+    color: var(--primary-color);
+    margin: 0 0 0.5rem 0;
+    font-size: 1.5rem;
+}
+
+.meal-details-modal .modal-header h3 {
+    color: var(--text-muted);
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.meal-details-modal .close-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-muted);
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+}
+
+.meal-details-modal .close-btn:hover {
+    background: rgba(0, 0, 0, 0.1);
+    color: var(--text-color);
+}
+
+.meal-details-modal .modal-body {
+    padding: 1.5rem;
+}
+
+.detailed-nutrition-summary {
+    margin-bottom: 2rem;
+}
+
+.nutrition-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 1rem;
+}
+
+.nutrition-card {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+    border-radius: 12px;
+    padding: 1rem;
+    text-align: center;
+    border: 1px solid rgba(102, 126, 234, 0.2);
+}
+
+.nutrition-number {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--primary-color);
+    margin-bottom: 0.25rem;
+}
+
+.nutrition-text {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.detailed-meals-section {
+    display: grid;
+    gap: 1.5rem;
 }
 
 /* Add New Menu Card */
@@ -801,6 +1065,11 @@
         padding: 1.5rem;
     }
     
+    .meal-plan-cards {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
     .meal-card-nutrition {
         gap: 0.5rem;
     }
@@ -829,6 +1098,73 @@
     .nutrition-badge {
         font-size: 0.7rem;
         padding: 0.15rem 0.4rem;
+    }
+    
+    /* Compact Card Mobile Styles */
+    .meal-plan-card.compact {
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+    
+    .meal-plan-card.compact .meal-card-header {
+        flex-direction: column;
+        align-items: stretch;
+        margin-bottom: 1rem;
+        gap: 1rem;
+    }
+    
+    .nutrition-summary {
+        text-align: left;
+        margin-left: 0;
+    }
+    
+    .nutrition-highlight {
+        justify-content: flex-start;
+    }
+    
+    .compact-category {
+        padding: 0.5rem;
+    }
+    
+    .compact-icon {
+        font-size: 1rem;
+        margin-right: 0.5rem;
+    }
+    
+    .compact-label {
+        font-size: 0.85rem;
+    }
+    
+    .compact-items {
+        font-size: 0.8rem;
+    }
+    
+    .meal-card-actions.compact .meal-card-btn {
+        width: 2rem;
+        height: 2rem;
+        font-size: 0.8rem;
+    }
+    
+    /* Meal Details Modal Mobile */
+    .meal-details-modal {
+        padding: 0.5rem;
+    }
+    
+    .meal-details-content {
+        max-height: 95vh;
+    }
+    
+    .nutrition-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+    }
+    
+    .nutrition-card {
+        padding: 0.75rem;
+    }
+    
+    .nutrition-number {
+        font-size: 1.5rem;
     }
     
     .home-stats {
@@ -899,6 +1235,29 @@
     
     .meal-item-detail {
         padding: 0.5rem;
+    }
+    
+    /* Compact Cards - Small Mobile */
+    .meal-plan-card.compact .nutrition-highlight .nutrition-value {
+        font-size: 1.5rem;
+    }
+    
+    .meal-plan-card.compact .meal-card-date {
+        font-size: 1.1rem;
+    }
+    
+    .compact-category {
+        padding: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .meal-details-modal {
+        padding: 0.25rem;
+    }
+    
+    .nutrition-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
     }
     
     .item-name-detail {

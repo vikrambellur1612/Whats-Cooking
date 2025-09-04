@@ -488,47 +488,39 @@ class Home {
         container.innerHTML = sortedDates.map(date => {
             const dayMenu = this.menuPlans[date];
             const nutrition = this.calculateDayNutrition(dayMenu);
+            const totalItems = this.countDayItems(dayMenu);
             
             return `
-                <div class="meal-plan-card">
+                <div class="meal-plan-card compact">
                     <div class="meal-card-header">
-                        <div>
+                        <div class="date-section">
                             <div class="meal-card-date">${this.formatDateForDisplay(date)}</div>
                             <div class="meal-card-day">${this.formatDayOfWeek(date)}</div>
                         </div>
-                        <div class="meal-card-nutrition">
-                            <div class="nutrition-item">
-                                <div class="nutrition-value">${nutrition.calories}</div>
-                                <div class="nutrition-label">Calories</div>
+                        <div class="nutrition-summary">
+                            <div class="nutrition-highlight">
+                                <span class="nutrition-value">${nutrition.calories}</span>
+                                <span class="nutrition-label">cal</span>
                             </div>
-                            <div class="nutrition-item">
-                                <div class="nutrition-value">${nutrition.protein}g</div>
-                                <div class="nutrition-label">Protein</div>
-                            </div>
-                            <div class="nutrition-item">
-                                <div class="nutrition-value">${nutrition.carbs}g</div>
-                                <div class="nutrition-label">Carbs</div>
-                            </div>
-                            <div class="nutrition-item">
-                                <div class="nutrition-value">${nutrition.fat}g</div>
-                                <div class="nutrition-label">Fat</div>
+                            <div class="nutrition-secondary">
+                                ${nutrition.protein}g protein • ${totalItems} items
                             </div>
                         </div>
                     </div>
                     
-                    <div class="meal-details-section">
-                        ${this.renderDetailedCategorySummary('breakfast', dayMenu.breakfast, '🌅', 'Breakfast')}
-                        ${this.renderDetailedCategorySummary('mains', dayMenu.mains, '🍛', 'Main Dishes')}
-                        ${this.renderDetailedCategorySummary('sides', dayMenu.sides, '🥗', 'Side Dishes')}
-                        ${this.renderDetailedCategorySummary('accompaniments', dayMenu.accompaniments, '🫓', 'Accompaniments')}
+                    <div class="meal-summary-section">
+                        ${this.renderCompactCategorySummary(dayMenu)}
                     </div>
                     
-                    <div class="meal-card-actions">
-                        <button class="meal-card-btn edit" onclick="window.home?.editMealPlan?.('${date}') || console.error('Home module not loaded')">
-                            ✏️ Edit Menu
+                    <div class="meal-card-actions compact">
+                        <button class="meal-card-btn edit" onclick="window.home?.editMealPlan?.('${date}') || console.error('Home module not loaded')" title="Edit meal plan">
+                            ✏️
                         </button>
-                        <button class="meal-card-btn delete" onclick="window.home?.deleteMealPlan?.('${date}') || console.error('Home module not loaded')">
-                            🗑️ Delete
+                        <button class="meal-card-btn delete" onclick="window.home?.deleteMealPlan?.('${date}') || console.error('Home module not loaded')" title="Delete meal plan">
+                            🗑️
+                        </button>
+                        <button class="meal-card-btn expand" onclick="window.home?.showMealPlanDetails?.('${date}') || console.error('Home module not loaded')" title="View details">
+                            �️
                         </button>
                     </div>
                 </div>
@@ -547,6 +539,109 @@ class Home {
                 <div class="category-label">${label}</div>
             </div>
         `;
+    }
+
+    renderCompactCategorySummary(dayMenu) {
+        const categories = [
+            { key: 'breakfast', icon: '🌅', label: 'Breakfast' },
+            { key: 'mains', icon: '🍛', label: 'Mains' },
+            { key: 'sides', icon: '🥗', label: 'Sides' },
+            { key: 'accompaniments', icon: '🫓', label: 'Accompaniments' }
+        ];
+
+        return categories
+            .filter(cat => dayMenu[cat.key] && dayMenu[cat.key].length > 0)
+            .map(cat => {
+                const items = dayMenu[cat.key];
+                const itemNames = items.slice(0, 2).map(item => item.name).join(', ');
+                const moreCount = items.length > 2 ? ` +${items.length - 2} more` : '';
+                
+                return `
+                    <div class="compact-category">
+                        <span class="compact-icon">${cat.icon}</span>
+                        <div class="compact-content">
+                            <div class="compact-label">${cat.label} (${items.length})</div>
+                            <div class="compact-items">${itemNames}${moreCount}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('') || `
+                <div class="compact-category empty">
+                    <span class="compact-icon">🍽️</span>
+                    <div class="compact-content">
+                        <div class="compact-label">No meals planned</div>
+                    </div>
+                </div>
+            `;
+    }
+
+    showMealPlanDetails(date) {
+        const dayMenu = this.menuPlans[date];
+        if (!dayMenu) return;
+
+        // Create a detailed view modal
+        const modal = document.createElement('div');
+        modal.className = 'meal-details-modal';
+        modal.innerHTML = `
+            <div class="modal-content meal-details-content">
+                <div class="modal-header">
+                    <h2>Meal Plan Details</h2>
+                    <h3>${this.formatDateForDisplay(date)} - ${this.formatDayOfWeek(date)}</h3>
+                    <button class="close-btn" onclick="this.closest('.meal-details-modal').remove()">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="detailed-nutrition-summary">
+                        ${(() => {
+                            const nutrition = this.calculateDayNutrition(dayMenu);
+                            return `
+                                <div class="nutrition-grid">
+                                    <div class="nutrition-card">
+                                        <div class="nutrition-number">${nutrition.calories}</div>
+                                        <div class="nutrition-text">Calories</div>
+                                    </div>
+                                    <div class="nutrition-card">
+                                        <div class="nutrition-number">${nutrition.protein}g</div>
+                                        <div class="nutrition-text">Protein</div>
+                                    </div>
+                                    <div class="nutrition-card">
+                                        <div class="nutrition-number">${nutrition.carbs}g</div>
+                                        <div class="nutrition-text">Carbs</div>
+                                    </div>
+                                    <div class="nutrition-card">
+                                        <div class="nutrition-number">${nutrition.fat}g</div>
+                                        <div class="nutrition-text">Fat</div>
+                                    </div>
+                                </div>
+                            `;
+                        })()}
+                    </div>
+                    <div class="detailed-meals-section">
+                        ${this.renderDetailedCategorySummary('breakfast', dayMenu.breakfast, '🌅', 'Breakfast')}
+                        ${this.renderDetailedCategorySummary('mains', dayMenu.mains, '🍛', 'Main Dishes')}
+                        ${this.renderDetailedCategorySummary('sides', dayMenu.sides, '🥗', 'Side Dishes')}
+                        ${this.renderDetailedCategorySummary('accompaniments', dayMenu.accompaniments, '🫓', 'Accompaniments')}
+                    </div>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(modal);
+        
+        // Add click outside to close
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.remove();
+            }
+        });
+        
+        // Add escape key to close
+        const handleEscape = (e) => {
+            if (e.key === 'Escape') {
+                modal.remove();
+                document.removeEventListener('keydown', handleEscape);
+            }
+        };
+        document.addEventListener('keydown', handleEscape);
     }
 
     renderDetailedCategorySummary(category, items, icon, label) {
