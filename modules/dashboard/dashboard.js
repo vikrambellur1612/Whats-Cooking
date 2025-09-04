@@ -14,6 +14,11 @@ class Dashboard {
         this.setupEventListeners();
         this.updateStatistics();
         
+        // Refresh analytics in case Home module data is available
+        setTimeout(() => {
+            this.updateMealHistoryAnalytics();
+        }, 500);
+        
         // Ensure global access
         window.dashboard = this;
         console.log('Dashboard initialized. Global instance:', window.dashboard);
