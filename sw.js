@@ -186,6 +186,24 @@ async function cacheFirst(request) {
     
   } catch (error) {
     console.error('SW: Both cache and network failed for:', request.url);
+    
+    // Try to return a meaningful offline response for HTML/JS/CSS files
+    if (request.url.includes('.html') || request.url.includes('.js') || request.url.includes('.css')) {
+      return new Response(
+        `// Offline fallback for ${request.url}
+        console.error('Resource unavailable offline: ${request.url}');`,
+        {
+          status: 200,
+          statusText: 'OK (Offline Fallback)',
+          headers: {
+            'Content-Type': request.url.includes('.html') ? 'text/html' : 
+                           request.url.includes('.js') ? 'application/javascript' : 
+                           'text/css',
+          },
+        }
+      );
+    }
+    
     throw error;
   }
 }

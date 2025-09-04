@@ -69,12 +69,37 @@ class App {
             console.log(`Loading HTML from: ${moduleConfig.htmlPath}`);
             const htmlResponse = await fetch(moduleConfig.htmlPath);
             
-            if (!htmlResponse.ok) {
-                throw new Error(`Failed to load HTML: ${htmlResponse.status} ${htmlResponse.statusText}`);
-            }
+            let htmlContent;
             
-            const htmlContent = await htmlResponse.text();
-            console.log(`HTML Content loaded (${htmlContent.length} characters):`, htmlContent.substring(0, 200) + '...');
+            if (!htmlResponse.ok) {
+                console.error(`Failed to load HTML: ${htmlResponse.status} ${htmlResponse.statusText}`);
+                
+                // If it's a 503 error, try to clear cache and reload
+                if (htmlResponse.status === 503) {
+                    console.warn('503 Service Unavailable detected. Clearing cache...');
+                    if ('serviceWorker' in navigator && 'caches' in window) {
+                        const cacheNames = await caches.keys();
+                        await Promise.all(cacheNames.map(name => caches.delete(name)));
+                        console.log('Cache cleared. Retrying...');
+                        
+                        // Retry the request
+                        const retryResponse = await fetch(moduleConfig.htmlPath);
+                        if (!retryResponse.ok) {
+                            throw new Error(`Retry failed: ${retryResponse.status} ${retryResponse.statusText}`);
+                        }
+                        
+                        htmlContent = await retryResponse.text();
+                        console.log(`HTML Content loaded on retry (${htmlContent.length} characters)`);
+                    } else {
+                        throw new Error(`Failed to load HTML: ${htmlResponse.status} ${htmlResponse.statusText}`);
+                    }
+                } else {
+                    throw new Error(`Failed to load HTML: ${htmlResponse.status} ${htmlResponse.statusText}`);
+                }
+            } else {
+                htmlContent = await htmlResponse.text();
+                console.log(`HTML Content loaded (${htmlContent.length} characters):`, htmlContent.substring(0, 200) + '...');
+            }
             
             // Load module CSS
             await this.loadModuleCSS(moduleConfig.cssPath, moduleId);
@@ -315,6 +340,14 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     };
+    
+    // Auto-clear cache if we detect 503 errors
+    window.addEventListener('error', (e) => {
+        if (e.message && e.message.includes('503')) {
+            console.warn('503 error detected, clearing service worker cache...');
+            window.clearSWCache();
+        }
+    });
     
     console.log('Debug: Use clearSWCache() to clear service worker cache');
 });
