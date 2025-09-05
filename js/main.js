@@ -28,19 +28,27 @@ class App {
         
         navButtons.forEach(btn => {
             btn.addEventListener('click', async (e) => {
+                e.preventDefault();
                 const moduleId = btn.getAttribute('data-module');
                 if (moduleId && moduleId !== this.currentModule) {
-                    // Use navigation system for proper routing
-                    if (window.navigation) {
+                    // Always use navigation system for proper routing and sidebar handling
+                    if (window.navigation && typeof window.navigation.navigateToModule === 'function') {
                         window.navigation.navigateToModule(moduleId);
                     } else {
-                        // Fallback if navigation system not loaded yet
+                        // Fallback: load module and close sidebar manually
                         await this.loadModule(moduleId);
                         this.currentModule = moduleId;
                         
                         // Update active nav button
                         navButtons.forEach(b => b.classList.remove('active'));
                         btn.classList.add('active');
+                        
+                        // Close sidebar on mobile after navigation
+                        if (window.navigation && typeof window.navigation.closeSidebar === 'function') {
+                            if (window.innerWidth < 1024) {
+                                window.navigation.closeSidebar();
+                            }
+                        }
                     }
                 }
             });

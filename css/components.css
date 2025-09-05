@@ -214,15 +214,20 @@
     z-index: 1000;
     min-height: 100vh;
     max-height: 100vh;
-    /* Ensure modal is always at viewport top on mobile */
     overflow-y: auto;
 }
 
-/* Mobile-specific modal positioning */
+/* Mobile-specific modal positioning - center in viewport */
 @media (max-width: 768px) {
     .modal {
-        align-items: flex-start;
-        padding-top: 80px; /* Account for sticky header */
+        align-items: center; /* Keep centered vertically */
+        padding: 20px; /* Uniform padding */
+        /* Ensure modal appears in current viewport */
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
         padding-bottom: 20px;
     }
 }

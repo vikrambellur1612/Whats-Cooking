@@ -16,7 +16,7 @@
           "carbs": 68,
           "fat": 8
         },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
         "id": "mn002",
@@ -33,7 +33,7 @@
           "carbs": 65,
           "fat": 2
         },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
         "id": "mn003",
@@ -50,7 +50,7 @@
           "carbs": 62,
           "fat": 8
         },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
         "id": "mn004",
@@ -67,7 +67,7 @@
           "carbs": 45,
           "fat": 9
         },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
         "id": "mn005",
@@ -84,7 +84,7 @@
           "carbs": 48,
           "fat": 6
         },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
         "id": "mn006",
@@ -101,7 +101,7 @@
           "carbs": 52,
           "fat": 7
         },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
         "id": "mn007",
@@ -118,7 +118,7 @@
           "carbs": 35,
           "fat": 3
         },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
         "id": "mn008",
@@ -135,7 +135,7 @@
           "carbs": 62,
           "fat": 7
         },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
         "id": "mn009",
@@ -152,7 +152,7 @@
           "carbs": 35,
           "fat": 6
         },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
         "id": "mn010",
@@ -169,7 +169,7 @@
           "carbs": 65,
           "fat": 8
         },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
         "id": "mn011",
@@ -186,7 +186,7 @@
           "carbs": 35,
           "fat": 6
         },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
         "id": "mn012",
@@ -203,7 +203,7 @@
           "carbs": 35,
           "fat": 6
         },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
         "id": "mn013",
@@ -220,7 +220,7 @@
           "carbs": 18,
           "fat": 16
         },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
         "id": "mn014",
@@ -237,7 +237,7 @@
           "carbs": 45,
           "fat": 9
         },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
         "id": "mn015",
@@ -254,7 +254,7 @@
           "carbs": 45,
           "fat": 5
         },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
         "id": "mn016",
@@ -271,41 +271,7 @@
           "carbs": 18,
           "fat": 16
         },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
-      },
-      {
-        "id": "mn017",
-        "name": "Avalakki Bisibelebath",
-        "description": "Karnataka's signature rice dish with lentils, vegetables and aromatic spices",
-        "type": "mains-rice",
-        "cuisine": "South Indian",
-        "mealTypes": [
-          "vegetarian"
-        ],
-        "nutrition": {
-          "calories": 380,
-          "protein": 12,
-          "carbs": 68,
-          "fat": 8
-        },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
-      },
-      {
-        "id": "mn018",
-        "name": "Puliyogare",
-        "description": "",
-        "type": "mains-rice",
-        "cuisine": "South Indian",
-        "mealTypes": [
-          "vegetarian"
-        ],
-        "nutrition": {
-          "calories": 350,
-          "protein": 8,
-          "carbs": 65,
-          "fat": 8
-        },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       }
     ]
   }

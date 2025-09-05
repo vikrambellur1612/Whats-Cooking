@@ -16,7 +16,7 @@
           "carbs": 58,
           "fat": 7
         },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
         "id": "bf002",
@@ -33,7 +33,7 @@
           "carbs": 52,
           "fat": 5
         },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
         "id": "bf003",
@@ -50,7 +50,7 @@
           "carbs": 28,
           "fat": 3
         },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
         "id": "bf004",
@@ -67,7 +67,7 @@
           "carbs": 35,
           "fat": 5
         },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
         "id": "bf005",
@@ -84,11 +84,11 @@
           "carbs": 45,
           "fat": 8
         },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
         "id": "bf006",
-        "name": "Avalakki",
+        "name": "Poha",
         "description": "Flattened rice cooked with onions, peanuts and spices, garnished with coriander",
         "type": "breakfast",
         "cuisine": "North Indian",
@@ -101,7 +101,7 @@
           "carbs": 32,
           "fat": 4
         },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
         "id": "bf007",
@@ -118,7 +118,7 @@
           "carbs": 6,
           "fat": 0.5
         },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
         "id": "bf008",
@@ -135,7 +135,7 @@
           "carbs": 38,
           "fat": 4
         },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
         "id": "bf009",
@@ -152,7 +152,7 @@
           "carbs": 25,
           "fat": 4
         },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
         "id": "bf010",
@@ -169,7 +169,7 @@
           "carbs": 30,
           "fat": 4
         },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
         "id": "bf011",
@@ -186,7 +186,7 @@
           "carbs": 30,
           "fat": 6
         },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
         "id": "bf012",
@@ -203,7 +203,7 @@
           "carbs": 30,
           "fat": 6
         },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
         "id": "bf013",
@@ -220,7 +220,7 @@
           "carbs": 35,
           "fat": 6
         },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
         "id": "bf016",
@@ -237,7 +237,7 @@
           "carbs": 52,
           "fat": 5
         },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
         "id": "bf017",
@@ -254,7 +254,7 @@
           "carbs": 30,
           "fat": 6
         },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
         "id": "bf018",
@@ -271,7 +271,7 @@
           "carbs": 35,
           "fat": 5
         },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
         "id": "bf019",
@@ -288,24 +288,7 @@
           "carbs": 30,
           "fat": 6
         },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
-      },
-      {
-        "id": "bf020",
-        "name": "Gojju Avalakki",
-        "description": "Flattened rice cooked with onions, peanuts and spices, garnished with coriander",
-        "type": "breakfast",
-        "cuisine": "North Indian",
-        "mealTypes": [
-          "vegetarian"
-        ],
-        "nutrition": {
-          "calories": 180,
-          "protein": 4,
-          "carbs": 32,
-          "fat": 4
-        },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       }
     ]
   }

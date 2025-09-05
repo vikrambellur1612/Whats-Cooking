@@ -500,7 +500,19 @@ class AccompanimentsCatalog {
 
         this.deleteItemId = itemId;
         document.getElementById('deleteDishName').textContent = item.name;
-        document.getElementById('deleteModal').classList.add('active');
+        
+        // Show the modal and ensure it's in the viewport
+        const modal = document.getElementById('deleteModal');
+        modal.classList.add('active');
+        
+        // Prevent body scroll while modal is open
+        document.body.style.overflow = 'hidden';
+        
+        // Ensure modal is focused for accessibility
+        setTimeout(() => {
+            const firstButton = modal.querySelector('button');
+            if (firstButton) firstButton.focus();
+        }, 100);
     }
 
     async confirmDelete() {
@@ -515,7 +527,12 @@ class AccompanimentsCatalog {
     }
 
     closeDeleteModal() {
-        document.getElementById('deleteModal').classList.remove('active');
+        const modal = document.getElementById('deleteModal');
+        modal.classList.remove('active');
+        
+        // Restore body scroll
+        document.body.style.overflow = '';
+        
         this.deleteItemId = null;
     }
 

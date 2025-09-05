@@ -16,7 +16,7 @@
           "carbs": 22,
           "fat": 4
         },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
         "id": "sd002",
@@ -33,11 +33,11 @@
           "carbs": 12,
           "fat": 2
         },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
         "id": "sd003",
-        "name": "Hagalakayi Gojju",
+        "name": "Gojju",
         "description": "Tangy and spicy gravy made with tamarind and jaggery",
         "type": "side-dish-gravy",
         "cuisine": "South Indian",
@@ -50,44 +50,10 @@
           "carbs": 25,
           "fat": 3
         },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
         "id": "sd004",
-        "name": "Bendekayi Gojju",
-        "description": "Tangy and spicy gravy made with tamarind and jaggery",
-        "type": "side-dish-gravy",
-        "cuisine": "South Indian",
-        "mealTypes": [
-          "vegetarian"
-        ],
-        "nutrition": {
-          "calories": 120,
-          "protein": 2,
-          "carbs": 25,
-          "fat": 3
-        },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
-      },
-      {
-        "id": "sd005",
-        "name": "Badanekayi Gojju/Gravy",
-        "description": "Tangy and spicy gravy made with tamarind and jaggery",
-        "type": "side-dish-gravy",
-        "cuisine": "South Indian",
-        "mealTypes": [
-          "vegetarian"
-        ],
-        "nutrition": {
-          "calories": 120,
-          "protein": 2,
-          "carbs": 25,
-          "fat": 3
-        },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
-      },
-      {
-        "id": "sd006",
         "name": "Majjige Huli",
         "description": "Buttermilk curry with vegetables, cooling and digestive",
         "type": "side-dish-gravy",
@@ -101,10 +67,10 @@
           "carbs": 12,
           "fat": 3
         },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
-        "id": "sd007",
+        "id": "sd005",
         "name": "Tovve",
         "description": "Simple dal preparation with minimal spices, comfort food",
         "type": "side-dish-gravy",
@@ -118,10 +84,10 @@
           "carbs": 20,
           "fat": 3
         },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
-        "id": "sd008",
+        "id": "sd006",
         "name": "Badnekayi Yennegai",
         "description": "Stuffed baby brinjals cooked with spices and peanuts",
         "type": "side-dish-sabji",
@@ -135,10 +101,10 @@
           "carbs": 20,
           "fat": 9
         },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
-        "id": "sd009",
+        "id": "sd007",
         "name": "Beans Palya",
         "description": "Stir-fried green beans with coconut and spices - Karnataka style",
         "type": "side-dish-sabji",
@@ -152,10 +118,10 @@
           "carbs": 12,
           "fat": 3
         },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
-        "id": "sd010",
+        "id": "sd008",
         "name": "Cabbage Palya",
         "description": "Simple and healthy stir-fried cabbage with minimal spices",
         "type": "side-dish-sabji",
@@ -169,10 +135,10 @@
           "carbs": 10,
           "fat": 2
         },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
-        "id": "sd011",
+        "id": "sd009",
         "name": "Aloo Gobi",
         "description": "North Indian dry curry with potatoes and cauliflower",
         "type": "side-dish-sabji",
@@ -186,10 +152,10 @@
           "carbs": 25,
           "fat": 4
         },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
-        "id": "sd012",
+        "id": "sd010",
         "name": "Paneer Butter Masala",
         "description": "Rich and creamy North Indian paneer curry in tomato-based gravy",
         "type": "side-dish-gravy",
@@ -203,10 +169,10 @@
           "carbs": 12,
           "fat": 22
         },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
-        "id": "sd013",
+        "id": "sd011",
         "name": "Dal Makhani",
         "description": "Creamy black lentil curry slow-cooked with butter and cream",
         "type": "side-dish-gravy",
@@ -220,10 +186,10 @@
           "carbs": 18,
           "fat": 16
         },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
-        "id": "sd014",
+        "id": "sd012",
         "name": "Bhindi Masala",
         "description": "Spiced okra curry with onions, tomatoes and aromatic spices",
         "type": "side-dish-sabji",
@@ -237,10 +203,10 @@
           "carbs": 15,
           "fat": 6
         },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
-        "id": "sd015",
+        "id": "sd013",
         "name": "Paneer Burji",
         "description": "A delicious dish",
         "type": "side-dish-sabji",
@@ -254,10 +220,10 @@
           "carbs": 30,
           "fat": 6
         },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
-        "id": "sd016",
+        "id": "sd014",
         "name": "Channa Masala",
         "description": "",
         "type": "side-dish-gravy",
@@ -271,10 +237,10 @@
           "carbs": 30,
           "fat": 6
         },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
-        "id": "sd017",
+        "id": "sd015",
         "name": "Rajma Masala",
         "description": "",
         "type": "side-dish-gravy",
@@ -288,10 +254,10 @@
           "carbs": 30,
           "fat": 6
         },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
-        "id": "sd018",
+        "id": "sd016",
         "name": "Hagalakayi Palya",
         "description": "",
         "type": "side-dish-sabji",
@@ -305,10 +271,10 @@
           "carbs": 15,
           "fat": 6
         },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
-        "id": "sd019",
+        "id": "sd017",
         "name": "Cluser Beans Dal/Palya",
         "description": "",
         "type": "side-dish-sabji",
@@ -322,10 +288,10 @@
           "carbs": 15,
           "fat": 6
         },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
-        "id": "sd020",
+        "id": "sd018",
         "name": "Thondekayi Palya",
         "description": "",
         "type": "side-dish-sabji",
@@ -339,10 +305,10 @@
           "carbs": 15,
           "fat": 6
         },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
-        "id": "sd021",
+        "id": "sd019",
         "name": "Veg Khurma",
         "description": "",
         "type": "side-dish-gravy",
@@ -356,10 +322,10 @@
           "carbs": 25,
           "fat": 4
         },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
-        "id": "sd022",
+        "id": "sd020",
         "name": "Veg Shahi Paneer",
         "description": "",
         "type": "side-dish-gravy",
@@ -373,10 +339,10 @@
           "carbs": 12,
           "fat": 22
         },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
-        "id": "sd023",
+        "id": "sd021",
         "name": "Methi Malai Mutter",
         "description": "",
         "type": "side-dish-gravy",
@@ -390,10 +356,10 @@
           "carbs": 25,
           "fat": 4
         },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
-        "id": "sd024",
+        "id": "sd022",
         "name": "Avarekalu Palya",
         "description": "",
         "type": "side-dish-sabji",
@@ -407,10 +373,10 @@
           "carbs": 30,
           "fat": 6
         },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
-        "id": "sd025",
+        "id": "sd023",
         "name": "Soppu KaLu Palya",
         "description": "",
         "type": "side-dish-sabji",
@@ -424,10 +390,10 @@
           "carbs": 30,
           "fat": 6
         },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
-        "id": "sd026",
+        "id": "sd024",
         "name": "Dal Palak",
         "description": "",
         "type": "side-dish-gravy",
@@ -441,10 +407,10 @@
           "carbs": 18,
           "fat": 16
         },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       },
       {
-        "id": "sd027",
+        "id": "sd025",
         "name": "Dal Pappu",
         "description": "",
         "type": "side-dish-gravy",
@@ -458,41 +424,7 @@
           "carbs": 18,
           "fat": 16
         },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
-      },
-      {
-        "id": "sd028",
-        "name": "Tambuli",
-        "description": "",
-        "type": "side-dish-gravy",
-        "cuisine": "South Indian",
-        "mealTypes": [
-          "vegetarian"
-        ],
-        "nutrition": {
-          "calories": 80,
-          "protein": 3,
-          "carbs": 12,
-          "fat": 2
-        },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
-      },
-      {
-        "id": "ac010",
-        "name": "Sweet Pumpkin Raitha",
-        "description": "",
-        "type": "accompaniments",
-        "cuisine": "South Indian",
-        "mealTypes": [
-          "vegetarian"
-        ],
-        "nutrition": {
-          "calories": 35,
-          "protein": 1,
-          "carbs": 8,
-          "fat": 5
-        },
-        "dateAdded": "2025-09-05T04:05:39.647Z"
+        "dateAdded": "2025-09-04T11:25:06.559Z"
       }
     ]
   }
