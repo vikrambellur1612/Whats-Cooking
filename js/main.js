@@ -16,9 +16,14 @@ class App {
         await this.loadModule('calendar');
         
         // Set up global navigation helper
-        window.navigation = {
+        window.navigationHelper = {
             navigateToModule: async (moduleId) => {
                 await this.loadModule(moduleId);
+                
+                // Close sidebar after navigation (especially important for mobile)
+                if (window.navigation && typeof window.navigation.closeSidebar === 'function') {
+                    window.navigation.closeSidebar();
+                }
             }
         };
     }
@@ -32,8 +37,8 @@ class App {
                 const moduleId = btn.getAttribute('data-module');
                 if (moduleId && moduleId !== this.currentModule) {
                     // Always use navigation system for proper routing and sidebar handling
-                    if (window.navigation && typeof window.navigation.navigateToModule === 'function') {
-                        window.navigation.navigateToModule(moduleId);
+                    if (window.navigationHelper && typeof window.navigationHelper.navigateToModule === 'function') {
+                        window.navigationHelper.navigateToModule(moduleId);
                     } else {
                         // Fallback: load module and close sidebar manually
                         await this.loadModule(moduleId);
@@ -45,9 +50,7 @@ class App {
                         
                         // Close sidebar on mobile after navigation
                         if (window.navigation && typeof window.navigation.closeSidebar === 'function') {
-                            if (window.innerWidth < 1024) {
-                                window.navigation.closeSidebar();
-                            }
+                            window.navigation.closeSidebar();
                         }
                     }
                 }

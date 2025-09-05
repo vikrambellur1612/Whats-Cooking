@@ -211,7 +211,7 @@
     opacity: 0;
     visibility: hidden;
     transition: all 0.3s ease;
-    z-index: 1000;
+    z-index: 9999; /* Higher z-index for iOS PWA */
     min-height: 100vh;
     max-height: 100vh;
     overflow-y: auto;
@@ -221,14 +221,16 @@
 @media (max-width: 768px) {
     .modal {
         align-items: center; /* Keep centered vertically */
-        padding: 20px; /* Uniform padding */
-        /* Ensure modal appears in current viewport */
+        justify-content: center; /* Keep centered horizontally */
+        padding: 15px; /* Reduced padding for small screens */
+        /* Force modal to stay in viewport on iOS PWA */
         position: fixed;
         top: 0;
         left: 0;
         width: 100vw;
         height: 100vh;
-        padding-bottom: 20px;
+        height: 100dvh; /* Use dynamic viewport height for better iOS support */
+        overflow: hidden; /* Prevent any scrolling issues */
     }
 }
 

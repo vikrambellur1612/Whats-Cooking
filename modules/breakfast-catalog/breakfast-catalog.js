@@ -388,8 +388,20 @@ class BreakfastCatalog {
         const modal = document.getElementById('deleteModal');
         modal.classList.add('active');
         
+        // Scroll to top to ensure modal is visible (iOS PWA fix)
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+        
         // Prevent body scroll while modal is open
         document.body.style.overflow = 'hidden';
+        document.body.style.position = 'fixed';
+        document.body.style.top = `-${window.scrollY}px`;
+        document.body.style.width = '100%';
+        
+        // Store scroll position
+        this.scrollPosition = window.scrollY;
         
         // Ensure modal is focused for accessibility
         setTimeout(() => {
@@ -413,8 +425,17 @@ class BreakfastCatalog {
         const modal = document.getElementById('deleteModal');
         modal.classList.remove('active');
         
-        // Restore body scroll
+        // Restore body scroll and position
         document.body.style.overflow = '';
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.width = '';
+        
+        // Restore scroll position
+        if (this.scrollPosition !== undefined) {
+            window.scrollTo(0, this.scrollPosition);
+            this.scrollPosition = undefined;
+        }
         
         this.deleteItemId = null;
     }
