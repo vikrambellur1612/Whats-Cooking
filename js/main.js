@@ -349,6 +349,35 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
     
+    // Test update notification
+    window.testUpdateNotification = () => {
+        const event = {
+            data: {
+                type: 'SW_UPDATED',
+                version: '2.1.0',
+                message: 'App updated! New features: improved navigation and modal positioning.'
+            }
+        };
+        
+        // Find the showUpdateNotification function from the service worker script
+        const script = document.querySelector('script');
+        if (typeof showUpdateNotification === 'function') {
+            showUpdateNotification(event.data.message, event.data.version);
+        } else {
+            console.log('Testing update notification...');
+            const notification = document.getElementById('update-notification');
+            const updateText = document.getElementById('update-text');
+            
+            if (updateText) {
+                updateText.textContent = event.data.message + ` (v${event.data.version})`;
+            }
+            
+            if (notification) {
+                notification.classList.remove('hidden');
+            }
+        }
+    };
+    
     // Auto-clear cache if we detect 503 errors
     window.addEventListener('error', (e) => {
         if (e.message && e.message.includes('503')) {
@@ -358,4 +387,5 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     
     console.log('Debug: Use clearSWCache() to clear service worker cache');
+    console.log('Debug: Use testUpdateNotification() to test update notifications');
 });

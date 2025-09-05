@@ -10,6 +10,13 @@
     <!-- PWA Manifest -->
     <link rel="manifest" href="manifest.json">
     
+    <!-- iOS PWA Support -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="ನಾಳೆ ಅಡುಗೆ ಏನು?">
+    <link rel="apple-touch-icon" href="assets/icons/icon-192x192.png">
+    <link rel="apple-touch-startup-image" href="assets/icons/icon-512x512.png">
+    
     <!-- CSS Files -->
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/components.css">
@@ -88,6 +95,21 @@
                 <p>Loading...</p>
             </div>
         </div>
+
+        <!-- Update Notification -->
+        <div id="update-notification" class="update-notification hidden">
+            <div class="update-content">
+                <div class="update-icon">🔄</div>
+                <div class="update-message">
+                    <h3>App Updated!</h3>
+                    <p id="update-text">New version available with improvements</p>
+                </div>
+                <div class="update-actions">
+                    <button id="update-reload" class="btn btn-primary">Reload App</button>
+                    <button id="update-dismiss" class="btn btn-secondary">Dismiss</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Scripts -->
@@ -98,15 +120,167 @@
     <!-- PWA Service Worker Registration -->
     <script>
         if ('serviceWorker' in navigator) {
+            let registration;
+            let refreshing = false;
+            let updateAvailable = false;
+            
+            // iOS detection
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+            const isInStandaloneMode = window.matchMedia('(display-mode: standalone)').matches;
+            
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('sw.js')
-                    .then((registration) => {
-                        console.log('SW registered: ', registration);
+                    .then((reg) => {
+                        console.log('SW registered: ', reg);
+                        registration = reg;
+                        
+                        // Check for updates immediately
+                        reg.update();
+                        
+                        // Check for updates periodically (every 30 seconds for testing, 10 minutes for production)
+                        const updateInterval = isIOS ? 30000 : 600000; // 30s for iOS testing, 10m for others
+                        setInterval(() => {
+                            console.log('SW: Checking for updates...');
+                            reg.update();
+                        }, updateInterval);
+                        
+                        // Listen for updates
+                        reg.addEventListener('updatefound', () => {
+                            console.log('SW: Update found');
+                            const newWorker = reg.installing;
+                            updateAvailable = true;
+                            
+                            newWorker.addEventListener('statechange', () => {
+                                console.log('SW: New worker state:', newWorker.state);
+                                
+                                if (newWorker.state === 'installed') {
+                                    if (navigator.serviceWorker.controller) {
+                                        console.log('SW: New version installed, waiting to activate');
+                                        // New version is available but waiting
+                                        showUpdateAvailableNotification();
+                                    } else {
+                                        console.log('SW: First install complete');
+                                    }
+                                }
+                                
+                                if (newWorker.state === 'activated') {
+                                    console.log('SW: New version activated');
+                                }
+                            });
+                        });
+                        
+                        // iOS-specific: Prompt to add to home screen if not already
+                        if (isIOS && !isInStandaloneMode && !localStorage.getItem('iosInstallPromptShown')) {
+                            setTimeout(() => {
+                                showIOSInstallPrompt();
+                            }, 3000);
+                        }
                     })
                     .catch((registrationError) => {
                         console.log('SW registration failed: ', registrationError);
                     });
             });
+            
+            // Listen for messages from service worker
+            navigator.serviceWorker.addEventListener('message', (event) => {
+                console.log('SW message received:', event.data);
+                
+                if (event.data && event.data.type === 'SW_UPDATED') {
+                    showUpdateNotification(event.data.message || 'App has been updated!', event.data.version);
+                }
+                
+                if (event.data && event.data.type === 'VERSION_INFO') {
+                    console.log('SW: Version info received:', event.data);
+                }
+            });
+            
+            // Handle page reload after SW update
+            navigator.serviceWorker.addEventListener('controllerchange', () => {
+                if (refreshing) return;
+                refreshing = true;
+                console.log('SW: Controller changed, reloading page');
+                
+                // Show a brief message before reload
+                showUpdateNotification('App updated successfully! Reloading...', null);
+                
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000);
+            });
+            
+            function showUpdateAvailableNotification() {
+                showUpdateNotification('New app version available! Click reload to update.', '2.1.0');
+            }
+            
+            function showUpdateNotification(message, version) {
+                const notification = document.getElementById('update-notification');
+                const updateText = document.getElementById('update-text');
+                const reloadBtn = document.getElementById('update-reload');
+                const dismissBtn = document.getElementById('update-dismiss');
+                
+                if (updateText) {
+                    updateText.textContent = message + (version ? ` (v${version})` : '');
+                }
+                
+                if (notification) {
+                    notification.classList.remove('hidden');
+                    
+                    // Auto-dismiss after 15 seconds (longer for iOS)
+                    setTimeout(() => {
+                        notification.classList.add('hidden');
+                    }, isIOS ? 15000 : 10000);
+                }
+                
+                // Reload button handler
+                if (reloadBtn) {
+                    reloadBtn.onclick = () => {
+                        if (registration && registration.waiting) {
+                            registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+                        } else {
+                            window.location.reload();
+                        }
+                    };
+                }
+                
+                // Dismiss button handler
+                if (dismissBtn) {
+                    dismissBtn.onclick = () => {
+                        notification.classList.add('hidden');
+                    };
+                }
+            }
+            
+            function showIOSInstallPrompt() {
+                const prompt = document.createElement('div');
+                prompt.className = 'ios-install-prompt';
+                prompt.innerHTML = `
+                    <div class="ios-prompt-content">
+                        <div class="ios-prompt-icon">📱</div>
+                        <h3>Install App</h3>
+                        <p>Add this app to your home screen for the best experience!</p>
+                        <div class="ios-prompt-steps">
+                            <p>1. Tap the Share button <span style="font-size: 1.2em;">⎋</span></p>
+                            <p>2. Select "Add to Home Screen"</p>
+                        </div>
+                        <button id="ios-prompt-dismiss" class="btn btn-secondary">Got it</button>
+                    </div>
+                `;
+                
+                document.body.appendChild(prompt);
+                
+                document.getElementById('ios-prompt-dismiss').onclick = () => {
+                    prompt.remove();
+                    localStorage.setItem('iosInstallPromptShown', 'true');
+                };
+                
+                // Auto-dismiss after 10 seconds
+                setTimeout(() => {
+                    if (prompt.parentNode) {
+                        prompt.remove();
+                        localStorage.setItem('iosInstallPromptShown', 'true');
+                    }
+                }, 10000);
+            }
         }
     </script>
 </body>

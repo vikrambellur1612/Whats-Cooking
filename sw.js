@@ -1,7 +1,7 @@
-// Service Worker for ನಾಳೆ ಅಡುಗೆ ಏನು? PWA v2.0.0
-const CACHE_NAME = 'naale-aduge-v2.0.0';
-const STATIC_CACHE_NAME = 'whats-cooking-static-v2.0.0';
-const DYNAMIC_CACHE_NAME = 'whats-cooking-dynamic-v2.0.0';
+// Service Worker for ನಾಳೆ ಅಡುಗೆ ಏನು? PWA v2.1.0
+const CACHE_NAME = 'naale-aduge-v2.1.0';
+const STATIC_CACHE_NAME = 'whats-cooking-static-v2.1.0';
+const DYNAMIC_CACHE_NAME = 'whats-cooking-dynamic-v2.1.0';
 
 // Files to cache immediately
 const STATIC_ASSETS = [
@@ -56,7 +56,7 @@ const CACHE_FIRST = [
 
 // Install event - cache static assets
 self.addEventListener('install', (event) => {
-  console.log('SW: Installing service worker...');
+  console.log('SW: Installing service worker v2.1.0...');
   
   event.waitUntil(
     caches.open(STATIC_CACHE_NAME)
@@ -66,7 +66,8 @@ self.addEventListener('install', (event) => {
       })
       .then(() => {
         console.log('SW: Installation complete');
-        return self.skipWaiting();
+        // Don't skip waiting automatically - let the app decide
+        return;
       })
       .catch((error) => {
         console.error('SW: Installation failed:', error);
@@ -74,27 +75,47 @@ self.addEventListener('install', (event) => {
   );
 });
 
-// Activate event - cleanup old caches
+// Activate event - cleanup old caches and notify about updates
 self.addEventListener('activate', (event) => {
-  console.log('SW: Activating service worker...');
+  console.log('SW: Activating service worker v2.1.0...');
   
   event.waitUntil(
     caches.keys()
       .then((cacheNames) => {
-        return Promise.all(
-          cacheNames.map((cacheName) => {
-            if (cacheName !== STATIC_CACHE_NAME && 
-                cacheName !== DYNAMIC_CACHE_NAME &&
-                cacheName.startsWith('whats-cooking-')) {
-              console.log('SW: Deleting old cache:', cacheName);
-              return caches.delete(cacheName);
+        const oldCaches = cacheNames.filter((cacheName) => {
+          return cacheName !== STATIC_CACHE_NAME && 
+                 cacheName !== DYNAMIC_CACHE_NAME &&
+                 (cacheName.startsWith('whats-cooking-') || cacheName.startsWith('naale-aduge-'));
+        });
+        
+        // If there were old caches, this is an update
+        const isUpdate = oldCaches.length > 0;
+        
+        return Promise.all([
+          // Delete old caches
+          ...oldCaches.map((cacheName) => {
+            console.log('SW: Deleting old cache:', cacheName);
+            return caches.delete(cacheName);
+          }),
+          // Take control of clients
+          self.clients.claim().then(() => {
+            if (isUpdate) {
+              // Notify all clients about the update
+              return self.clients.matchAll().then((clients) => {
+                clients.forEach((client) => {
+                  client.postMessage({
+                    type: 'SW_UPDATED',
+                    version: '2.1.0',
+                    message: 'App updated! New features: improved navigation and modal positioning.'
+                  });
+                });
+              });
             }
           })
-        );
+        ]);
       })
       .then(() => {
         console.log('SW: Activation complete');
-        return self.clients.claim();
       })
   );
 });
@@ -362,13 +383,37 @@ self.addEventListener('message', (event) => {
   console.log('SW: Received message:', event.data);
   
   if (event.data && event.data.type === 'SKIP_WAITING') {
+    console.log('SW: Skipping waiting and taking control');
     self.skipWaiting();
   }
   
   if (event.data && event.data.type === 'GET_VERSION') {
     event.ports[0].postMessage({
       type: 'VERSION',
-      version: CACHE_NAME
+      version: CACHE_NAME,
+      staticCache: STATIC_CACHE_NAME,
+      dynamicCache: DYNAMIC_CACHE_NAME
     });
+  }
+  
+  if (event.data && event.data.type === 'CHECK_UPDATE') {
+    // Respond with current version info
+    const response = {
+      type: 'VERSION_INFO',
+      version: '2.1.0',
+      cacheVersion: CACHE_NAME,
+      updateAvailable: false
+    };
+    
+    if (event.ports && event.ports[0]) {
+      event.ports[0].postMessage(response);
+    } else {
+      // Broadcast to all clients
+      self.clients.matchAll().then((clients) => {
+        clients.forEach((client) => {
+          client.postMessage(response);
+        });
+      });
+    }
   }
 });

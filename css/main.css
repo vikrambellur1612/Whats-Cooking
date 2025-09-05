@@ -440,3 +440,204 @@ body {
 .sidebar.open .nav-btn:nth-child(3) { animation-delay: 0.2s; }
 .sidebar.open .nav-btn:nth-child(4) { animation-delay: 0.25s; }
 .sidebar.open .nav-btn:nth-child(5) { animation-delay: 0.3s; }
+
+/* Update Notification Styles */
+.update-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    max-width: 400px;
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    border: 2px solid var(--primary-color);
+    z-index: 9999;
+    opacity: 1;
+    transform: translateX(0);
+    transition: all 0.3s ease;
+    animation: slideInRight 0.3s ease;
+}
+
+.update-notification.hidden {
+    opacity: 0;
+    transform: translateX(120%);
+    pointer-events: none;
+}
+
+.update-content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.update-icon {
+    font-size: 2rem;
+    text-align: center;
+    animation: rotate 2s linear infinite;
+}
+
+.update-message h3 {
+    color: var(--primary-color);
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+}
+
+.update-message p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.update-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.update-actions .btn {
+    padding: 8px 16px;
+    font-size: 0.85rem;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: var(--transition);
+    font-weight: 500;
+}
+
+.update-actions .btn-primary {
+    background: var(--primary-gradient);
+    color: var(--text-light);
+}
+
+.update-actions .btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.update-actions .btn-secondary {
+    background: var(--text-muted);
+    color: var(--text-light);
+}
+
+.update-actions .btn-secondary:hover {
+    background: #6c7b7d;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(120%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Mobile Update Notification */
+@media (max-width: 768px) {
+    .update-notification {
+        top: 10px;
+        right: 10px;
+        left: 10px;
+        max-width: none;
+        margin: 0 auto;
+    }
+    
+    .update-content {
+        padding: 15px;
+        gap: 12px;
+    }
+    
+    .update-actions {
+        flex-direction: column;
+    }
+    
+    .update-actions .btn {
+        width: 100%;
+        padding: 10px;
+    }
+}
+
+/* iOS Install Prompt Styles */
+.ios-install-prompt {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    z-index: 10000;
+    max-width: 320px;
+    width: 90%;
+    animation: fadeInScale 0.3s ease;
+}
+
+.ios-prompt-content {
+    padding: 25px;
+    text-align: center;
+}
+
+.ios-prompt-icon {
+    font-size: 3rem;
+    margin-bottom: 15px;
+}
+
+.ios-prompt-content h3 {
+    color: var(--primary-color);
+    margin-bottom: 10px;
+    font-size: 1.3rem;
+}
+
+.ios-prompt-content p {
+    color: var(--text-muted);
+    margin-bottom: 15px;
+    line-height: 1.5;
+}
+
+.ios-prompt-steps {
+    background: rgba(102, 126, 234, 0.05);
+    border-radius: 10px;
+    padding: 15px;
+    margin: 15px 0;
+    text-align: left;
+}
+
+.ios-prompt-steps p {
+    margin: 5px 0;
+    font-size: 0.9rem;
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+/* Mobile adjustments for iOS prompt */
+@media (max-width: 480px) {
+    .ios-install-prompt {
+        max-width: none;
+        width: calc(100vw - 40px);
+    }
+    
+    .ios-prompt-content {
+        padding: 20px;
+    }
+}
